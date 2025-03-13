@@ -179,7 +179,7 @@
 
 /*** Hero Header ***/
 .hero-header {
-    background: linear-gradient(rgba(248, 223, 173, 0.1), rgba(248, 223, 173, 0.1)), url(../img/hero-img.jpg);
+    background: linear-gradient(rgba(248, 223, 173, 0.1), rgba(248, 223, 173, 0.1)), url('/Assets/img/backgrounds/home-bg.jpg');
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -220,7 +220,7 @@
 
 .page-header {
     position: relative;
-    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/cart-page-header-img.jpg);
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/Assets/img/backgrounds/contact-bg.jpg');
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -497,3 +497,33 @@
 }
 
 /*** Footer End ***/
+
+/*** Recycle Button Start ***/
+.btn-recycle {
+    background-color: white;
+    border: 1px solid #dcdcdc;
+    color: #81c408;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+    .btn-recycle:hover,
+    .btn-recycle:active {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #81c408;
+    }
+
+    .btn-recycle i {
+        color: #81c408;
+        font-size: 1.2rem;
+    }
+
+    .btn-recycle span {
+        color: #81c408;
+    }
+
+.me-3 {
+    margin-right: 1rem;
+}
+
+/*** Recycle Button End ***/
