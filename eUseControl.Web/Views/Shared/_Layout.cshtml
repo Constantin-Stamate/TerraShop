@@ -42,18 +42,18 @@
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
     <!-- Spinner End -->
-
     <!-- Navbar start -->
     <div class="container-fluid fixed-top">
         @Html.Partial("_Navbar")
     </div>
     <!-- Navbar End -->
-
     <!-- Modal Search Start -->
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         @Html.Partial("_ModalSearch")
     </div>
     <!-- Modal Search End -->
+
+    @RenderBody()
 
     <!-- Hero Start -->
     <div class="container-fluid py-5 mb-5 hero-header">
@@ -116,7 +116,6 @@
         </div>
     </div>
     <!-- Hero End -->
-
     <!-- Features Section Start -->
     <div class="container-fluid featurs py-5" style="margin-top: -20px;">
         <div class="container py-5">
@@ -169,7 +168,6 @@
         </div>
     </div>
     <!-- Features Section End -->
-
     <!-- TerraShop Charity Banner Section Start -->
     <div class="container-fluid banner bg-secondary my-5" style="background: linear-gradient(to right, #84c30c, #a6d75b);">
         <div class="container py-5">
@@ -200,7 +198,6 @@
         </div>
     </div>
     <!-- TerraShop Charity Banner Section End -->
-
     <!-- Products Shop Start -->
     <div class="container-fluid fruite py-5">
         <div class="container py-5">
@@ -280,7 +277,7 @@
                                         <div class="rounded position-relative fruite-item">
                                             <div class="fruite-img">
                                                 src="@Url.Content("~/Assets/img/volunteer-products/volunteer-product-2.jpg")" class="img-fluid w-100 rounded-top"
-                                                     alt="">
+                                                alt="">
                                             </div>
                                             <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
                                                  style="top: 10px; left: 10px;">
@@ -612,7 +609,6 @@
         </div>
     </div>
     <!-- Products Shop End -->
-
     <!-- Banner Section Start -->
     <div class="container-fluid banner bg-secondary my-5">
         <div class="container py-5">
@@ -642,7 +638,6 @@
         </div>
     </div>
     <!-- Banner Section End -->
-
     <!-- Fact Start -->
     <div class="container-fluid py-5">
         <div class="container">
@@ -681,7 +676,6 @@
         </div>
     </div>
     <!-- Fact End -->
-
     <!-- Testimonial Start -->
     <div class="container-fluid testimonial py-5">
         <div class="container py-5">
@@ -781,19 +775,16 @@
         </div>
     </div>
     <!-- Testimonial End -->
-
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5">
         @Html.Partial("_Footer")
     </div>
     <!-- Footer End -->
-
     <!-- Copyright Start -->
     <div class="container-fluid copyright bg-dark py-4">
         @Html.Partial("_Copyright")
     </div>
     <!-- Copyright End -->
-
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top">
         <i class="fa fa-arrow-up"></i>
