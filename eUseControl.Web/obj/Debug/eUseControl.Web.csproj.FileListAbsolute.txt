@@ -1,0 +1,2 @@
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\obj\Debug\eUseControl.Web.csproj.AssemblyReference.cache
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\obj\Debug\eUseControl.Web.csproj.CoreCompileInputs.cache
