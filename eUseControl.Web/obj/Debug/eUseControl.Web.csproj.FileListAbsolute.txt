@@ -76,9 +76,12 @@ C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\System.Web.Webpages
 C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\System.Web.Helpers.xml
 C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\System.Web.Mvc.xml
 C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\obj\Debug\eUseControl.Web.csproj.AssemblyReference.cache
-C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\obj\Debug\eUseControl.Web.csproj.CoreCompileInputs.cache
 C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\obj\Debug\eUseCont.507825D9.Up2Date
 C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\obj\Debug\eUseControl.Web.dll
 C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\obj\Debug\eUseControl.Web.pdb
 >>>>>>> 3042d0750e8c94775515d7325cde712f3c505e2a
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\roslyn\Microsoft.Managed.Core.CurrentVersions.targets
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\roslyn\System.Buffers.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\roslyn\System.Memory.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\roslyn\System.Numerics.Vectors.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\roslyn\System.Runtime.CompilerServices.Unsafe.dll
