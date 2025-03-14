@@ -109,9 +109,14 @@
     <Content Include="Assets\img\testimonial\testimonial_1.jpg" />
     <Content Include="Assets\img\transaction.png" />
     <Content Include="Assets\img\volunteer-categories\volunteer-category-1.jpg" />
+    <Content Include="Assets\img\volunteer-categories\volunteer-category-2.jpg" />
     <Content Include="Assets\img\volunteer-categories\volunteer-category-3.jpg" />
+    <Content Include="Assets\img\volunteer-categories\volunteer-category-4.jpg" />
+    <Content Include="Assets\img\volunteer-categories\volunteer-category-5.jpg" />
     <Content Include="Assets\img\volunteer-products\volunteer-product-1.jpg" />
     <Content Include="Assets\img\volunteer-products\volunteer-product-10.jpg" />
+    <Content Include="Assets\img\volunteer-products\volunteer-product-11.jpg" />
+    <Content Include="Assets\img\volunteer-products\volunteer-product-12.jpg" />
     <Content Include="Assets\img\volunteer-products\volunteer-product-2.jpg" />
     <Content Include="Assets\img\volunteer-products\volunteer-product-3.jpg" />
     <Content Include="Assets\img\volunteer-products\volunteer-product-4.jpg" />
@@ -239,9 +244,6 @@
     <Content Include="Assets\scss\bootstrap\scss\_utilities.scss" />
     <Content Include="Assets\scss\bootstrap\scss\_variables.scss" />
     <Content Include="Assets\scss\bootstrap.scss" />
-    <Content Include="Assets\img\volunteer-categories\volunteer-category-2.avif" />
-    <Content Include="Assets\img\volunteer-categories\volunteer-category-4.avif" />
-    <Content Include="Assets\img\volunteer-categories\volunteer-category-5.avif" />
     <Content Include="Assets\img\volunteer-products\volunteer-product-11.avif" />
     <Content Include="Assets\img\volunteer-products\volunteer-product-12.avif" />
     <None Include="packages.config" />
