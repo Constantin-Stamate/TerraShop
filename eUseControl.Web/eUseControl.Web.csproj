@@ -23,6 +23,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,7 +44,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -53,6 +60,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -60,6 +70,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web.Razor">
@@ -89,37 +102,26 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\css\style.css" />
-    <Content Include="Assets\img\avatar.jpg" />
-    <Content Include="Assets\img\baner-1.png" />
-    <Content Include="Assets\img\banner-fruits.jpg" />
-    <Content Include="Assets\img\best-product-1.jpg" />
-    <Content Include="Assets\img\best-product-2.jpg" />
-    <Content Include="Assets\img\best-product-3.jpg" />
-    <Content Include="Assets\img\best-product-4.jpg" />
-    <Content Include="Assets\img\best-product-5.jpg" />
-    <Content Include="Assets\img\best-product-6.jpg" />
-    <Content Include="Assets\img\cart-page-header-img.jpg" />
-    <Content Include="Assets\img\featur-1.jpg" />
-    <Content Include="Assets\img\featur-2.jpg" />
-    <Content Include="Assets\img\featur-3.jpg" />
-    <Content Include="Assets\img\fruite-item-1.jpg" />
-    <Content Include="Assets\img\fruite-item-2.jpg" />
-    <Content Include="Assets\img\fruite-item-3.jpg" />
-    <Content Include="Assets\img\fruite-item-4.jpg" />
-    <Content Include="Assets\img\fruite-item-5.jpg" />
-    <Content Include="Assets\img\fruite-item-6.jpg" />
-    <Content Include="Assets\img\hero-img-1.png" />
-    <Content Include="Assets\img\hero-img-2.jpg" />
-    <Content Include="Assets\img\hero-img.jpg" />
-    <Content Include="Assets\img\payment.png" />
-    <Content Include="Assets\img\single-item.jpg" />
-    <Content Include="Assets\img\testimonial-1.jpg" />
-    <Content Include="Assets\img\vegetable-item-1.jpg" />
-    <Content Include="Assets\img\vegetable-item-2.jpg" />
-    <Content Include="Assets\img\vegetable-item-3.png" />
-    <Content Include="Assets\img\vegetable-item-4.jpg" />
-    <Content Include="Assets\img\vegetable-item-5.jpg" />
-    <Content Include="Assets\img\vegetable-item-6.jpg" />
+    <Content Include="Assets\img\app-logo.png" />
+    <Content Include="Assets\img\backgrounds\contact-bg.jpg" />
+    <Content Include="Assets\img\backgrounds\home-bg.jpg" />
+    <Content Include="Assets\img\favicon.ico" />
+    <Content Include="Assets\img\promotion\banner-sale-1.png" />
+    <Content Include="Assets\img\promotion\banner-sale-2.png" />
+    <Content Include="Assets\img\testimonial\testimonial_1.jpg" />
+    <Content Include="Assets\img\transaction.png" />
+    <Content Include="Assets\img\volunteer-categories\volunteer-category-1.jpg" />
+    <Content Include="Assets\img\volunteer-categories\volunteer-category-3.jpg" />
+    <Content Include="Assets\img\volunteer-products\volunteer-product-1.jpg" />
+    <Content Include="Assets\img\volunteer-products\volunteer-product-10.jpg" />
+    <Content Include="Assets\img\volunteer-products\volunteer-product-2.jpg" />
+    <Content Include="Assets\img\volunteer-products\volunteer-product-3.jpg" />
+    <Content Include="Assets\img\volunteer-products\volunteer-product-4.jpg" />
+    <Content Include="Assets\img\volunteer-products\volunteer-product-5.jpg" />
+    <Content Include="Assets\img\volunteer-products\volunteer-product-6.jpg" />
+    <Content Include="Assets\img\volunteer-products\volunteer-product-7.jpg" />
+    <Content Include="Assets\img\volunteer-products\volunteer-product-8.jpg" />
+    <Content Include="Assets\img\volunteer-products\volunteer-product-9.jpg" />
     <Content Include="Assets\js\main.js" />
     <Content Include="Assets\lib\easing\easing.js" />
     <Content Include="Assets\lib\easing\easing.min.js" />
@@ -145,7 +147,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -237,7 +241,19 @@
     <Content Include="Assets\scss\bootstrap\scss\_utilities.scss" />
     <Content Include="Assets\scss\bootstrap\scss\_variables.scss" />
     <Content Include="Assets\scss\bootstrap.scss" />
+    <Content Include="Assets\img\volunteer-categories\volunteer-category-2.avif" />
+    <Content Include="Assets\img\volunteer-categories\volunteer-category-4.avif" />
+    <Content Include="Assets\img\volunteer-categories\volunteer-category-5.avif" />
+    <Content Include="Assets\img\volunteer-products\volunteer-product-11.avif" />
+    <Content Include="Assets\img\volunteer-products\volunteer-product-12.avif" />
     <None Include="packages.config" />
+    <Content Include="Views\Shared\_Navbar.cshtml" />
+    <Content Include="Views\Shared\_ModalSearch.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Views\Shared\_Copyright.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Main\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -247,7 +263,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
