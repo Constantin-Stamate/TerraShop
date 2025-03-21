@@ -1,0 +1,104 @@
+﻿﻿@{
+    Layout = "~/Views/Shared/_LayoutAddProduct.cshtml";
+    ViewBag.Title = "AddProduct";
+}
+
+<div class="mask d-flex align-items-center gradient-custom-3" style="min-height: 100vh;">
+    <div class="container" style="padding-top: 40px;">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                <div class="card" style="border-radius: 15px; max-width: 1000px; margin: 0 auto;">
+                    <div class="card-body p-4" style="width: 100%;">
+                        <h2 class="text-nowrap text-center mb-4"
+                            style="font-size: 28px; font-weight: 600; margin-top: 20px; color: #81c408;">
+                            Create a new Product
+                        </h2>
+                        <form action="#">
+                            <div class="row g-4">
+                                <div class="col-lg-6 mb-3" style="margin-top: 10mm;">
+                                    <div class="border-bottom rounded">
+                                        <input type="text" class="form-control border-0 me-4"
+                                               placeholder="Product name *">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-3" style="margin-top: 10mm;">
+                                    <div class="border-bottom rounded">
+                                        <input type="email" class="form-control border-0" placeholder="Address *">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <div class="border-bottom rounded">
+                                        <input type="text" class="form-control border-0 me-4"
+                                               placeholder="Quantity *">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <div class="border-bottom rounded">
+                                        <input type="text" class="form-control border-0 me-4"
+                                               placeholder="Quality *">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <div class="border-bottom rounded">
+                                        <input type="text" class="form-control border-0 me-4" placeholder="Price *">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <div class="border-bottom rounded">
+                                        <input type="text" class="form-control border-0 me-4"
+                                               placeholder="Region *">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <div class="border-bottom rounded">
+                                        <select class="form-control border-0 me-4" style="background-color: white;">
+                                            <option value="" disabled selected>Category *</option>
+                                            <option value="Personal Care">Personal Care</option>
+                                            <option value="Household">Household</option>
+                                            <option value="Kitchen">Kitchen</option>
+                                            <option value="Eco Fashion">Eco Fashion</option>
+                                            <option value="Organic Cosmetics">Organic Cosmetics</option>
+                                            <option value="Health Care">Health Care</option>
+                                            <option value="Eco Chemicals">Eco Chemicals</option>
+                                            <option value="Renewable Energy">Renewable Energy</option>
+                                            <option value="Biodegradable Tableware">Bio Tableware</option>
+                                            <option value="Eco Transport">Eco Transport</option>
+                                            <option value="Eco Car Cleaning">Eco Car Cleaning</option>
+                                            <option value="Eco Construction">Eco Construction</option>
+                                            <option value="Pet Care">Pet Care</option>
+                                            <option value="Eco Gardening">Eco Gardening</option>
+                                            <option value="Eco Stationery">Eco Stationery</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <div class="border-bottom rounded">
+                                        <input type="file" id="productImage" name="imageFile" accept="image/*"
+                                               class="form-control border-0 me-4"
+                                               placeholder="Click to upload an image"
+                                               onchange="displayFileName(event)" style="background-color: white;">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 mb-4">
+                                    <div class="border-bottom rounded">
+                                        <textarea name="" id="" class="form-control border-0" cols="30" rows="3"
+                                                  placeholder="Details *" spellcheck="false"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="d-flex justify-content-between py-2 mb-0"
+                                         style="margin-top: -10px;">
+                                        <a href="#"
+                                           class="btn border border-secondary text-primary rounded-pill px-4 py-3">
+                                            Publish Product
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
