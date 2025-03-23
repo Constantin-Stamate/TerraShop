@@ -1,0 +1,59 @@
+﻿﻿@{
+    Layout = "~/Views/Shared/_LayoutGeneralProfile.cshtml";
+    ViewBag.Title = "GeneralProfile";
+}
+
+<div class="card profile-card overflow-hidden">
+    <div class="row no-gutters">
+        <div class="col-md-3">
+            <div class="list-group list-group-flush account-settings-links">
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="#"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">General</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="#"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    Change
+                    password
+                </a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="#"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    Profile
+                    settings
+                </a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="#"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Articles</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="#"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Sales</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="#"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    Purchase
+                    history
+                </a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card-body">
+                <div class="profile-header">
+                    <img src="@Url.Content("~/Assets/img/testimonial/testimonial_1.jpg")" alt="Profile Image" class="profile-image">
+                    <div class="profile-header-info">
+                        <h3>John Doe</h3>
+                        <p>johndoe@example.com</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="profile-info">
+                    <p><span class="profile-section-title">Name:</span> John</p>
+                    <p><span class="profile-section-title">Surname:</span> Doe</p>
+                    <p><span class="profile-section-title">Email:</span> johndoe@example.com</p>
+                    <p><span class="profile-section-title">Address:</span> 1234 Elm Street, Springfield</p>
+                    <p><span class="profile-section-title">Phone number:</span> +123456789</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
