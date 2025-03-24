@@ -13,5 +13,11 @@ namespace eUseControl.Web.Controllers
         {
             return View();
         }
+
+        // GET: ArticlesProfile
+        public ActionResult ArticlesProfile()
+        {
+            return View();
+        }
     }
 }
