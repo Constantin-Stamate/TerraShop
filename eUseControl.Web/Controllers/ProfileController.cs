@@ -37,5 +37,12 @@ namespace eUseControl.Web.Controllers
         {
             return View();
         }
+
+
+        // GET: SettingsProfile
+        public ActionResult SettingsProfile()
+        {
+            return View();
+        }
     }
 }
