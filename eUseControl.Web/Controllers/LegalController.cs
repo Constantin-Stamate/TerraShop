@@ -13,5 +13,11 @@ namespace eUseControl.Web.Controllers
         {
             return View();
         }
+
+        // GET: SalesAndRefunds
+        public ActionResult SalesAndRefunds()
+        {
+            return View();
+        }
     }
 }
