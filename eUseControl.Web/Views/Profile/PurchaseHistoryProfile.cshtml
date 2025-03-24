@@ -1,0 +1,72 @@
+﻿﻿@{
+    Layout = "~/Views/Shared/_LayoutPurchaseHistoryProfile.cshtml";
+    ViewBag.Title = "PurchaseHistoryProfile";
+}
+
+<div class="card profile-card overflow-hidden">
+    <div class="row no-gutters">
+        <div class="col-md-3">
+            <div class="list-group list-group-flush account-settings-links">
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="#"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">General</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="#"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    Change
+                    password
+                </a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="#"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    Profile
+                    settings
+                </a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="#"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Articles</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="#"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Sales</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="#"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    Purchase
+                    history
+                </a>
+            </div>
+        </div>
+        <div class="col-md-9 py-5">
+            <h4 class="mb-4">My Purchase History</h4>
+            <div class="row g-4">
+                <div class="col-md-6" style="margin-top: 40px;">
+                    <div class="order-card p-3 border rounded shadow-sm bg-white">
+                        <img src="@Url.Content("~/Assets/img/volunteer-products/volunteer-product-1.jpg")" alt="Product"
+                             class="product-image mb-3 w-100 rounded"
+                             style="object-fit: cover; height: 200px;">
+                        <div class="order-info">
+                            <h5 class="fw-bold mb-3" style="color: #FFB524;">Smartphone XYZ</h5>
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <strong>Price:</strong> $299.99
+                                </li>
+                                <li class="mb-2">
+                                    <strong>Quantity:</strong> 2 pcs
+                                </li>
+                                <li class="mb-2">
+                                    <strong>Order date:</strong> September 19, 2024
+                                </li>
+                                <li class="mb-2">
+                                    <strong>Seller:</strong> John Doe
+                                </li>
+                                <li class="mb-2">
+                                    <strong>Payment method:</strong> Credit Card
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

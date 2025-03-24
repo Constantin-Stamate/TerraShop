@@ -25,5 +25,11 @@ namespace eUseControl.Web.Controllers
         {
             return View();
         }
+
+        // GET: PurchaseHistoryProfile
+        public ActionResult PurchaseHistoryProfile()
+        {
+            return View();
+        }
     }
 }
