@@ -1,0 +1,37 @@
+﻿﻿@{
+    Layout = "~/Views/Shared/_LayoutRegister.cshtml";
+    ViewBag.Title = "Register";
+}
+
+<div class="center">
+    <div class="container" style="margin-top: 75px;">
+        <div class="text">
+            Registration
+        </div>
+        <form action="#">
+            <div class="data">
+                <label>Username</label>
+                <input type="text" required>
+            </div>
+            <div class="data">
+                <label>Email</label>
+                <input type="text" required>
+            </div>
+            <div class="data">
+                <label>Password</label>
+                <input type="password" required>
+            </div>
+            <div class="forgot-pass" style="padding-left: 10px;">
+                I agree all statements in
+                <a href="#">Terms of service</a>
+            </div>
+            <div class="btn">
+                <div class="inner"></div>
+                <button type="submit">Register</button>
+            </div>
+            <div class="signup-link">
+                Already a member? <a href="#">Log in here</a>
+            </div>
+        </form>
+    </div>
+</div>
