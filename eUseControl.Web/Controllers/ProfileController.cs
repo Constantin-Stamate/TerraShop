@@ -31,5 +31,11 @@ namespace eUseControl.Web.Controllers
         {
             return View();
         }
+
+        // GET: SalesProfile
+        public ActionResult SalesProfile()
+        {
+            return View();
+        }
     }
 }
