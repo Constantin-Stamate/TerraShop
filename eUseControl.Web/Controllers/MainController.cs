@@ -19,5 +19,11 @@ namespace eUseControl.Web.Controllers
         {
             return View();
         }
+
+        // GET: ThankYou
+        public ActionResult ThankYou()
+        {
+            return View();
+        }
     }
 }
