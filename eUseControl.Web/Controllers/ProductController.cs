@@ -19,5 +19,11 @@ namespace eUseControl.Web.Controllers
         {
             return View();
         }
+
+        // GET: ProductDetails
+        public ActionResult ProductDetails()
+        {
+            return View();
+        }
     }
 }
