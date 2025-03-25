@@ -8,8 +8,14 @@ namespace eUseControl.Web.Controllers
 {
     public class ProductController : Controller
     {
-        // GET: Product
+        // GET: AddProduct
         public ActionResult AddProduct()
+        {
+            return View();
+        }
+
+        // GET: UpdateProduct
+        public ActionResult UpdateProduct()
         {
             return View();
         }
