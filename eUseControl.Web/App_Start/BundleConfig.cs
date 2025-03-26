@@ -37,8 +37,11 @@ namespace eUseControl.Web.App_Start
             bundles.Add(new StyleBundle("~/bundles/owl/theme/green/min/css").Include(
                "~/Assets/lib/owlcarousel/assets/owl.theme.green.min.css", new CssRewriteUrlTransform()));
 
-            bundles.Add(new StyleBundle("~/bundles/login").Include(
+            bundles.Add(new StyleBundle("~/bundles/login/css").Include(
                 "~/Assets/css/login.css", new CssRewriteUrlTransform()));
+
+            bundles.Add(new StyleBundle("~/bundles/payment/css").Include(
+               "~/Assets/css/payment.css", new CssRewriteUrlTransform()));
 
             bundles.Add(new ScriptBundle("~/bundles/main/js").Include(
                 "~/Assets/js/main.js"));
@@ -60,6 +63,9 @@ namespace eUseControl.Web.App_Start
 
             bundles.Add(new ScriptBundle("~/bundles/waypoints/js").Include(
                 "~/Assets/lib/waypoints/waypoints.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/payment/js").Include(
+                "~/Assets/js/payment.js"));
         }
     }
 }
