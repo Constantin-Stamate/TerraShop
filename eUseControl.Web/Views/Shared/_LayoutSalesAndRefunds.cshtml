@@ -44,39 +44,44 @@
 </head>
 
 <body>
-
     <!-- Spinner Start -->
     <div id="spinner"
          class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
     <!-- Spinner End -->
-    <!-- Navbar start -->
+
+    <!-- Navbar Start -->
     <div class="container-fluid fixed-top">
         @Html.Partial("_Navbar")
     </div>
     <!-- Navbar End -->
+
     <!-- Modal Search Start -->
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         @Html.Partial("_ModalSearch")
     </div>
     <!-- Modal Search End -->
+
     <!-- Main Content Start -->
     <section class="container mt-5 pt-5"
              style="max-width: 800px; background-color: #fff; padding: 30px 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
         @RenderBody()
     </section>
     <!-- Main Content End -->
+
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5">
         @Html.Partial("_Footer")
     </div>
     <!-- Footer End -->
+
     <!-- Copyright Start -->
     <div class="container-fluid copyright bg-dark py-4">
         @Html.Partial("_Copyright")
     </div>
     <!-- Copyright End -->
+
     <!-- Back to Top -->
     <a href="@Url.Action("SalesAndRefunds", "Legal")" class="btn btn-primary border-3 border-primary rounded-circle back-to-top">
         <i class="fa fa-arrow-up"></i>
