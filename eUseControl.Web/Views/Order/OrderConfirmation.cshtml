@@ -1,0 +1,19 @@
+﻿﻿@{
+    Layout = "~/Views/Shared/_LayoutOrderConfirmation.cshtml";
+    ViewBag.Title = "OrderConfirmation";
+}
+
+<div class="confirmation-content">
+    <h1 style="margin-top: -25px;">Order confirmed!</h1>
+    <p class="thank-you-msg">
+        <span class="icon">✔️</span>
+        <span class="main-msg">Thank you for your purchase!</span>
+    </p>
+    <p class="sub-msg">A confirmation email has been sent with your order details.</p>
+    <div class="order-details">
+        <p><strong>Order number:</strong> #123456</p>
+        <p><strong>Date:</strong> 2025-03-17 14:30</p>
+        <p><strong>Total:</strong> 550 MDL</p>
+    </div>
+    <a href="@Url.Action("Index", "Main")" class="btn-home" style="margin-top: 31px;">Back to home page</a>
+</div>

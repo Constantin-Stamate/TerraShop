@@ -1,0 +1,95 @@
+﻿﻿@{
+    Layout = "~/Views/Shared/_LayoutSettingsProfile.cshtml";
+    ViewBag.Title = "SettingsProfile";
+}
+
+<div class="card profile-card overflow-hidden">
+    <div class="row no-gutters">
+        <div class="col-md-3">
+            <div class="list-group list-group-flush account-settings-links">
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="@Url.Action("GeneralProfile", "Profile")"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">General</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="@Url.Action("ChangePasswordProfile", "Profile")"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    Change
+                    password
+                </a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="@Url.Action("SettingsProfile", "Profile")"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    Profile
+                    settings
+                </a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="@Url.Action("ArticlesProfile", "Profile")"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Articles</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="@Url.Action("SalesProfile", "Profile")"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Sales</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
+                   href="@Url.Action("PurchaseHistoryProfile", "Profile")"
+                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    Purchase
+                    history
+                </a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <form action="" method="post" enctype="multipart/form-data" class="p-4 shadow rounded bg-white">
+                <div class="tab-content">
+                    <div class="tab-pane fade active show" id="account-general">
+                        <div class="card-body d-flex align-items-center flex-column text-center">
+                            <label class="btn-recycle btn border border-secondary align-items-center me-3">
+                                Upload new photo
+                                <input type="file" name="profileImage" class="account-settings-fileinput d-none">
+                            </label>
+                            <div id="uploadSuccessMessage" class="text-success mt-3 d-none">
+                                ✅ Image uploaded successfully!
+                            </div>
+                            <small class="text-muted mt-3">Allowed: JPG, GIF, PNG. Max size: 800KB</small>
+                        </div>
+                        <hr class="border-light">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-user mr-2"></i> Name</label>
+                                <input type="text" class="form-control mb-3" placeholder="Enter your name"
+                                       style="font-size: 0.9em;">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-user-tag mr-2"></i> Surname</label>
+                                <input type="text" class="form-control mb-3" placeholder="Enter your surname"
+                                       style="font-size: 0.9em;">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-envelope mr-2"></i> E-mail</label>
+                                <input type="email" class="form-control mb-3" placeholder="Enter your email"
+                                       style="font-size: 0.9em;">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-map-marker-alt mr-2"></i> Address</label>
+                                <input type="text" class="form-control mb-3" placeholder="Enter your address"
+                                       style="font-size: 0.9em;">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-phone mr-2"></i> Phone number</label>
+                                <input type="tel" class="form-control mb-3" placeholder="Enter your phone number"
+                                       style="font-size: 0.9em;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <button type="submit" class="btn-recycle btn border border-secondary align-items-center me-3">
+                     <i class="fas fa-cloud-download-alt"></i>
+                     Save changes
+                    </button>
+                    <div id="saveSuccessMessage" class="alert alert-success d-none">
+                        ✅ Changes saved successfully!
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

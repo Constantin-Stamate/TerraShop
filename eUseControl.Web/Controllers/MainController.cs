@@ -13,5 +13,17 @@ namespace eUseControl.Web.Controllers
         {
             return View();
         }
+
+        // GET: Error
+        public ActionResult Error404()
+        {
+            return View();
+        }
+
+        // GET: ThankYou
+        public ActionResult ThankYou()
+        {
+            return View();
+        }
     }
 }

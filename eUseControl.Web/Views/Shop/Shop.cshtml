@@ -1,0 +1,311 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutShop.cshtml";
+    ViewBag.Title = "Shop";
+}
+
+<div class="container py-5">
+    <h1 class="mb-4">TerraBio Market</h1>
+    <div class="row g-4">
+        <div class="col-lg-12">
+            <div class="row g-4">
+                <div class="col-xl-3">
+                    <div class="input-group w-100 mx-auto d-flex">
+                        <input type="search" class="form-control p-3" placeholder="Search"
+                               aria-describedby="search-icon-1">
+                        <button type="submit" class="btn btn-primary p-3"
+                                style="background-color: #FFB524; border-color: #FFB524;">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-6"></div>
+                <div class="col-xl-3">
+                    <div class="bg-light ps-3 py-3 rounded d-flex align-items-center mb-4"
+                         style="gap: 10px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);">
+                        <label for="fruits" class="mb-0" style="font-size: 14px; margin-right: 50px;">
+                            Default
+                            Sorting:
+                        </label>
+                        <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light"
+                                style="padding: 3px 5px; width: 110px;">
+                            <option value="lowToHigh">Price ↑</option>
+                            <option value="highToLow">Price ↓</option>
+                            <option value="oldest">Old →</option>
+                            <option value="newest">New →</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3">
+                    <div class="row g-4">
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <h4>Categories</h4>
+                                <ul class="list-unstyled fruite-categorie" style="margin-left: 7px;">
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>All Products</a>
+                                            <span style="margin-left: 134px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Personal Care</a>
+                                            <span style="margin-left: 118px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Household</a>
+                                            <span style="margin-left: 141px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Kitchen</a>
+                                            <span style="margin-left: 166px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Eco Fashion</a>
+                                            <span style="margin-left: 133px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Organic Cosmetics</a>
+                                            <span style="margin-left: 84px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Health Care</a>
+                                            <span style="margin-left: 134px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Eco Chemicals</a>
+                                            <span style="margin-left: 116px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Renewable Energy</a>
+                                            <span style="margin-left: 86px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Bio Tableware</a>
+                                            <span style="margin-left: 117px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Eco Transport</a>
+                                            <span style="margin-left: 119px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Eco Car Cleaning</a>
+                                            <span style="margin-left: 99px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Eco Construction</a>
+                                            <span style="margin-left: 97px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Pet Care</a>
+                                            <span style="margin-left: 161px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Eco Gardening</a>
+                                            <span style="margin-left: 116px;">(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex justify-content-start fruite-name">
+                                            <a href="#"><i class="fas fa-seedling me-2"></i>Eco Stationery</a>
+                                            <span style="margin-left: 117px;">(3)</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <h4 class="mb-2">Price</h4>
+                                <input type="range" class="form-range w-100" id="rangeInput" name="rangeInput"
+                                       min="0" max="5000" value="0" oninput="amount.value=rangeInput.value">
+                                <output id="amount" name="amount" min-vlue="0" max-value="5000" for="rangeInput">
+                                    0
+                                </output>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center my-4">
+                            <a href="#"
+                               class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100"
+                               style="margin-top: -20px; margin-left: -15px;">Filter</a>
+                        </div>
+                        <div class="col-lg-12">
+                            <h4 class="mb-3">Popular products</h4>
+                            <div class="d-flex align-items-center justify-content-start">
+                                <div class="rounded me-4" style="width: 100px; height: 100px;">
+                                    <img src="@Url.Content("~/Assets/img/popular-products/popular-product-2.jpg")" class="img-fluid rounded" alt=""
+                                         style="margin-top: 9px; width: 1100px; height: 70px;">
+                                </div>
+                                <div>
+                                    <h6 class="mb-2">Bamboo brush</h6>
+                                    <div class="d-flex mb-2">
+                                        <i class="fa fa-star text-secondary"></i>
+                                        <i class="fa fa-star text-secondary"></i>
+                                        <i class="fa fa-star text-secondary"></i>
+                                        <i class="fa fa-star text-secondary"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <div class="d-flex mb-2">
+                                        <h5 class="fw-bold me-2">1.99 $</h5>
+                                        <h5 class="text-danger text-decoration-line-through">2.59 $</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-start">
+                                <div class="rounded me-4" style="width: 100px; height: 100px;">
+                                    <img src="@Url.Content("~/Assets/img/popular-products/popular-product-3.jpg")" class="img-fluid rounded" alt=""
+                                         style="margin-top: 9px; width: 1100px; height: 70px;">
+                                </div>
+                                <div>
+                                    <h6 class="mb-2">Bio detergents</h6>
+                                    <div class="d-flex mb-2">
+                                        <i class="fa fa-star text-secondary"></i>
+                                        <i class="fa fa-star text-secondary"></i>
+                                        <i class="fa fa-star text-secondary"></i>
+                                        <i class="fa fa-star text-secondary"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <div class="d-flex mb-2">
+                                        <h5 class="fw-bold me-2">8.99 $</h5>
+                                        <h5 class="text-danger text-decoration-line-through">11.99 $</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-start">
+                                <div class="rounded me-4" style="width: 100px; height: 100px;">
+                                    <img src="@Url.Content("~/Assets/img/popular-products/popular-product-4.jpg")" class="img-fluid rounded" alt=""
+                                         style="margin-top: 9px; width: 1100px; height: 70px;">
+                                </div>
+                                <div>
+                                    <h6 class="mb-2">Natural soaps</h6>
+                                    <div class="d-flex mb-2">
+                                        <i class="fa fa-star text-secondary"></i>
+                                        <i class="fa fa-star text-secondary"></i>
+                                        <i class="fa fa-star text-secondary"></i>
+                                        <i class="fa fa-star text-secondary"></i>
+                                        <i class="fa fa-star text-secondary"></i>
+                                    </div>
+                                    <div class="d-flex mb-2">
+                                        <h5 class="fw-bold me-2">6.99 $</h5>
+                                        <h5 class="text-danger text-decoration-line-through">10.99 $</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center my-4">
+                                <a href="@Url.Action("Shop", "Shop")"
+                                   class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100"
+                                   style="margin-left: -40px;">View More</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="position-relative">
+                                <img src="@Url.Content("~/Assets/img/banner.jpg")" class="img-fluid w-100 rounded" style="margin-left: -20px;"
+                                     alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-md-6 col-lg-6 col-xl-4" style="margin-top: 40px">
+                            <div class="rounded position-relative fruite-item">
+                                <div class="fruite-img">
+                                    <a href="@Url.Action("ProductDetails", "Product")">
+                                        <img src="@Url.Content("~/Assets/img/volunteer-categories/volunteer-category-1.jpg")"
+                                             class="img-fluid w-100 rounded-top" alt="">
+                                    </a>
+                                </div>
+                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                                     style="top: 10px; left: 10px;">
+                                    Fruits
+                                </div>
+                                <div class="p-4 border border-secondary border-top-0 rounded-bottom text-center">
+                                    <h4>Oranges</h4>
+                                    <p class="truncate-text">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit
+                                        sed do eiusmod te incididunt.
+                                    </p>
+                                    <div class="d-flex justify-content-between flex-lg-wrap">
+                                        <p class="text-dark fs-5 fw-bold mb-0">$4.99 / kg</p>
+                                        <a href="#"
+                                           class="btn border border-secondary rounded-pill px-3 text-primary">
+                                            <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="pagination d-flex justify-content-center mt-5">
+                                <a href="#" class="rounded">&laquo;</a>
+                                <a href="#" class="active rounded">1</a>
+                                <a href="#" class="rounded">2</a>
+                                <a href="#" class="rounded">3</a>
+                                <a href="#" class="rounded">4</a>
+                                <a href="#" class="rounded">5</a>
+                                <a href="#" class="rounded">6</a>
+                                <a href="#" class="rounded">&raquo;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h1 class="fw-bold mb-0" style="margin-top: 120px">Recommended products</h1>
+                <div class="vesitable">
+                    <div class="owl-carousel vegetable-carousel justify-content-center">
+                        <div class="border border-primary rounded position-relative vesitable-item">
+                            <div class="vesitable-img">
+                                <img src="@Url.Content("~/Assets/img/volunteer-categories/volunteer-category-1.jpg")" class="img-fluid w-100 rounded-top" alt="">
+                            </div>
+                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
+                                 style="top: 10px; right: 10px;">
+                                Vegetable
+                            </div>
+                            <div class="p-4 pb-0 rounded-bottom text-center">
+                                <h4>Parsely</h4>
+                                <p>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te
+                                    incididunt
+                                </p>
+                                <div class="d-flex justify-content-between flex-lg-wrap">
+                                    <p class="text-dark fs-5 fw-bold">$4.99 / kg</p>
+                                    <a href="#"
+                                       class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary">
+                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

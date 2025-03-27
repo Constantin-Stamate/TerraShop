@@ -6,24 +6,24 @@
     <div class="d-flex justify-content-between">
         <div class="top-info ps-2">
             <small class="me-3">
-                <i class="fas fa-seedling me-2 text-secondary"></i> <a href="#"
+                <i class="fas fa-seedling me-2 text-secondary"></i> <a href="@Url.Action("Index", "Main")"
                                                                        class="text-white">
                     TerraShop
                     – Eco-friendly products for a healthier future!
                 </a>
             </small>
-            <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">team.terrashop@gmail.com</a></small>
+            <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="@Url.Action("Contact", "Contact")" class="text-white">team.terrashop@gmail.com</a></small>
         </div>
         <div class="top-link pe-2">
-            <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
-            <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
-            <a href="#" class="text-white"><small class="text-white ms-2">Sales and Refunds</small></a>
+            <a href="@Url.Action("PrivacyPolicy", "Legal")" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
+            <a href="@Url.Action("TermsOfUse", "Legal")" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
+            <a href="@Url.Action("SalesAndRefunds", "Legal")" class="text-white"><small class="text-white ms-2">Sales and Refunds</small></a>
         </div>
     </div>
 </div>
 <div class="container px-0">
     <nav class="navbar navbar-light bg-white navbar-expand-xl">
-        <a href="#" class="navbar-brand">
+        <a href="@Url.Action("Index", "Main")" class="navbar-brand">
             <img src="@Url.Content("~/Assets/img/app-logo.png")" class="img-fluid"
                  style="max-height:50px; background-color: transparent;">
         </a>
@@ -33,8 +33,8 @@
         </button>
         <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
             <div class="navbar-nav mx-auto">
-                <a href="#" class="nav-item nav-link">Home</a>
-                <a href="#" class="nav-item nav-link">Shop</a>
+                <a href="@Url.Action("Index", "Main")" class="nav-item nav-link">Home</a>
+                <a href="@Url.Action("Shop", "Shop")" class="nav-item nav-link">Shop</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Categories</a>
                     <div class="dropdown-menu m-0 bg-secondary rounded-0">
@@ -55,10 +55,10 @@
                         <a href="#" class="dropdown-item">Eco Stationery</a>
                     </div>
                 </div>
-                <a href="#" class="nav-item nav-link">Contact</a>
+                <a href="@Url.Action("Contact", "Contact")" class="nav-item nav-link">Contact</a>
             </div>
             <div class="d-flex m-3 me-0 navbar-nav">
-                <a href="#" class="btn-recycle btn border border-secondary align-items-center me-3">
+                <a href="@Url.Action("AddProduct", "Product")" class="btn-recycle btn border border-secondary align-items-center me-3">
                     <i class="bi bi-clipboard-plus me-2"></i>
                     <span>Add Product</span>
                 </a>
@@ -66,15 +66,15 @@
                         data-bs-toggle="modal" data-bs-target="#searchModal">
                     <i class="fas fa-search text-primary"></i>
                 </button>
-                <a href="#" class="position-relative me-4 my-auto">
+                <a href="@Url.Action("Cart", "Cart")" class="position-relative me-4 my-auto">
                     <i class="fa fa-shopping-bag fa-2x"></i>
                     <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
                           style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
                 </a>
-                <a href="#" class="my-auto">
+                <a href="@Url.Action("GeneralProfile", "Profile")" class="my-auto">
                     <i class="fas fa-user fa-2x"></i>
                 </a>
-                <a href="#" class="nav-item nav-link">Login</a>
+                <a href="@Url.Action("Login", "Login")" class="nav-item nav-link">Login</a>
                 <a href="#" class="nav-item nav-link">Logout</a>
             </div>
         </div>

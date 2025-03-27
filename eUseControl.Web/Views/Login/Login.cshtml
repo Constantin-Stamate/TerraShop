@@ -1,0 +1,29 @@
+﻿﻿@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    ViewBag.Title = "Login";
+}
+
+<div class="center">
+    <div class="container" style="margin-top: 35px;">
+        <div class="text">
+            Login
+        </div>
+        <form action="#">
+            <div class="data">
+                <label>Email</label>
+                <input type="text" required>
+            </div>
+            <div class="data">
+                <label>Password</label>
+                <input type="password" required>
+            </div>
+            <div class="btn">
+                <div class="inner"></div>
+                <button type="submit">Login</button>
+            </div>
+            <div class="signup-link">
+                Not a member? <a href="@Url.Action("Register", "Register")">Signup now</a>
+            </div>
+        </form>
+    </div>
+</div>

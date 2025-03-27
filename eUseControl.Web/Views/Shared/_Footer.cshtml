@@ -6,7 +6,7 @@
     <div class="pb-4 mb-4" style="border-bottom: 1px solid rgba(226, 175, 24, 0.5) ;">
         <div class="row g-4">
             <div class="col-lg-3">
-                <a href="#">
+                <a href="@Url.Action("Index", "Main")">
                     <h1 class="text-primary mb-0">TerraShop</h1>
                     <p class="text-secondary mb-0">Eco-friendly products</p>
                 </a>
@@ -24,16 +24,16 @@
             </div>
             <div class="col-lg-3">
                 <div class="d-flex justify-content-end pt-3">
-                    <a class="btn  btn-outline-secondary me-2 btn-md-square rounded-circle" href="">
+                    <a class="btn  btn-outline-secondary me-2 btn-md-square rounded-circle" href="@Url.Action("Index", "Main")">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a class="btn btn-outline-secondary me-2 btn-md-square rounded-circle" href="">
+                    <a class="btn btn-outline-secondary me-2 btn-md-square rounded-circle" href="@Url.Action("Index", "Main")">
                         <i class="fab fa-facebook-f"></i>
                     </a>
-                    <a class="btn btn-outline-secondary me-2 btn-md-square rounded-circle" href="">
+                    <a class="btn btn-outline-secondary me-2 btn-md-square rounded-circle" href="@Url.Action("Index", "Main")">
                         <i class="fab fa-youtube"></i>
                     </a>
-                    <a class="btn btn-outline-secondary btn-md-square rounded-circle" href="">
+                    <a class="btn btn-outline-secondary btn-md-square rounded-circle" href="@Url.Action("Index", "Main")">
                         <i class="fab fa-linkedin-in"></i>
                     </a>
                 </div>
@@ -48,29 +48,29 @@
                     Connecting customers with unique, eco-friendly products, promoting sustainability
                     and supporting small businesses worldwide
                 </p>
-                <a href="" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Read More</a>
+                <a href="@Url.Action("Index", "Main")" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Read More</a>
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
             <div class="d-flex flex-column text-start footer-item">
                 <h4 class="text-light mb-3">Shop Info</h4>
-                <a class="btn-link" href="">About Us</a>
-                <a class="btn-link" href="">Contact Us</a>
-                <a class="btn-link" href="">Privacy Policy</a>
-                <a class="btn-link" href="">Terms & Condition</a>
-                <a class="btn-link" href="">Return Policy</a>
-                <a class="btn-link" href="">FAQs & Help</a>
+                <a class="btn-link" href="@Url.Action("Index", "Main")">About Us</a>
+                <a class="btn-link" href="@Url.Action("Contact", "Contact")">Contact Us</a>
+                <a class="btn-link" href="@Url.Action("PrivacyPolicy", "Legal")">Privacy Policy</a>
+                <a class="btn-link" href="@Url.Action("TermsOfUse", "Legal")">Terms & Condition</a>
+                <a class="btn-link" href="@Url.Action("SalesAndRefunds", "Legal")">Return Policy</a>
+                <a class="btn-link" href="@Url.Action("Contact", "Contact")">FAQs & Help</a>
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
             <div class="d-flex flex-column text-start footer-item">
                 <h4 class="text-light mb-3">Account</h4>
-                <a class="btn-link" href="">My Account</a>
-                <a class="btn-link" href="">Shop details</a>
-                <a class="btn-link" href="">Shopping Cart</a>
-                <a class="btn-link" href="">Wishlist</a>
-                <a class="btn-link" href="">Order History</a>
-                <a class="btn-link" href="">International Orders</a>
+                <a class="btn-link" href="@Url.Action("GeneralProfile", "Profile")">My Account</a>
+                <a class="btn-link" href="@Url.Action("Shop", "Shop")">Shop Details</a>
+                <a class="btn-link" href="@Url.Action("Cart", "Cart")">Shopping Cart</a>
+                <a class="btn-link" href="@Url.Action("SalesProfile", "Profile")">Sales History</a>
+                <a class="btn-link" href="@Url.Action("PurchaseHistoryProfile", "Profile")">Purchase History</a>
+                <a class="btn-link" href="@Url.Action("ArticlesProfile", "Profile")">My Products</a>
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
