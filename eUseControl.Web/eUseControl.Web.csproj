@@ -99,11 +99,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\css\login.css" />
+    <Content Include="Assets\css\payment.css" />
     <Content Include="Assets\css\style.css" />
     <Content Include="Assets\img\app-logo.png" />
     <Content Include="Assets\img\backgrounds\contact-bg.jpg" />
     <Content Include="Assets\img\backgrounds\home-bg.jpg" />
+    <Content Include="Assets\img\backgrounds\background.jpg" />
+    <Content Include="Assets\img\banner.jpg" />
     <Content Include="Assets\img\favicon.ico" />
+    <Content Include="Assets\img\popular-products\popular-product-1.jpg" />
+    <Content Include="Assets\img\popular-products\popular-product-2.jpg" />
+    <Content Include="Assets\img\popular-products\popular-product-3.jpg" />
+    <Content Include="Assets\img\popular-products\popular-product-4.jpg" />
+    <Content Include="Assets\img\popular-products\popular-product-5.jpg" />
+    <Content Include="Assets\img\popular-products\popular-product-6.jpg" />
     <Content Include="Assets\img\promotion\banner-sale-1.png" />
     <Content Include="Assets\img\promotion\banner-sale-2.png" />
     <Content Include="Assets\img\testimonial\testimonial_1.jpg" />
@@ -126,6 +136,7 @@
     <Content Include="Assets\img\volunteer-products\volunteer-product-8.jpg" />
     <Content Include="Assets\img\volunteer-products\volunteer-product-9.jpg" />
     <Content Include="Assets\js\main.js" />
+    <Content Include="Assets\js\payment.js" />
     <Content Include="Assets\lib\easing\easing.js" />
     <Content Include="Assets\lib\easing\easing.min.js" />
     <Content Include="Assets\lib\lightbox\css\lightbox.min.css" />
@@ -152,7 +163,18 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CartController.cs" />
+    <Compile Include="Controllers\CheckoutController.cs" />
+    <Compile Include="Controllers\ContactController.cs" />
+    <Compile Include="Controllers\LegalController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\RegisterController.cs" />
+    <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -244,8 +266,6 @@
     <Content Include="Assets\scss\bootstrap\scss\_utilities.scss" />
     <Content Include="Assets\scss\bootstrap\scss\_variables.scss" />
     <Content Include="Assets\scss\bootstrap.scss" />
-    <Content Include="Assets\img\volunteer-products\volunteer-product-11.avif" />
-    <Content Include="Assets\img\volunteer-products\volunteer-product-12.avif" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\_Navbar.cshtml" />
     <Content Include="Views\Shared\_ModalSearch.cshtml" />
@@ -254,6 +274,52 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Main\Index.cshtml" />
+    <Content Include="Views\Shared\_LayoutContact.cshtml" />
+    <Content Include="Views\Contact\Contact.cshtml" />
+    <Content Include="Views\Shared\_LayoutError404.cshtml" />
+    <Content Include="Views\Main\Error404.cshtml" />
+    <Content Include="Views\Shared\_LayoutAddProduct.cshtml" />
+    <Content Include="Views\Product\AddProduct.cshtml" />
+    <Content Include="Views\Shared\_LayoutCart.cshtml" />
+    <Content Include="Views\Cart\Cart.cshtml" />
+    <Content Include="Views\Shared\_LayoutCheckout.cshtml" />
+    <Content Include="Views\Checkout\Checkout.cshtml" />
+    <Content Include="Views\Shared\_LayoutLogin.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
+    <Content Include="Views\Order\OrderConfirmation.cshtml" />
+    <Content Include="Views\Shared\_LayoutOrderConfirmation.cshtml" />
+    <Content Include="Views\Order\OrderFailure.cshtml" />
+    <Content Include="Views\Shared\_LayoutOrderFailure.cshtml" />
+    <Content Include="Views\Legal\PrivacyPolicy.cshtml" />
+    <Content Include="Views\Shared\_LayoutPrivacyPolicy.cshtml" />
+    <Content Include="Views\Profile\GeneralProfile.cshtml" />
+    <Content Include="Views\Shared\_LayoutGeneralProfile.cshtml" />
+    <Content Include="Views\Profile\ArticlesProfile.cshtml" />
+    <Content Include="Views\Shared\_LayoutArticlesProfile.cshtml" />
+    <Content Include="Views\Profile\ChangePasswordProfile.cshtml" />
+    <Content Include="Views\Shared\_LayoutChangePasswordProfile.cshtml" />
+    <Content Include="Views\Profile\PurchaseHistoryProfile.cshtml" />
+    <Content Include="Views\Shared\_LayoutPurchaseHistoryProfile.cshtml" />
+    <Content Include="Views\Profile\SalesProfile.cshtml" />
+    <Content Include="Views\Shared\_LayoutSalesProfile.cshtml" />
+    <Content Include="Views\Profile\SettingsProfile.cshtml" />
+    <Content Include="Views\Shared\_LayoutSettingsProfile.cshtml" />
+    <Content Include="Views\Register\Register.cshtml" />
+    <Content Include="Views\Shared\_LayoutRegister.cshtml" />
+    <Content Include="Views\Legal\SalesAndRefunds.cshtml" />
+    <Content Include="Views\Shared\_LayoutSalesAndRefunds.cshtml" />
+    <Content Include="Views\Legal\TermsOfUse.cshtml" />
+    <Content Include="Views\Shared\_LayoutTermsOfUse.cshtml" />
+    <Content Include="Views\Main\ThankYou.cshtml" />
+    <Content Include="Views\Shared\_LayoutThankYou.cshtml" />
+    <Content Include="Views\Product\UpdateProduct.cshtml" />
+    <Content Include="Views\Shared\_LayoutUpdateProduct.cshtml" />
+    <Content Include="Views\Product\ProductDetails.cshtml" />
+    <Content Include="Views\Shared\_LayoutProductDetails.cshtml" />
+    <Content Include="Views\Shop\Shop.cshtml" />
+    <Content Include="Views\Shared\_LayoutShop.cshtml" />
+    <Content Include="Views\Payment\Payment.cshtml" />
+    <Content Include="Views\Shared\_LayoutPayment.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
