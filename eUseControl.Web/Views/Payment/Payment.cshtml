@@ -132,13 +132,13 @@
         <input name="securityCode" id="securitycode" type="text" pattern="[0-9]*" inputmode="numeric"
                style="height: 40px">
     </div>
-    <form action="#" style="margin-left: 37px;">
+    <form action="@Url.Action("Index", "Main")" style="margin-left: 37px;">
         <button type="submit" class="animated-button-2"
                 style="padding: 8px 16px; background-color: #B22222; color: #fff; border: 2px; border-radius: 5px; font-size: 15px; cursor: pointer; transition: background-color 0.3s ease; margin-right: 40px">
             <span class="text">Cancel</span>
         </button>
     </form>
-    <form action="#" style="margin-left: 37px;">
+    <form action="@Url.Action("OrderConfirmation", "Order")" style="margin-left: 37px;">
         <button type="submit" class="animated-button"
                 style="padding: 8px 16px; background-color: #81c408; color: #fff; border: 2px; border-radius: 5px; font-size: 15px; cursor: pointer; transition: background-color 0.3s ease; margin-right: 40px">
             <span class="text">Confirm</span>
