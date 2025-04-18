@@ -1,37 +1,72 @@
-﻿﻿@{
+﻿@{
     Layout = "~/Views/Shared/_LayoutRegister.cshtml";
     ViewBag.Title = "Register";
 }
+
+@model eUseControl.Web.Models.UserRegister
 
 <div class="center">
     <div class="container" style="margin-top: 75px;">
         <div class="text">
             Registration
         </div>
-        <form action="#">
+        @using (Html.BeginForm("Register", "Register", FormMethod.Post, new { @id = "RegisterForm" }))
+        {
+            @Html.AntiForgeryToken()
             <div class="data">
-                <label>Username</label>
-                <input type="text" required>
+                @Html.LabelFor(m => m.Username, new { style = "margin-left: 2px;" })
+                @Html.TextBoxFor(m => m.Username, new { @class = "form-control", required = "required" })
             </div>
             <div class="data">
-                <label>Email</label>
-                <input type="text" required>
+                @Html.LabelFor(m => m.Email, new { style = "margin-left: 2px;" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", required = "required" })
             </div>
             <div class="data">
-                <label>Password</label>
-                <input type="password" required>
+                @Html.LabelFor(m => m.Password, new { style = "margin-left: 2px;" })
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", required = "required" })
             </div>
-            <div class="forgot-pass" style="padding-left: 10px;">
-                I agree all statements in
-                <a href="@Url.Action("TermsOfUse", "Legal")">Terms of service</a>
+
+            <div style="margin-top: 10px;">
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="text-danger no-bullets" style="text-align: center;">
+                        <ul>
+                            <li>@TempData["ErrorMessage"]</li>
+                        </ul>
+                    </div>
+                }
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="text-success no-bullets" style="text-align: center;">
+                        <ul>
+                            <li>@TempData["SuccessMessage"]</li>
+                        </ul>
+                    </div>
+
+                    <script>
+                        setTimeout(function () {
+                            window.location.href = '@Url.Action("Login", "Login")';
+                        }, 5000);
+                    </script>
+                }
             </div>
             <div class="btn">
                 <div class="inner"></div>
-                <button type="submit">Register</button>
+                <button type="submit" style="padding-top: 6px;">Register</button>
             </div>
+
             <div class="signup-link">
                 Already a member? <a href="@Url.Action("Login", "Login")">Log in here</a>
             </div>
-        </form>
+        }
     </div>
 </div>
+
+<style>
+    .no-bullets ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+    }
+</style>
