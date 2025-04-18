@@ -1,0 +1,9 @@
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Domain\bin\Debug\eUseControl.Domain.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Domain\bin\Debug\eUseControl.Domain.pdb
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Domain\bin\Debug\eUseControl.Helpers.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Domain\bin\Debug\eUseControl.Helpers.pdb
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Domain\obj\Debug\eUseControl.Domain.csproj.AssemblyReference.cache
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Domain\obj\Debug\eUseControl.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Domain\obj\Debug\eUseCont.610CB305.Up2Date
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Domain\obj\Debug\eUseControl.Domain.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Domain\obj\Debug\eUseControl.Domain.pdb

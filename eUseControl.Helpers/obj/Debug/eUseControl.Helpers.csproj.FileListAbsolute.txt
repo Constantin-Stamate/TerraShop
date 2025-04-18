@@ -1,0 +1,6 @@
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Helpers\bin\Debug\eUseControl.Helpers.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Helpers\bin\Debug\eUseControl.Helpers.pdb
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Helpers\obj\Debug\eUseControl.Helpers.csproj.AssemblyReference.cache
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Helpers\obj\Debug\eUseControl.Helpers.csproj.CoreCompileInputs.cache
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Helpers\obj\Debug\eUseControl.Helpers.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Helpers\obj\Debug\eUseControl.Helpers.pdb

@@ -85,3 +85,17 @@ C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\roslyn\System.Buffe
 C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\roslyn\System.Memory.dll
 C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\roslyn\System.Numerics.Vectors.dll
 C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\roslyn\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\AutoMapper.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\EntityFramework.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\EntityFramework.SqlServer.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\eUseControl.BusinessLogic.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\eUseControl.Domain.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\eUseControl.BusinessLogic.pdb
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\eUseControl.BusinessLogic.dll.config
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\eUseControl.Domain.pdb
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\AutoMapper.pdb
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\AutoMapper.xml
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\EntityFramework.xml
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\EntityFramework.SqlServer.xml
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\eUseControl.Helpers.dll
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Web\bin\eUseControl.Helpers.pdb
