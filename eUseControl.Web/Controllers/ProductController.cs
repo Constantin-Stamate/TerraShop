@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace eUseControl.Web.Controllers
 {
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         // GET: AddProduct
         public ActionResult AddProduct()

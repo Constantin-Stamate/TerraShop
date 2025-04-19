@@ -4,12 +4,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
 using eUseControl.BusinessLogic.DBModel;
 using eUseControl.Domain.Entities;
+using eUseControl.Domain.Entities.User;
+using eUseControl.Domain.Enums;
 using eUseControl.Helpers;
 
 namespace eUseControl.BusinessLogic.Core
@@ -69,6 +73,80 @@ namespace eUseControl.BusinessLogic.Core
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
                 return new URegisterResp { Status = false, StatusMsg = "Hmm, something went wrong!" };
+            }
+        }
+
+        internal ULoginResp UserLoginAction(ULoginData data)
+        {
+            UDbTable result;
+            var validate = new EmailAddressAttribute();
+
+            if (validate.IsValid(data.Username))
+            {
+                var pass = LoginHelper.HashGen(data.Password);
+
+                using (var db = new UserContext())
+                {
+                    result = db.Users.FirstOrDefault(u => u.Email == data.Username && u.Password == pass);
+                }
+
+                if (result == null)
+                {
+                    return new ULoginResp { Status = false, StatusMsg = "The username or password is incorrect!" };
+                }
+
+                using (var todo = new UserContext())
+                {
+                    result.LastIp = data.LastIp;
+                    result.Level = data.Level;
+                    result.LastLogin = data.LastLogin;
+                    todo.Entry(result).State = EntityState.Modified;
+                    todo.SaveChanges();
+                }
+
+                var userMinimal = new UserMinimal
+                {
+                    Id = result.Id,
+                    Username = result.Username,
+                    Email = result.Email,
+                    LastLogin = result.LastLogin ?? DateTime.Now,
+                    LastIp = result.LastIp,
+                    Level = result.Level ?? URole.User
+                };
+                return new ULoginResp { Status = true, UserMinimal = userMinimal };
+            }
+            else
+            {
+                var pass = LoginHelper.HashGen(data.Password);
+                using (var db = new UserContext())
+                {
+                    result = db.Users.FirstOrDefault(u => u.Username == data.Username && u.Password == pass);
+                }
+
+                if (result == null)
+                {
+                    return new ULoginResp { Status = false, StatusMsg = "The username or password is incorrect!" };
+                }
+
+                using (var todo = new UserContext())
+                {
+                    result.LastIp = data.LastIp;
+                    result.Level = data.Level;
+                    result.LastLogin = data.LastLogin;
+                    todo.Entry(result).State = EntityState.Modified;
+                    todo.SaveChanges();
+                }
+
+                var userMinimal = new UserMinimal
+                {
+                    Id = result.Id,
+                    Username = result.Username,
+                    Email = result.Email,
+                    LastLogin = result.LastLogin ?? DateTime.Now,
+                    LastIp = result.LastIp,
+                    Level = result.Level ?? URole.User
+                };
+                return new ULoginResp { Status = true, UserMinimal = userMinimal };
             }
         }
 

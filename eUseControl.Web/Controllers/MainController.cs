@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace eUseControl.Web.Controllers
 {
-    public class MainController : Controller
+    public class MainController : BaseController
     {
         // GET: Main
         public ActionResult Index()
