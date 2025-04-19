@@ -51,5 +51,29 @@ namespace eUseControl.Web.Controllers
                 System.Web.HttpContext.Current.Session["LoginStatus"] = "logout";
             }
         }
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+
+            SessionStatus();
+
+            var currentController = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
+            var currentAction = filterContext.ActionDescriptor.ActionName;
+
+            bool isHomePage = currentController.Equals("Main", StringComparison.OrdinalIgnoreCase) &&
+                              currentAction.Equals("Index", StringComparison.OrdinalIgnoreCase);
+
+            bool isLoginPage = currentController.Equals("Login", StringComparison.OrdinalIgnoreCase);
+
+            if (!isHomePage && !isLoginPage)
+            {
+                var loginStatus = System.Web.HttpContext.Current.Session["LoginStatus"];
+                if (loginStatus == null || loginStatus.ToString() != "login")
+                {
+                    filterContext.Result = new RedirectResult("/Login/Login");
+                }
+            }
+        }
     }
 }
