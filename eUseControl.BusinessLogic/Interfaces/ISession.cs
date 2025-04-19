@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using eUseControl.Domain.Entities;
 using System.Web;
+using eUseControl.Domain.Entities.User;
 
 namespace eUseControl.BusinessLogic.Interfaces
 {
@@ -15,5 +16,7 @@ namespace eUseControl.BusinessLogic.Interfaces
         HttpCookie GenCookie(string loginCredential);
 
         UserMinimal GetUserByCookie(string apiCookieValue);
+
+        ULoginResp UserLogin(ULoginData data);
     }
 }

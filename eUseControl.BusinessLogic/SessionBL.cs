@@ -7,6 +7,7 @@ using System.Web;
 using eUseControl.BusinessLogic.Core;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities;
+using eUseControl.Domain.Entities.User;
 
 namespace eUseControl.BusinessLogic
 {
@@ -25,6 +26,11 @@ namespace eUseControl.BusinessLogic
         public UserMinimal GetUserByCookie(string apiCookieValue)
         {
             return UserCookie(apiCookieValue);
+        }
+
+        public ULoginResp UserLogin(ULoginData data)
+        {
+            return UserLoginAction(data);
         }
     }
 }
