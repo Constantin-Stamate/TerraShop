@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace eUseControl.Web.Controllers
 {
-    public class ProfileController : Controller
+    public class ProfileController : BaseController
     {
         // GET: Profile
         public ActionResult GeneralProfile()
