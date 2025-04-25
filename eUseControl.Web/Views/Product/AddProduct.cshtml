@@ -3,6 +3,8 @@
     ViewBag.Title = "AddProduct";
 }
 
+@model eUseControl.Web.Models.Product 
+
 <div class="mask d-flex align-items-center gradient-custom-3" style="min-height: 100vh;">
     <div class="container" style="padding-top: 40px;">
         <div class="row d-flex justify-content-center align-items-center">
@@ -13,92 +15,130 @@
                             style="font-size: 28px; font-weight: 600; margin-top: 20px; color: #81c408;">
                             Create a new Product
                         </h2>
-                        <form action="#">
-                            <div class="row g-4">
-                                <div class="col-lg-6 mb-3" style="margin-top: 10mm;">
-                                    <div class="border-bottom rounded">
-                                        <input type="text" class="form-control border-0 me-4"
-                                               placeholder="Product name *">
+                        <div style="margin-top: 10px;">
+                            @if (TempData["ErrorMessage"] != null)
+                            {
+                                <div class="text-danger no-bullets" style="text-align: center; margin-top: -10px">
+                                    <ul>
+                                        <li>@TempData["ErrorMessage"]</li>
+                                    </ul>
+                                </div>
+                            }
+
+                            @if (TempData["SuccessMessage"] != null)
+                            {
+                                <div class="text-success no-bullets" style="text-align: center; margin-top: -10px">
+                                    <ul>
+                                        <li>@TempData["SuccessMessage"]</li>
+                                    </ul>
+                                </div>
+
+                                <script>
+                                    setTimeout(function () {
+                                        window.location.href = '@Url.Action("Shop", "Shop")';
+                                    }, 3500);
+                                </script>
+                            }
+
+                            @using (Html.BeginForm("AddProduct", "Product", FormMethod.Post, new { @id = "AddProductForm", enctype = "multipart/form-data" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="row g-4">
+                                    <div class="col-lg-6 mb-3" style="margin-top: 15mm;">
+                                        <div class="border-bottom rounded">
+                                            @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control border-0 me-4", placeholder = "Product name *", required = "required" })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-3" style="margin-top: 15mm;">
+                                        <div class="border-bottom rounded">
+                                            @Html.TextBoxFor(m => m.ProductAddress, new { @class = "form-control border-0", placeholder = "Address *", required = "required" })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="border-bottom rounded">
+                                            @Html.TextBoxFor(m => m.ProductQuantity, new { @class = "form-control border-0 me-4", placeholder = "Quantity *", required = "required" })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="border-bottom rounded">
+                                            @Html.DropDownListFor(m => m.ProductQuality, new List<SelectListItem>
+                                            {
+                                                new SelectListItem { Text = "Quality *", Value = "", Disabled = true, Selected = true },
+                                                new SelectListItem { Text = "Low", Value = "Low" },
+                                                new SelectListItem { Text = "Medium", Value = "Medium" },
+                                                new SelectListItem { Text = "High", Value = "High" },
+                                                new SelectListItem { Text = "Premium", Value = "Premium" },
+                                            }, new { @class = "form-control border-0 me-4", required = "required" })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="border-bottom rounded">
+                                            @Html.TextBoxFor(m => m.ProductPrice, new { @class = "form-control border-0 me-4", placeholder = "Price *", required = "required" })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="border-bottom rounded">
+                                            @Html.TextBoxFor(m => m.ProductRegion, new { @class = "form-control border-0 me-4", placeholder = "Region *", required = "required" })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="border-bottom rounded">
+                                            @Html.DropDownListFor(m => m.ProductCategory, new List<SelectListItem>
+                                            {
+                                                new SelectListItem { Text = "Category *", Value = "", Disabled = true, Selected = true },
+                                                new SelectListItem { Text = "Personal Care", Value = "Personal Care" },
+                                                new SelectListItem { Text = "Household", Value = "Household" },
+                                                new SelectListItem { Text = "Kitchen", Value = "Kitchen" },
+                                                new SelectListItem { Text = "Eco Fashion", Value = "Eco Fashion" },
+                                                new SelectListItem { Text = "Organic Cosmetics", Value = "Organic Cosmetics" },
+                                                new SelectListItem { Text = "Health Care", Value = "Health Care" },
+                                                new SelectListItem { Text = "Eco Chemicals", Value = "Eco Chemicals" },
+                                                new SelectListItem { Text = "Renewable Energy", Value = "Renewable Energy" },
+                                                new SelectListItem { Text = "Bio Tableware", Value = "Bio Tableware" },
+                                                new SelectListItem { Text = "Eco Transport", Value = "Eco Transport" },
+                                                new SelectListItem { Text = "Eco Car Cleaning", Value = "Eco Car Cleaning" },
+                                                new SelectListItem { Text = "Eco Construction", Value = "Eco Construction" },
+                                                new SelectListItem { Text = "Pet Care", Value = "Pet Care" },
+                                                new SelectListItem { Text = "Eco Gardening", Value = "Eco Gardening" },
+                                                new SelectListItem { Text = "Eco Stationery", Value = "Eco Stationery" }
+                                            }, new { @class = "form-control border-0 me-4", required = "required" })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="border-bottom rounded">
+                                            <input type="file" id="ProductImageUrl" name="ProductImageUrl" accept="image/*"
+                                                   class="form-control border-0 me-4" placeholder="Click to upload an image"
+                                                   onchange="displayFileName(event)" style="background-color: white;">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 mb-4">
+                                        <div class="border-bottom rounded">
+                                            @Html.TextAreaFor(m => m.ProductDescription, new { @class = "form-control border-0", placeholder = "Details *", spellcheck = "false", required = "required", cols = 30, rows = 3 })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="d-flex justify-content-between py-2 mb-0"
+                                             style="margin-top: -10px;">
+                                            <button type="submit"
+                                                    class="btn border border-secondary text-primary rounded-pill px-4 py-3">
+                                                Publish Product
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 mb-3" style="margin-top: 10mm;">
-                                    <div class="border-bottom rounded">
-                                        <input type="email" class="form-control border-0" placeholder="Address *">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-3">
-                                    <div class="border-bottom rounded">
-                                        <input type="text" class="form-control border-0 me-4"
-                                               placeholder="Quantity *">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-3">
-                                    <div class="border-bottom rounded">
-                                        <input type="text" class="form-control border-0 me-4"
-                                               placeholder="Quality *">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-3">
-                                    <div class="border-bottom rounded">
-                                        <input type="text" class="form-control border-0 me-4" placeholder="Price *">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-3">
-                                    <div class="border-bottom rounded">
-                                        <input type="text" class="form-control border-0 me-4"
-                                               placeholder="Region *">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-3">
-                                    <div class="border-bottom rounded">
-                                        <select class="form-control border-0 me-4" style="background-color: white;">
-                                            <option value="" disabled selected>Category *</option>
-                                            <option value="Personal Care">Personal Care</option>
-                                            <option value="Household">Household</option>
-                                            <option value="Kitchen">Kitchen</option>
-                                            <option value="Eco Fashion">Eco Fashion</option>
-                                            <option value="Organic Cosmetics">Organic Cosmetics</option>
-                                            <option value="Health Care">Health Care</option>
-                                            <option value="Eco Chemicals">Eco Chemicals</option>
-                                            <option value="Renewable Energy">Renewable Energy</option>
-                                            <option value="Biodegradable Tableware">Bio Tableware</option>
-                                            <option value="Eco Transport">Eco Transport</option>
-                                            <option value="Eco Car Cleaning">Eco Car Cleaning</option>
-                                            <option value="Eco Construction">Eco Construction</option>
-                                            <option value="Pet Care">Pet Care</option>
-                                            <option value="Eco Gardening">Eco Gardening</option>
-                                            <option value="Eco Stationery">Eco Stationery</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-3">
-                                    <div class="border-bottom rounded">
-                                        <input type="file" id="productImage" name="imageFile" accept="image/*"
-                                               class="form-control border-0 me-4"
-                                               placeholder="Click to upload an image"
-                                               onchange="displayFileName(event)" style="background-color: white;">
-                                    </div>
-                                </div>
-                                <div class="col-lg-12 mb-4">
-                                    <div class="border-bottom rounded">
-                                        <textarea name="" id="" class="form-control border-0" cols="30" rows="3"
-                                                  placeholder="Details *" spellcheck="false"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="d-flex justify-content-between py-2 mb-0"
-                                         style="margin-top: -10px;">
-                                        <a href="#"
-                                           class="btn border border-secondary text-primary rounded-pill px-4 py-3">
-                                            Publish Product
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .no-bullets ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    }
+</style>
