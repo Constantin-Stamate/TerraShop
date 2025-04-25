@@ -3,6 +3,8 @@
     ViewBag.Title = "ArticlesProfile";
 }
 
+@model IEnumerable<eUseControl.Web.Models.ProductCompact>
+
 <div class="card profile-card overflow-hidden">
     <div class="row no-gutters">
         <div class="col-md-3">
@@ -38,50 +40,93 @@
         </div>
         <div class="col-md-9 py-5">
             <h4 style="color: #81c408;">My Articles</h4>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center py-5">
-                <div class="col" style="margin-top: 2px;">
-                    <div class="card h-100 rounded position-relative shadow-sm border-0 anim">
-                        <div class="fruite2-img position-relative">
-                            <a href="#">
-                                <img src="@Url.Content("~/Assets/img/testimonial/testimonial_1.jpg")"
-                                     class="img-fluid w-100 rounded-top card-img-top"
-                                     alt="Product Image"
-                                     style="object-fit: cover; height: 250px;">
-                            </a>
-                            <div class="position-absolute top-0 end-0 m-2">
-                                <form action="#" method="post">
-                                    <button type="submit" class="btn btn-sm px-3"
-                                            style="background-color: #FFB524; color: white;">
-                                        Activate
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="card-body p-4 border border-top-0 rounded-bottom"
-                             style="border-color: #f6ba31; min-height: 200px;">
-                            <h5 class="card-title text-center">Wireless Headphones</h5>
-                            <p class="card-text text-muted small product-description text-center">
-                                High-quality wireless headphones with noise cancellation and 20-hour battery life.
-                            </p>
-                            <p class="text-dark fs-5 fw-bold mb-0">
-                                <span>$12.99</span>
-                            </p>
-                            <div class="d-flex justify-content-between flex-lg-wrap mt-3">
-                                <a href="@Url.Action("UpdateProduct", "Product")"
-                                   class="btn rounded-pill px-3 text-primary" style="transition: all 0.3s ease; border: 1px solid #FFB524; text-decoration: none;">
-                                    Change
-                                </a>
-                                <a href="#"
-                                   class="btn text-danger rounded-pill px-3"
-                                   onclick="return confirm('Are you sure you want to delete this product?');"
-                                   style="transition: all 0.3s ease; border: 1px solid #FFB524; text-decoration: none;">
-                                    Delete
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+            @if (Model == null || !Model.Any())
+            {
+                <div class="no-products-message" style="color: #888; font-size: 0.95em; margin-bottom: 50px;">
+                    You haven't added any products yet.
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center py-5">
+                    @foreach (var product in Model)
+                    {
+                        <div class="col" style="margin-top: 2px; margin-bottom: 20px;">
+                            <div class="card h-100 rounded position-relative shadow-sm border-0 anim">
+                                <div class="fruite2-img position-relative">
+                                    <a href="#">
+                                        <img src="@Url.Content(product.ProductImageUrl)"
+                                             class="img-fluid w-100 rounded-top card-img-top"
+                                             alt="Product Image"
+                                             style="object-fit: cover; height: 250px;">
+                                    </a>
+                                    <div class="position-absolute top-0 end-0 m-2">
+                                        <form action="#" method="post">
+                                            <button type="submit" class="btn btn-sm px-3"
+                                                    style="background-color: #FFB524; color: white;">
+                                                Activate
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="card-body p-4 border border-top-0 rounded-bottom"
+                                     style="border-color: #f6ba31; min-height: 200px;">
+                                    <h5 class="card-title text-center">@product.ProductName</h5>
+                                    <p class="card-text text-muted small product-description text-center">
+                                        @product.ProductDescription
+                                    </p>
+                                    <p class="text-dark fs-5 fw-bold mb-0">
+                                        <span>@product.ProductPrice$</span>
+                                    </p>
+                                    <div class="d-flex justify-content-between flex-lg-wrap mt-3">
+                                        <a href="@Url.Action("UpdateProduct", "Product", new { Id = product.Id })"
+                                           class="btn rounded-pill px-3 text-primary" style="transition: all 0.3s ease; border: 1px solid #FFB524; text-decoration: none;">
+                                            Change
+                                        </a>
+                                        <a href="#"
+                                           class="btn text-danger rounded-pill px-3"
+                                           onclick="return confirm('Are you sure you want to delete this product?');"
+                                           style="transition: all 0.3s ease; border: 1px solid #FFB524; text-decoration: none;">
+                                            Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
         </div>
     </div>
 </div>
+
+<style>
+    .product-description {
+        display: -webkit-box;
+        -webkit-line-clamp: 3; 
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal; 
+        min-height: 60px;
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+        .card-body .product-description {
+            flex-grow: 1; 
+        }
+
+        .card-body .btn {
+            margin-top: 10px; 
+        }
+
+        .card-body p.text-dark {
+            margin-bottom: 10px; 
+        }
+</style>
