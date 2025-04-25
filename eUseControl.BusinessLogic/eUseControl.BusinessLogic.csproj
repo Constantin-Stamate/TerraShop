@@ -58,9 +58,22 @@
     <Compile Include="BusinessLogicManager.cs" />
     <Compile Include="Core\AdminApi.cs" />
     <Compile Include="Core\UserApi.cs" />
+    <Compile Include="DBModel\CategoryContext.cs" />
+    <Compile Include="DBModel\ProductContext.cs" />
     <Compile Include="DBModel\SessionContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
+    <Compile Include="Interfaces\IProduct.cs" />
     <Compile Include="Interfaces\ISession.cs" />
+    <Compile Include="Migrations\202504241028061_CreateCategoriesTable.cs" />
+    <Compile Include="Migrations\202504241028061_CreateCategoriesTable.Designer.cs">
+      <DependentUpon>202504241028061_CreateCategoriesTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202504242255076_CreateProductsTable.cs" />
+    <Compile Include="Migrations\202504242255076_CreateProductsTable.Designer.cs">
+      <DependentUpon>202504242255076_CreateProductsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="ProductBL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionBL.cs" />
   </ItemGroup>
@@ -77,6 +90,14 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202504241028061_CreateCategoriesTable.resx">
+      <DependentUpon>202504241028061_CreateCategoriesTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202504242255076_CreateProductsTable.resx">
+      <DependentUpon>202504242255076_CreateProductsTable.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -15,6 +15,7 @@ using eUseControl.Domain.Entities;
 using eUseControl.Domain.Entities.User;
 using eUseControl.Domain.Enums;
 using eUseControl.Helpers;
+using eUseControl.Domain.Entities.Product;
 
 namespace eUseControl.BusinessLogic.Core
 {
@@ -146,6 +147,7 @@ namespace eUseControl.BusinessLogic.Core
                     LastIp = result.LastIp,
                     Level = result.Level ?? URole.User
                 };
+
                 return new ULoginResp { Status = true, UserMinimal = userMinimal };
             }
         }
@@ -232,6 +234,230 @@ namespace eUseControl.BusinessLogic.Core
             UserMinimal userMinimal = mapper.Map<UserMinimal>(curentUser);
 
             return userMinimal;
+        }
+
+        internal ProductResp CreateProductAction(ProductData productData, string cookie)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(productData.ProductName) ||
+                    string.IsNullOrWhiteSpace(productData.ProductAddress) ||
+                    string.IsNullOrWhiteSpace(productData.ProductQuality) ||
+                    string.IsNullOrWhiteSpace(productData.ProductRegion) ||
+                    string.IsNullOrWhiteSpace(productData.ProductImageUrl) ||
+                    string.IsNullOrWhiteSpace(productData.ProductDescription) ||
+                    string.IsNullOrWhiteSpace(productData.ProductCategory))
+                {
+                    return new ProductResp { Status = false, StatusMsg = "All fields are required!" };
+                }
+
+                if (productData.ProductQuantity <= 0)
+                {
+                    return new ProductResp { Status = false, StatusMsg = "Quantity must be a positive number!" };
+                }
+
+                if (productData.ProductPrice <= 0)
+                {
+                    return new ProductResp { Status = false, StatusMsg = "Price must be greater than zero!" };
+                }
+
+                Category category;
+                using (var db = new CategoryContext())
+                {
+                    category = db.Categories.FirstOrDefault(c => c.CategoryName == productData.ProductCategory);
+                    if (category == null)
+                    {
+                        return new ProductResp { Status = false, StatusMsg = "Invalid category!" };
+                    }
+                }
+
+                var userMinimal = UserCookie(cookie);
+                if (userMinimal == null)
+                {
+                    return new ProductResp { Status = false, StatusMsg = "User not authenticated!" };          
+                }
+
+                using (var db = new ProductContext())
+                {
+                    var product = new ProductDbTable
+                    {
+                        ProductName = productData.ProductName,
+                        ProductAddress = productData.ProductAddress,
+                        ProductQuantity = productData.ProductQuantity,
+                        ProductQuality = productData.ProductQuality,
+                        ProductPrice = productData.ProductPrice,
+                        ProductRegion = productData.ProductRegion,
+                        ProductImageUrl = productData.ProductImageUrl,
+                        ProductDescription = productData.ProductDescription,
+                        ProductPostDate = DateTime.Now,
+                        UserId = userMinimal.Id,
+                        CategoryId = category.Id,
+                        ProductStatus = ProductStatus.Available
+                    };
+
+                    db.Products.Add(product);
+                    db.SaveChanges();
+                }
+
+                return new ProductResp { Status = true, StatusMsg = "Product created successfully!" };
+            }
+            catch (Exception ex) 
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ProductResp { Status = false, StatusMsg = "An error occurred while saving the product!" };
+            }
+        }
+
+        internal List<ProductMinimal> GetProducts(string cookie)
+        {
+            var userMinimal = UserCookie(cookie);
+            if (userMinimal == null)
+            {
+                return new List<ProductMinimal>();
+            }
+
+            using (var db = new ProductContext())
+            {
+                var products = db.Products
+                    .Where(p => p.UserId == userMinimal.Id)
+                    .ToList();
+
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<ProductDbTable, ProductMinimal>()
+                       .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                       .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ProductName))
+                       .ForMember(dest => dest.ProductDescription, opt => opt.MapFrom(src => src.ProductDescription))
+                       .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.ProductPrice))
+                       .ForMember(dest => dest.ProductImageUrl, opt => opt.MapFrom(src => src.ProductImageUrl));
+                });
+
+                var mapper = config.CreateMapper();
+                var productMinimals = mapper.Map<List<ProductMinimal>>(products);
+
+                return productMinimals;
+            }
+        }
+
+        internal ProductData GetProductByIdAction(int productId, string cookie)
+        {
+            try
+            {
+                using (var db = new ProductContext()) 
+                {
+                    var userMinimal = UserCookie(cookie);
+
+                    var product = db.Products
+                                    .Where(p => p.Id == productId && p.UserId == userMinimal.Id)
+                                    .FirstOrDefault();
+
+                    if (product == null)
+                    {
+                        return null; 
+                    }
+
+                    using (var categoryDb = new CategoryContext())
+                    {
+                        var categoryName = categoryDb.Categories
+                                                     .Where(c => c.Id == product.CategoryId)
+                                                     .Select(c => c.CategoryName)
+                                                     .FirstOrDefault();
+
+                        var productData = new ProductData
+                        {
+                            ProductName = product.ProductName,
+                            ProductAddress = product.ProductAddress,
+                            ProductQuantity = product.ProductQuantity,
+                            ProductQuality = product.ProductQuality,
+                            ProductPrice = product.ProductPrice,
+                            ProductRegion = product.ProductRegion,
+                            ProductImageUrl = product.ProductImageUrl,
+                            ProductDescription = product.ProductDescription,
+                            ProductCategory = categoryName,
+                        };
+
+                        return productData;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return null; 
+            }
+        }
+
+        internal ProductResp UpdateProductAction(ProductData productData, string cookie, int productId)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(productData.ProductName) ||
+                    string.IsNullOrWhiteSpace(productData.ProductAddress) ||
+                    string.IsNullOrWhiteSpace(productData.ProductQuality) ||
+                    string.IsNullOrWhiteSpace(productData.ProductRegion) ||
+                    string.IsNullOrWhiteSpace(productData.ProductImageUrl) ||
+                    string.IsNullOrWhiteSpace(productData.ProductDescription) ||
+                    string.IsNullOrWhiteSpace(productData.ProductCategory))
+                {
+                    return new ProductResp { Status = false, StatusMsg = "All fields are required!" };
+                }
+
+                if (productData.ProductQuantity <= 0)
+                {
+                    return new ProductResp { Status = false, StatusMsg = "Quantity must be a positive number!" };
+                }
+
+                if (productData.ProductPrice <= 0)
+                {
+                    return new ProductResp { Status = false, StatusMsg = "Price must be greater than zero!" };
+                }
+
+                Category category;
+                using (var db = new CategoryContext())
+                {
+                    category = db.Categories.FirstOrDefault(c => c.CategoryName == productData.ProductCategory);
+                    if (category == null)
+                    {
+                        return new ProductResp { Status = false, StatusMsg = "Invalid category!" };
+                    }
+                }
+
+                var userMinimal = UserCookie(cookie);
+                if (userMinimal == null)
+                {
+                    return new ProductResp { Status = false, StatusMsg = "User not authenticated!" };
+                }
+
+                ProductDbTable product;
+                using (var db = new ProductContext())
+                {
+                    product = db.Products.FirstOrDefault(p => p.Id == productId && p.UserId == userMinimal.Id);
+                    if (product == null)
+                    {
+                        return new ProductResp { Status = false, StatusMsg = "Product not found!" };
+                    }
+
+                    product.ProductName = productData.ProductName;
+                    product.ProductAddress = productData.ProductAddress;
+                    product.ProductQuantity = productData.ProductQuantity;
+                    product.ProductQuality = productData.ProductQuality;
+                    product.ProductPrice = productData.ProductPrice;
+                    product.ProductRegion = productData.ProductRegion;
+                    product.ProductImageUrl = productData.ProductImageUrl;
+                    product.ProductDescription = productData.ProductDescription;
+                    product.CategoryId = category.Id;
+
+                    db.Entry(product).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+                return new ProductResp { Status = true, StatusMsg = "Product updated successfully!" };
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ProductResp { Status = false, StatusMsg = "An error occurred while updating the product!" };
+            }
         }
     }
 }
