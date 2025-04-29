@@ -91,10 +91,10 @@
       <DependentUpon>202504281533102_CreateUsersTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\User\Configuration.cs" />
-    <Compile Include="ProductBL.cs" />
+    <Compile Include="BusinessLayer\ProductBL.cs" />
     <Compile Include="BusinessLayer\ProfileBL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SessionBL.cs" />
+    <Compile Include="BusinessLayer\SessionBL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\eUseControl.Domain\eUseControl.Domain.csproj">
