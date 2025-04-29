@@ -62,8 +62,11 @@ namespace eUseControl.Web.Controllers
                     return RedirectToAction("Register", "Register", new { error = true });
                 }
             }
-
-            return View(register);
+            else
+            {
+                TempData["ErrorMessage"] = "The model you submitted is invalid!";
+                return RedirectToAction("Register", "Register", new { error = true });
+            }
         } 
     }
 }
