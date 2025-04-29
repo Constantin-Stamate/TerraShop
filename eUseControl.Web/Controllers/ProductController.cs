@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
@@ -22,13 +20,83 @@ namespace eUseControl.Web.Controllers
             _product = bl.GetProductBL();
         }
 
-        // GET: AddProduct
+        [HttpGet]
         public ActionResult AddProduct()
         {
             return View();
         }
 
-        // GET: UpdateProduct
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddProduct(Product product, HttpPostedFileBase ProductImageUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ProductImageUrl != null && ProductImageUrl.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileName(ProductImageUrl.FileName);
+                    string uploadsPath = Server.MapPath("~/Uploads/");
+
+                    if (!Directory.Exists(uploadsPath))
+                    {
+                        Directory.CreateDirectory(uploadsPath);
+                    }
+
+                    string filePath = Path.Combine(uploadsPath, fileName);
+
+                    if (!System.IO.File.Exists(filePath))
+                    {
+                        try
+                        {
+                            ProductImageUrl.SaveAs(filePath);
+                        }
+                        catch (Exception ex)
+                        {
+                            TempData["ErrorMessage"] = "Oops! Couldn't save the image: " + ex.Message;
+                            return RedirectToAction("AddProduct", "Product", new { error = true });
+                        }
+                    }
+
+                    product.ProductImageUrl = "~/Uploads/" + fileName;
+                }
+
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<Product, ProductData>();
+                });
+
+                var mapper = config.CreateMapper();
+                var productData = mapper.Map<ProductData>(product);
+
+                var cookie = Request.Cookies["X-KEY"].Value;
+                if (string.IsNullOrEmpty(cookie))
+                {
+                    TempData["ErrorMessage"] = "You are not authenticated!";
+                    return RedirectToAction("Login", "Login", new { error = true });
+                }
+
+                var result = _product.CreateProduct(productData, cookie);
+
+                if (result.Status)
+                {
+                    TempData["SuccessMessage"] = "The product has been successfully created!";
+                    return RedirectToAction("AddProduct", "Product", new { success = true });
+                }
+                else
+                {
+                    ModelState.AddModelError("", result.StatusMsg);
+                    TempData["ErrorMessage"] = result.StatusMsg;
+
+                    return RedirectToAction("AddProduct", "Product", new { error = true });
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "The model you submitted is invalid!";
+                return RedirectToAction("AddProduct", "Product", new { error = true });
+            }
+        }
+
         [HttpGet]
         public ActionResult UpdateProduct(int Id)
         {
@@ -128,81 +196,10 @@ namespace eUseControl.Web.Controllers
             }
         }
 
-        // GET: ProductDetails
+        [HttpGet]
         public ActionResult ProductDetails()
         {
             return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AddProduct(Product product, HttpPostedFileBase ProductImageUrl)
-        {
-            if (ModelState.IsValid)
-            {
-                if (ProductImageUrl != null && ProductImageUrl.ContentLength > 0)
-                {
-                    string fileName = Path.GetFileName(ProductImageUrl.FileName);
-                    string uploadsPath = Server.MapPath("~/Uploads/");
-
-                    if (!Directory.Exists(uploadsPath))
-                    {
-                        Directory.CreateDirectory(uploadsPath);
-                    }
-
-                    string filePath = Path.Combine(uploadsPath, fileName);
-
-                    if (!System.IO.File.Exists(filePath))
-                    {
-                        try
-                        {
-                            ProductImageUrl.SaveAs(filePath);
-                        }
-                        catch (Exception ex)
-                        {
-                            TempData["ErrorMessage"] = "Oops! Couldn't save the image: " + ex.Message;
-                            return RedirectToAction("AddProduct", "Product", new { error = true });
-                        }
-                    }
-
-                    product.ProductImageUrl = "~/Uploads/" + fileName;
-                }
-
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Product, ProductData>();
-                });
-
-                var mapper = config.CreateMapper();
-                var productData = mapper.Map<ProductData>(product);
-
-                var cookie = Request.Cookies["X-KEY"].Value;
-                if (string.IsNullOrEmpty(cookie))
-                {
-                    TempData["ErrorMessage"] = "You are not authenticated!";
-                    return RedirectToAction("Login", "Login", new { error = true }); 
-                }
-
-                var result = _product.CreateProduct(productData, cookie);
-
-                if (result.Status)
-                {
-                    TempData["SuccessMessage"] = "The product has been successfully created!";
-                    return RedirectToAction("AddProduct", "Product", new { success = true });
-                }
-                else
-                {
-                    ModelState.AddModelError("", result.StatusMsg);
-                    TempData["ErrorMessage"] = result.StatusMsg;
-
-                    return RedirectToAction("AddProduct", "Product", new { error = true });
-                }
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "The model you submitted is invalid!";
-                return RedirectToAction("AddProduct", "Product", new { error = true });
-            }
         }
     }
 }

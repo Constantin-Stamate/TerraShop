@@ -13,6 +13,7 @@ using eUseControl.Domain.Enums;
 using eUseControl.Helpers;
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Profile;
+using System.Text.RegularExpressions;
 
 namespace eUseControl.BusinessLogic.Core
 {
@@ -24,19 +25,40 @@ namespace eUseControl.BusinessLogic.Core
             {
                 if (data.Password.Length < 8)
                 {
-                    return new URegisterResp { Status = false, StatusMsg = "Minimum 8 characters required!" };
+                    return new URegisterResp 
+                    { 
+                        Status = false, 
+                        StatusMsg = "Minimum 8 characters required!" 
+                    };
+                }
+
+                if (!Regex.IsMatch(data.Password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$"))
+                {
+                    return new URegisterResp
+                    {
+                        Status = false,
+                        StatusMsg = "Password must meet complexity requirements!"
+                    };
                 }
 
                 using (var db = new UserContext())
                 {
                     if (db.Users.Any(u => u.Email == data.Email))
                     {
-                        return new URegisterResp { Status = false, StatusMsg = "Email has already been used!" };
+                        return new URegisterResp 
+                        { 
+                            Status = false, 
+                            StatusMsg = "Email has already been used!" 
+                        };
                     }
 
                     if (db.Users.Any(u => u.Username == data.Username))
                     {
-                        return new URegisterResp { Status = false, StatusMsg = "Username has already been used!" };
+                        return new URegisterResp 
+                        { 
+                            Status = false, 
+                            StatusMsg = "Username has already been used!" 
+                        };
                     }
 
                     var hashedPassword = LoginHelper.HashGen(data.Password);
@@ -54,7 +76,10 @@ namespace eUseControl.BusinessLogic.Core
                     db.SaveChanges();
                 }
 
-                return new URegisterResp { Status = true };
+                return new URegisterResp 
+                { 
+                    Status = true 
+                };
             }
             catch (DbUpdateException e)
             {
@@ -65,12 +90,20 @@ namespace eUseControl.BusinessLogic.Core
                     innerException = innerException.InnerException;
                 }
 
-                return new URegisterResp { Status = false, StatusMsg = "We couldn't save your account!" };
+                return new URegisterResp 
+                { 
+                    Status = false, 
+                    StatusMsg = "We couldn't save your account!" 
+                };
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
-                return new URegisterResp { Status = false, StatusMsg = "Hmm, something went wrong!" };
+                return new URegisterResp 
+                { 
+                    Status = false, 
+                    StatusMsg = "Hmm, something went wrong!" 
+                };
             }
         }
 
@@ -90,7 +123,11 @@ namespace eUseControl.BusinessLogic.Core
 
                 if (result == null)
                 {
-                    return new ULoginResp { Status = false, StatusMsg = "The username or password is incorrect!" };
+                    return new ULoginResp 
+                    { 
+                        Status = false, 
+                        StatusMsg = "The username or password is incorrect!" 
+                    };
                 }
 
                 using (var todo = new UserContext())
@@ -111,7 +148,12 @@ namespace eUseControl.BusinessLogic.Core
                     LastIp = result.LastIp,
                     Level = result.Level ?? URole.User
                 };
-                return new ULoginResp { Status = true, UserMinimal = userMinimal };
+
+                return new ULoginResp 
+                { 
+                    Status = true, 
+                    UserMinimal = userMinimal 
+                };
             }
             else
             {
@@ -123,7 +165,11 @@ namespace eUseControl.BusinessLogic.Core
 
                 if (result == null)
                 {
-                    return new ULoginResp { Status = false, StatusMsg = "The username or password is incorrect!" };
+                    return new ULoginResp 
+                    { 
+                        Status = false,
+                        StatusMsg = "The username or password is incorrect!" 
+                    };
                 }
 
                 using (var todo = new UserContext())
@@ -145,7 +191,11 @@ namespace eUseControl.BusinessLogic.Core
                     Level = result.Level ?? URole.User
                 };
 
-                return new ULoginResp { Status = true, UserMinimal = userMinimal };
+                return new ULoginResp 
+                { 
+                    Status = true, 
+                    UserMinimal = userMinimal 
+                };
             }
         }
 
@@ -245,17 +295,29 @@ namespace eUseControl.BusinessLogic.Core
                     string.IsNullOrWhiteSpace(productData.ProductDescription) ||
                     string.IsNullOrWhiteSpace(productData.ProductCategory))
                 {
-                    return new ProductResp { Status = false, StatusMsg = "All fields are required!" };
+                    return new ProductResp 
+                    { 
+                        Status = false, 
+                        StatusMsg = "All fields are required!" 
+                    };
                 }
 
                 if (productData.ProductQuantity <= 0)
                 {
-                    return new ProductResp { Status = false, StatusMsg = "Quantity must be a positive number!" };
+                    return new ProductResp 
+                    { 
+                        Status = false, 
+                        StatusMsg = "Quantity must be a positive number!" 
+                    };
                 }
 
                 if (productData.ProductPrice <= 0)
                 {
-                    return new ProductResp { Status = false, StatusMsg = "Price must be greater than zero!" };
+                    return new ProductResp 
+                    { 
+                        Status = false, 
+                        StatusMsg = "Price must be greater than zero!" 
+                    };
                 }
 
                 Category category;
@@ -264,14 +326,22 @@ namespace eUseControl.BusinessLogic.Core
                     category = db.Categories.FirstOrDefault(c => c.CategoryName == productData.ProductCategory);
                     if (category == null)
                     {
-                        return new ProductResp { Status = false, StatusMsg = "Invalid category!" };
+                        return new ProductResp 
+                        { 
+                            Status = false, 
+                            StatusMsg = "Invalid category!" 
+                        };
                     }
                 }
 
                 var userMinimal = UserCookie(cookie);
                 if (userMinimal == null)
                 {
-                    return new ProductResp { Status = false, StatusMsg = "User not authenticated!" };          
+                    return new ProductResp 
+                    { 
+                        Status = false, 
+                        StatusMsg = "User not authenticated!" 
+                    };          
                 }
 
                 using (var db = new ProductContext())
@@ -296,12 +366,20 @@ namespace eUseControl.BusinessLogic.Core
                     db.SaveChanges();
                 }
 
-                return new ProductResp { Status = true, StatusMsg = "Product created successfully!" };
+                return new ProductResp 
+                { 
+                    Status = true, 
+                    StatusMsg = "Product created successfully!" 
+                };
             }
             catch (Exception ex) 
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new ProductResp { Status = false, StatusMsg = "An error occurred while saving the product!" };
+                return new ProductResp 
+                { 
+                    Status = false, 
+                    StatusMsg = "An error occurred while saving the product!" 
+                };
             }
         }
 
@@ -396,17 +474,29 @@ namespace eUseControl.BusinessLogic.Core
                     string.IsNullOrWhiteSpace(productData.ProductDescription) ||
                     string.IsNullOrWhiteSpace(productData.ProductCategory))
                 {
-                    return new ProductResp { Status = false, StatusMsg = "All fields are required!" };
+                    return new ProductResp 
+                    { 
+                        Status = false, 
+                        StatusMsg = "All fields are required!" 
+                    };
                 }
 
                 if (productData.ProductQuantity <= 0)
                 {
-                    return new ProductResp { Status = false, StatusMsg = "Quantity must be a positive number!" };
+                    return new ProductResp 
+                    { 
+                        Status = false, 
+                        StatusMsg = "Quantity must be a positive number!" 
+                    };
                 }
 
                 if (productData.ProductPrice <= 0)
                 {
-                    return new ProductResp { Status = false, StatusMsg = "Price must be greater than zero!" };
+                    return new ProductResp 
+                    { 
+                        Status = false, 
+                        StatusMsg = "Price must be greater than zero!" 
+                    };
                 }
 
                 Category category;
@@ -415,14 +505,22 @@ namespace eUseControl.BusinessLogic.Core
                     category = db.Categories.FirstOrDefault(c => c.CategoryName == productData.ProductCategory);
                     if (category == null)
                     {
-                        return new ProductResp { Status = false, StatusMsg = "Invalid category!" };
+                        return new ProductResp 
+                        { 
+                            Status = false, 
+                            StatusMsg = "Invalid category!" 
+                        };
                     }
                 }
 
                 var userMinimal = UserCookie(cookie);
                 if (userMinimal == null)
                 {
-                    return new ProductResp { Status = false, StatusMsg = "User not authenticated!" };
+                    return new ProductResp 
+                    { 
+                        Status = false, 
+                        StatusMsg = "User not authenticated!" 
+                    };
                 }
 
                 ProductDbTable product;
@@ -431,7 +529,11 @@ namespace eUseControl.BusinessLogic.Core
                     product = db.Products.FirstOrDefault(p => p.Id == productId && p.UserId == userMinimal.Id);
                     if (product == null)
                     {
-                        return new ProductResp { Status = false, StatusMsg = "Product not found!" };
+                        return new ProductResp 
+                        { 
+                            Status = false, 
+                            StatusMsg = "Product not found!" 
+                        };
                     }
 
                     product.ProductName = productData.ProductName;
@@ -448,12 +550,20 @@ namespace eUseControl.BusinessLogic.Core
                     db.SaveChanges();
                 }
 
-                return new ProductResp { Status = true, StatusMsg = "Product updated successfully!" };
+                return new ProductResp 
+                { 
+                    Status = true, 
+                    StatusMsg = "Product updated successfully!" 
+                };
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new ProductResp { Status = false, StatusMsg = "An error occurred while updating the product!" };
+                return new ProductResp 
+                { 
+                    Status = false, 
+                    StatusMsg = "An error occurred while updating the product!" 
+                };
             }
         }
 
@@ -516,13 +626,73 @@ namespace eUseControl.BusinessLogic.Core
         {
             try
             {
-                using (var db = new ProfileContext())
-                {
-                    var userProfile = db.UserProfiles.FirstOrDefault(p => p.UserId == userId);
+                if (string.IsNullOrWhiteSpace(profileData.FirstName) || profileData.FirstName.Length < 5)
+                { 
+                    return new ProfileResp 
+                    { 
+                        Status = false, 
+                        StatusMsg = "First name must be at least 5 characters!" 
+                    };
+                }
 
+                if (string.IsNullOrWhiteSpace(profileData.LastName) || profileData.LastName.Length < 5)
+                {
+                    return new ProfileResp
+                    {
+                        Status = false,
+                        StatusMsg = "Last name must be at least 5 characters!"
+                    };
+                }
+
+                if (string.IsNullOrWhiteSpace(profileData.Email) || !Regex.IsMatch(profileData.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                {
+                    return new ProfileResp
+                    {
+                        Status = false,
+                        StatusMsg = "Please enter a valid email address!"
+                    };
+                }
+
+                if (string.IsNullOrWhiteSpace(profileData.PhoneNumber) || !Regex.IsMatch(profileData.PhoneNumber, @"^\d{9}$"))
+                {
+                    return new ProfileResp
+                    {
+                        Status = false,
+                        StatusMsg = "Phone number must contain exactly 9 digits!"
+                    };
+                }
+
+                if (string.IsNullOrWhiteSpace(profileData.Address) || profileData.Address.Length < 5)
+                {
+                    return new ProfileResp
+                    {
+                        Status = false,
+                        StatusMsg = "Address must be at least 5 characters!"
+                    };
+                }
+
+                using (var profileDb = new ProfileContext())
+                using (var userDb = new UserContext())
+                {
+                    var existingEmailUser = userDb.Users.FirstOrDefault(u => u.Email == profileData.Email && u.Id != userId);
+
+                    if (existingEmailUser != null)
+                    {
+                        return new ProfileResp
+                        {
+                            Status = false,
+                            StatusMsg = "This email is already in use by another user!"
+                        };
+                    }
+
+                    var userProfile = profileDb.UserProfiles.FirstOrDefault(p => p.UserId == userId);
                     if (userProfile == null)
                     {
-                        return new ProfileResp { Status = false, StatusMsg = "We couldn't find your profile!" };
+                        return new ProfileResp 
+                        { 
+                            Status = false, 
+                            StatusMsg = "We couldn't find your profile!" 
+                        };
                     }
 
                     userProfile.FirstName = profileData.FirstName;
@@ -531,21 +701,34 @@ namespace eUseControl.BusinessLogic.Core
                     userProfile.Address = profileData.Address;
                     userProfile.PhoneNumber = profileData.PhoneNumber;
                     if (!string.IsNullOrEmpty(profileData.ProfileImageUrl))
-                    {
                         userProfile.ProfileImageUrl = profileData.ProfileImageUrl;
-                    }
                     userProfile.LastProfileUpdate = DateTime.Now;
+                    profileDb.Entry(userProfile).State = EntityState.Modified;
+                    profileDb.SaveChanges();
 
-                    db.Entry(userProfile).State = EntityState.Modified;
-                    db.SaveChanges();
+                    var user = userDb.Users.FirstOrDefault(u => u.Id == userId);
+                    if (user != null)
+                    {
+                        user.Email = profileData.Email;
+                        userDb.Entry(user).State = EntityState.Modified;
+                        userDb.SaveChanges();
+                    }
                 }
 
-                return new ProfileResp { Status = true, StatusMsg = "Your profile has been updated!" };
+                return new ProfileResp 
+                { 
+                    Status = true, 
+                    StatusMsg = "Your profile has been updated!" 
+                };
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new ProfileResp { Status = false, StatusMsg = "Oops! There was an error saving your changes!" };
+                return new ProfileResp 
+                { 
+                    Status = false, 
+                    StatusMsg = "Oops! There was an error saving your changes!" 
+                };
             }
         }
 
@@ -555,17 +738,38 @@ namespace eUseControl.BusinessLogic.Core
             {
                 if (string.IsNullOrWhiteSpace(currentPassword) || string.IsNullOrWhiteSpace(newPassword))
                 {
-                    return new ProfileResp { Status = false, StatusMsg = "Passwords cannot be empty!" };
+                    return new ProfileResp 
+                    { 
+                        Status = false, 
+                        StatusMsg = "Passwords cannot be empty!" 
+                    };
                 }
 
                 if (newPassword.Length < 8)
                 {
-                    return new ProfileResp { Status = false, StatusMsg = "New password must be at least 8 characters long!" };
+                    return new ProfileResp 
+                    { 
+                        Status = false, 
+                        StatusMsg = "New password must be at least 8 characters long!" 
+                    };
                 }
 
                 if (currentPassword == newPassword)
                 {
-                    return new ProfileResp { Status = false, StatusMsg = "New password must be different from the current one!" };
+                    return new ProfileResp 
+                    { 
+                        Status = false, 
+                        StatusMsg = "New password must be different from the current one!" 
+                    };
+                }
+
+                if (!Regex.IsMatch(newPassword, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$"))
+                {
+                    return new ProfileResp
+                    {
+                        Status = false,
+                        StatusMsg = "Password must meet complexity requirements!"
+                    };
                 }
 
                 var hashedCurrent = LoginHelper.HashGen(currentPassword);
@@ -577,20 +781,32 @@ namespace eUseControl.BusinessLogic.Core
 
                     if (user == null)
                     {
-                        return new ProfileResp { Status = false, StatusMsg = "Incorrect current password!" };
+                        return new ProfileResp 
+                        { 
+                            Status = false, 
+                            StatusMsg = "Incorrect current password!" 
+                        };
                     }
 
                     user.Password = hashedNew;
                     db.Entry(user).State = EntityState.Modified;
                     db.SaveChanges();
 
-                    return new ProfileResp { Status = true, StatusMsg = "Password changed successfully!" };
+                    return new ProfileResp 
+                    { 
+                        Status = true, 
+                        StatusMsg = "Password changed successfully!" 
+                    };
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new ProfileResp { Status = false, StatusMsg = "An error occurred while updating the password!" };
+                return new ProfileResp 
+                { 
+                    Status = false, 
+                    StatusMsg = "An error occurred while updating the password!" 
+                };
             }
         }
     }

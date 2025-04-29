@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using eUseControl.BusinessLogic.Core;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities.Product;
 
-namespace eUseControl.BusinessLogic
+namespace eUseControl.BusinessLogic.BusinessLayer
 {
     public class ProductBL : UserApi, IProduct
     {

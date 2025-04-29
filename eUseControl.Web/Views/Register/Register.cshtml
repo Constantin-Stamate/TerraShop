@@ -25,7 +25,6 @@
                 @Html.LabelFor(m => m.Password, new { style = "margin-left: 2px;" })
                 @Html.PasswordFor(m => m.Password, new { @class = "form-control", required = "required" })
             </div>
-
             <div style="margin-top: 10px;">
                 @if (TempData["ErrorMessage"] != null)
                 {
@@ -47,7 +46,7 @@
                     <script>
                         setTimeout(function () {
                             window.location.href = '@Url.Action("Login", "Login")';
-                        }, 5000);
+                        }, 3500);
                     </script>
                 }
             </div>
@@ -55,7 +54,6 @@
                 <div class="inner"></div>
                 <button type="submit" style="padding-top: 6px;">Register</button>
             </div>
-
             <div class="signup-link">
                 Already a member? <a href="@Url.Action("Login", "Login")">Log in here</a>
             </div>

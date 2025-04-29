@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace eUseControl.Web.Controllers
 {
     public class LegalController : Controller
     {
-        // GET: PrivacyPolicy
+        [HttpGet]
         public ActionResult PrivacyPolicy() 
         {
             return View();
         }
 
-        // GET: SalesAndRefunds
+        [HttpGet]
         public ActionResult SalesAndRefunds()
         {
             return View();
         }
 
-        // GET: TermsOfUse
+        [HttpGet]
         public ActionResult TermsOfUse()
         {
             return View();
