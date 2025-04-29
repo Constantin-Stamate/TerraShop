@@ -170,6 +170,9 @@
     <Compile Include="Entities\Product\ProductDbTable.cs" />
     <Compile Include="Entities\Product\ProductMinimal.cs" />
     <Compile Include="Entities\Product\ProductResp.cs" />
+    <Compile Include="Entities\Profile\ProfileData.cs" />
+    <Compile Include="Entities\Profile\ProfileDbTable.cs" />
+    <Compile Include="Entities\Profile\ProfileResp.cs" />
     <Compile Include="Entities\User\Session.cs" />
     <Compile Include="Entities\User\UDbTable.cs" />
     <Compile Include="Entities\User\ULoginData.cs" />

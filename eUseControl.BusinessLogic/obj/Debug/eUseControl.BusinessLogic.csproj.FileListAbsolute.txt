@@ -17,6 +17,9 @@ C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUs
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseCont.F912DA32.Up2Date
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.dll
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.pdb
-C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.CreateCategoriesTable.resources
+C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.User.CreateUsersTable.resources
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.csproj.GenerateResource.cache
-C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.CreateProductsTable.resources
+C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Session.CreateSessionsTable.resources
+C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.ProductCategory.CreateProductCategoriesTable.resources
+C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Product.CreateProductsTable.resources
+C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Profile.CreateUserProfilesTable.resources

@@ -3,6 +3,8 @@
     ViewBag.Title = "GeneralProfile";
 }
 
+@model eUseControl.Web.Models.ProfileCompact
+
 <div class="card profile-card overflow-hidden">
     <div class="row no-gutters">
         <div class="col-md-3">
@@ -39,19 +41,19 @@
         <div class="col-md-9">
             <div class="card-body">
                 <div class="profile-header">
-                    <img src="@Url.Content("~/Assets/img/testimonial/testimonial_1.jpg")" alt="Profile Image" class="profile-image">
+                    <img src="@Url.Content(Model.ProfileImageUrl)" alt="Profile Image" class="profile-image">
                     <div class="profile-header-info">
-                        <h3>John Doe</h3>
-                        <p>johndoe@example.com</p>
+                        <h3>@Model.FirstName @Model.LastName</h3>
+                        <p>@Model.Email</p>
                     </div>
                 </div>
                 <hr>
                 <div class="profile-info">
-                    <p><span class="profile-section-title">Name:</span> John</p>
-                    <p><span class="profile-section-title">Surname:</span> Doe</p>
-                    <p><span class="profile-section-title">Email:</span> johndoe@example.com</p>
-                    <p><span class="profile-section-title">Address:</span> 1234 Elm Street, Springfield</p>
-                    <p><span class="profile-section-title">Phone number:</span> +123456789</p>
+                    <p><span class="profile-section-title">Name:</span> @Model.FirstName</p>
+                    <p><span class="profile-section-title">Surname:</span> @Model.LastName</p>
+                    <p><span class="profile-section-title">Email:</span> @Model.Email</p>
+                    <p><span class="profile-section-title">Address:</span> @Model.Address</p>
+                    <p><span class="profile-section-title">Phone number:</span> @Model.PhoneNumber</p>
                 </div>
             </div>
         </div>
