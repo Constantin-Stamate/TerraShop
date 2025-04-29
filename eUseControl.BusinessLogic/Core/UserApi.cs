@@ -4,10 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Net.Mail;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
 using eUseControl.BusinessLogic.DBModel;
@@ -16,6 +12,7 @@ using eUseControl.Domain.Entities.User;
 using eUseControl.Domain.Enums;
 using eUseControl.Helpers;
 using eUseControl.Domain.Entities.Product;
+using eUseControl.Domain.Entities.Profile;
 
 namespace eUseControl.BusinessLogic.Core
 {
@@ -457,6 +454,143 @@ namespace eUseControl.BusinessLogic.Core
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return new ProductResp { Status = false, StatusMsg = "An error occurred while updating the product!" };
+            }
+        }
+
+        internal ProfileData GetProfileByUserIdAction(int userId)
+        {
+            try
+            {
+                UDbTable user;
+                using (var userDb = new UserContext())
+                {
+                    user = userDb.Users.FirstOrDefault(u => u.Id == userId);
+                    if (user == null)
+                    {
+                        return null;
+                    }
+                }
+
+                ProfileData profile = null;
+                using (var profileDb = new ProfileContext())
+                {
+                    var userProfile = profileDb.UserProfiles.FirstOrDefault(p => p.UserId == userId);
+
+                    if (userProfile == null)
+                    {
+                        userProfile = new ProfileDbTable
+                        {
+                            UserId = userId,
+                            FirstName = "User", 
+                            LastName = "User", 
+                            Email = user.Email,
+                            Address = "N/A",
+                            PhoneNumber = "N/A",
+                            LastProfileUpdate = DateTime.Now,
+                            ProfileImageUrl = "/Assets/img/user.jpg"
+                        };
+
+                        profileDb.UserProfiles.Add(userProfile);
+                        profileDb.SaveChanges();
+                    }
+
+                    var config = new MapperConfiguration(cfg =>
+                    {
+                        cfg.CreateMap<ProfileDbTable, ProfileData>();
+                    });
+
+                    var mapper = config.CreateMapper();
+                    profile = mapper.Map<ProfileData>(userProfile);
+                }
+
+                return profile;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return null;  
+            }
+        }
+
+        internal ProfileResp UpdateProfileAction(int userId, ProfileData profileData)
+        {
+            try
+            {
+                using (var db = new ProfileContext())
+                {
+                    var userProfile = db.UserProfiles.FirstOrDefault(p => p.UserId == userId);
+
+                    if (userProfile == null)
+                    {
+                        return new ProfileResp { Status = false, StatusMsg = "We couldn't find your profile!" };
+                    }
+
+                    userProfile.FirstName = profileData.FirstName;
+                    userProfile.LastName = profileData.LastName;
+                    userProfile.Email = profileData.Email;
+                    userProfile.Address = profileData.Address;
+                    userProfile.PhoneNumber = profileData.PhoneNumber;
+                    if (!string.IsNullOrEmpty(profileData.ProfileImageUrl))
+                    {
+                        userProfile.ProfileImageUrl = profileData.ProfileImageUrl;
+                    }
+                    userProfile.LastProfileUpdate = DateTime.Now;
+
+                    db.Entry(userProfile).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+                return new ProfileResp { Status = true, StatusMsg = "Your profile has been updated!" };
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ProfileResp { Status = false, StatusMsg = "Oops! There was an error saving your changes!" };
+            }
+        }
+
+        internal ProfileResp ChangePasswordAction(string currentPassword, string newPassword, int userId)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(currentPassword) || string.IsNullOrWhiteSpace(newPassword))
+                {
+                    return new ProfileResp { Status = false, StatusMsg = "Passwords cannot be empty!" };
+                }
+
+                if (newPassword.Length < 8)
+                {
+                    return new ProfileResp { Status = false, StatusMsg = "New password must be at least 8 characters long!" };
+                }
+
+                if (currentPassword == newPassword)
+                {
+                    return new ProfileResp { Status = false, StatusMsg = "New password must be different from the current one!" };
+                }
+
+                var hashedCurrent = LoginHelper.HashGen(currentPassword);
+                var hashedNew = LoginHelper.HashGen(newPassword);
+
+                using (var db = new UserContext())
+                {
+                    var user = db.Users.FirstOrDefault(u => u.Id == userId && u.Password == hashedCurrent);
+
+                    if (user == null)
+                    {
+                        return new ProfileResp { Status = false, StatusMsg = "Incorrect current password!" };
+                    }
+
+                    user.Password = hashedNew;
+                    db.Entry(user).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return new ProfileResp { Status = true, StatusMsg = "Password changed successfully!" };
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ProfileResp { Status = false, StatusMsg = "An error occurred while updating the password!" };
             }
         }
     }
