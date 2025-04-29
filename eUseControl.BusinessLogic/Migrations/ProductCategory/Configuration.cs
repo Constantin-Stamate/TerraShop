@@ -1,9 +1,6 @@
-﻿namespace eUseControl.BusinessLogic.Migrations
+﻿namespace eUseControl.BusinessLogic.Migrations.ProductCategory
 {
-    using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
     using eUseControl.Domain.Entities.Product;
 
     internal sealed class Configuration : DbMigrationsConfiguration<eUseControl.BusinessLogic.DBModel.CategoryContext>
@@ -11,6 +8,7 @@
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            MigrationsDirectory = @"Migrations\ProductCategory";
         }
 
         protected override void Seed(eUseControl.BusinessLogic.DBModel.CategoryContext context)
@@ -25,7 +23,7 @@
                 new Category { CategoryName = "Health Care" },
                 new Category { CategoryName = "Eco Chemicals" },
                 new Category { CategoryName = "Renewable Energy" },
-                new Category { CategoryName = "Biodegradable Tableware" },
+                new Category { CategoryName = "Bio Tableware" },
                 new Category { CategoryName = "Eco Transport" },
                 new Category { CategoryName = "Eco Car Cleaning" },
                 new Category { CategoryName = "Eco Construction" },
