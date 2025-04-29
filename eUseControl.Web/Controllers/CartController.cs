@@ -4,7 +4,7 @@ namespace eUseControl.Web.Controllers
 {
     public class CartController : BaseController
     {
-        // GET: Cart
+        [HttpGet]
         public ActionResult Cart()
         {
             return View();

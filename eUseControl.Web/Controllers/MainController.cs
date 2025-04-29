@@ -4,19 +4,19 @@ namespace eUseControl.Web.Controllers
 {
     public class MainController : BaseController
     {
-        // GET: Main
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: Error
+        [HttpGet]
         public ActionResult Error404()
         {
             return View();
         }
 
-        // GET: ThankYou
+        [HttpGet]
         public ActionResult ThankYou()
         {
             return View();

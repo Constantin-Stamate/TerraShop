@@ -12,13 +12,14 @@ namespace eUseControl.Web.Controllers
     public class RegisterController : Controller
     {
         private readonly ISession _session;
+
         public RegisterController()
         {
             var bl = new BusinessLogicManager();
             _session = bl.GetSessionBL();
         }
 
-        // GET: Register
+        [HttpGet]
         public ActionResult Register()
         {
             return View();

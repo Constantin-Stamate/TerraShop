@@ -4,7 +4,7 @@ namespace eUseControl.Web.Controllers
 {
     public class PaymentController : Controller
     {
-        // GET: Payment
+        [HttpGet]
         public ActionResult Payment()
         {
             return View();

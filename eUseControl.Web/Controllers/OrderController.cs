@@ -4,13 +4,13 @@ namespace eUseControl.Web.Controllers
 {
     public class OrderController : Controller
     {
-        // GET: OrderConfirmation
+        [HttpGet]
         public ActionResult OrderConfirmation()
         {
             return View();
         }
 
-        // GET: OrderFailure
+        [HttpGet]
         public ActionResult OrderFailure() 
         {
             return View();

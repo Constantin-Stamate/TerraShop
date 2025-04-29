@@ -4,19 +4,19 @@ namespace eUseControl.Web.Controllers
 {
     public class LegalController : Controller
     {
-        // GET: PrivacyPolicy
+        [HttpGet]
         public ActionResult PrivacyPolicy() 
         {
             return View();
         }
 
-        // GET: SalesAndRefunds
+        [HttpGet]
         public ActionResult SalesAndRefunds()
         {
             return View();
         }
 
-        // GET: TermsOfUse
+        [HttpGet]
         public ActionResult TermsOfUse()
         {
             return View();

@@ -4,7 +4,7 @@ namespace eUseControl.Web.Controllers
 {
     public class CheckoutController : Controller
     {
-        // GET: Checkout
+        [HttpGet]
         public ActionResult Checkout()
         {
             return View();

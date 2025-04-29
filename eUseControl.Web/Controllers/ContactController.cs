@@ -4,7 +4,7 @@ namespace eUseControl.Web.Controllers
 {
     public class ContactController : BaseController
     {
-        // GET: Contact
+        [HttpGet]
         public ActionResult Contact()
         {
             return View();

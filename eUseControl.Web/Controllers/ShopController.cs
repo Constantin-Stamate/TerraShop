@@ -4,7 +4,7 @@ namespace eUseControl.Web.Controllers
 {
     public class ShopController : BaseController
     {
-        // GET: Shop
+        [HttpGet]
         public ActionResult Shop()
         {
             return View();

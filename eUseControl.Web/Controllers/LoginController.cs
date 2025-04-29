@@ -20,7 +20,7 @@ namespace eUseControl.Web.Controllers
             _session = bl.GetSessionBL();
         }
 
-        // GET: Login
+        [HttpGet]
         public ActionResult Login()
         {
             return View();

@@ -6,6 +6,7 @@ namespace eUseControl.Web.Controllers
 {
     public class AccountController : Controller
     {
+        [HttpGet]
         public ActionResult Logout()
         {
             Session.Clear();
