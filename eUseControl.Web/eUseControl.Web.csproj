@@ -128,6 +128,7 @@
     <Content Include="Assets\img\promotion\banner-sale-2.png" />
     <Content Include="Assets\img\testimonial\testimonial_1.jpg" />
     <Content Include="Assets\img\transaction.png" />
+    <Content Include="Assets\img\user.jpg" />
     <Content Include="Assets\img\volunteer-categories\volunteer-category-1.jpg" />
     <Content Include="Assets\img\volunteer-categories\volunteer-category-2.jpg" />
     <Content Include="Assets\img\volunteer-categories\volunteer-category-3.jpg" />
@@ -168,6 +169,7 @@
     <Content Include="Assets\lib\waypoints\waypoints.min.js" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
+    <Content Include="Uploads\avatars\avatar.jpg" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +195,7 @@
     </Compile>
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductCompact.cs" />
+    <Compile Include="Models\ProfileCompact.cs" />
     <Compile Include="Models\UserLogin.cs" />
     <Compile Include="Models\UserRegister.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

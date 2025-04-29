@@ -60,20 +60,39 @@
     <Compile Include="Core\UserApi.cs" />
     <Compile Include="DBModel\CategoryContext.cs" />
     <Compile Include="DBModel\ProductContext.cs" />
+    <Compile Include="DBModel\ProfileContext.cs" />
     <Compile Include="DBModel\SessionContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="Interfaces\IProduct.cs" />
+    <Compile Include="Interfaces\IProfile.cs" />
     <Compile Include="Interfaces\ISession.cs" />
-    <Compile Include="Migrations\202504241028061_CreateCategoriesTable.cs" />
-    <Compile Include="Migrations\202504241028061_CreateCategoriesTable.Designer.cs">
-      <DependentUpon>202504241028061_CreateCategoriesTable.cs</DependentUpon>
+    <Compile Include="Migrations\ProductCategory\202504281602085_CreateProductCategoriesTable.cs" />
+    <Compile Include="Migrations\ProductCategory\202504281602085_CreateProductCategoriesTable.Designer.cs">
+      <DependentUpon>202504281602085_CreateProductCategoriesTable.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202504242255076_CreateProductsTable.cs" />
-    <Compile Include="Migrations\202504242255076_CreateProductsTable.Designer.cs">
-      <DependentUpon>202504242255076_CreateProductsTable.cs</DependentUpon>
+    <Compile Include="Migrations\ProductCategory\Configuration.cs" />
+    <Compile Include="Migrations\Product\202504281611217_CreateProductsTable.cs" />
+    <Compile Include="Migrations\Product\202504281611217_CreateProductsTable.Designer.cs">
+      <DependentUpon>202504281611217_CreateProductsTable.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\Product\Configuration.cs" />
+    <Compile Include="Migrations\Profile\202504281629134_CreateUserProfilesTable.cs" />
+    <Compile Include="Migrations\Profile\202504281629134_CreateUserProfilesTable.Designer.cs">
+      <DependentUpon>202504281629134_CreateUserProfilesTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Profile\Configuration.cs" />
+    <Compile Include="Migrations\Session\202504281540471_CreateSessionsTable.cs" />
+    <Compile Include="Migrations\Session\202504281540471_CreateSessionsTable.Designer.cs">
+      <DependentUpon>202504281540471_CreateSessionsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Session\Configuration.cs" />
+    <Compile Include="Migrations\User\202504281533102_CreateUsersTable.cs" />
+    <Compile Include="Migrations\User\202504281533102_CreateUsersTable.Designer.cs">
+      <DependentUpon>202504281533102_CreateUsersTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\User\Configuration.cs" />
     <Compile Include="ProductBL.cs" />
+    <Compile Include="BusinessLayer\ProfileBL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionBL.cs" />
   </ItemGroup>
@@ -92,11 +111,20 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202504241028061_CreateCategoriesTable.resx">
-      <DependentUpon>202504241028061_CreateCategoriesTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\ProductCategory\202504281602085_CreateProductCategoriesTable.resx">
+      <DependentUpon>202504281602085_CreateProductCategoriesTable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202504242255076_CreateProductsTable.resx">
-      <DependentUpon>202504242255076_CreateProductsTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Product\202504281611217_CreateProductsTable.resx">
+      <DependentUpon>202504281611217_CreateProductsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Profile\202504281629134_CreateUserProfilesTable.resx">
+      <DependentUpon>202504281629134_CreateUserProfilesTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Session\202504281540471_CreateSessionsTable.resx">
+      <DependentUpon>202504281540471_CreateSessionsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\User\202504281533102_CreateUsersTable.resx">
+      <DependentUpon>202504281533102_CreateUsersTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
