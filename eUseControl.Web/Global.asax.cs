@@ -25,7 +25,7 @@ namespace eUseControl.Web
             Server.ClearError();
             Response.StatusCode = 404;
 
-            Server.TransferRequest("~/Main/Error404?error=true", true);
+            Response.Redirect("~/Main/Error404?error=true");
         }
     }
 }
