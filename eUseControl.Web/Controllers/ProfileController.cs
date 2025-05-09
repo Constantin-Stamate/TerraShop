@@ -10,7 +10,7 @@ using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Profile;
 using eUseControl.Web.Models.Product;
-using eUseControl.Web.Models;
+using eUseControl.Web.Models.Profile;
 
 namespace eUseControl.Web.Controllers
 {
@@ -240,7 +240,7 @@ namespace eUseControl.Web.Controllers
                     return RedirectToAction("Login", "Login", new { error = true });
                 }
 
-                var result = _profile.UpdateProfile(user.Id, profile);
+                var result = _profile.UpdateProfile(profile);
 
                 if (result.Status)
                 {
