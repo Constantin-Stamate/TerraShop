@@ -19,5 +19,10 @@ namespace eUseControl.BusinessLogic
         {
             return new ProfileBL();
         }
+
+        public IReview GetReviewBL()
+        {
+            return new ReviewBL();
+        }
     }
 }
