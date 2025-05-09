@@ -9,6 +9,7 @@ using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Profile;
+using eUseControl.Web.Models.Product;
 using eUseControl.Web.Models;
 
 namespace eUseControl.Web.Controllers
@@ -68,16 +69,17 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            var productsMinimals = _product.GetProductsByUser(cookie);
+            var user = _session.GetUserByCookie(cookie);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Login", new { error = true });
+            }
+
+            var productsMinimals = _product.GetProductsByUserId(user.Id);
 
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<ProductMinimal, ProductCompact>()
-                   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                   .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ProductName))
-                   .ForMember(dest => dest.ProductDescription, opt => opt.MapFrom(src => src.ProductDescription))
-                   .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.ProductPrice))
-                   .ForMember(dest => dest.ProductImageUrl, opt => opt.MapFrom(src => src.ProductImageUrl));
+                cfg.CreateMap<ProductMinimal, ProductCompact>();
             });
 
             var mapper = config.CreateMapper();
