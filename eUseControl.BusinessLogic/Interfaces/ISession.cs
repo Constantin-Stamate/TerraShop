@@ -13,5 +13,7 @@ namespace eUseControl.BusinessLogic.Interfaces
         UserMinimal GetUserByCookie(string apiCookieValue);
 
         ULoginResp UserLogin(ULoginData data);
+
+        UserSummary GetUserById(int userId);
     }
 }

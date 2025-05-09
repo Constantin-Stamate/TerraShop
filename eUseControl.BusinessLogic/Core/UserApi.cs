@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web;
 using AutoMapper;
@@ -70,7 +69,8 @@ namespace eUseControl.BusinessLogic.Core
                         Email = data.Email,
                         Password = hashedPassword,
                         RegistrationDateTime = data.RegistrationDateTime,
-                        RegistrationIp = data.RegistrationIp
+                        RegistrationIp = data.RegistrationIp,
+                        Level = data.Level
                     };
 
                     db.Users.Add(newUser);
@@ -79,27 +79,13 @@ namespace eUseControl.BusinessLogic.Core
 
                 return new URegisterResp 
                 { 
-                    Status = true 
+                    Status = true,
+                    StatusMsg = "You have successfully registered!"
                 };
             }
-            catch (DbUpdateException e)
+            catch (Exception ex)
             {
-                var innerException = e.InnerException;
-                while (innerException != null)
-                {
-                    System.Diagnostics.Debug.WriteLine(innerException.Message);
-                    innerException = innerException.InnerException;
-                }
-
-                return new URegisterResp 
-                { 
-                    Status = false, 
-                    StatusMsg = "We couldn't save your account!" 
-                };
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 return new URegisterResp 
                 { 
                     Status = false, 
@@ -110,178 +96,164 @@ namespace eUseControl.BusinessLogic.Core
 
         internal ULoginResp UserLoginAction(ULoginData data)
         {
-            UDbTable result;
-            var validate = new EmailAddressAttribute();
-
-            if (validate.IsValid(data.Username))
+            try
             {
+                UDbTable result;
+                var validate = new EmailAddressAttribute();
                 var pass = LoginHelper.HashGen(data.Password);
 
                 using (var db = new UserContext())
                 {
-                    result = db.Users.FirstOrDefault(u => u.Email == data.Username && u.Password == pass);
-                }
+                    if (validate.IsValid(data.Username))
+                    {
+                        result = db.Users
+                            .FirstOrDefault(u => u.Email == data.Username && u.Password == pass);
+                    }
+                    else
+                    {
+                        result = db.Users
+                            .FirstOrDefault(u => u.Username == data.Username && u.Password == pass);
+                    }
 
-                if (result == null)
-                {
-                    return new ULoginResp 
-                    { 
-                        Status = false, 
-                        StatusMsg = "The username or password is incorrect!" 
+                    if (result == null)
+                    {
+                        return new ULoginResp
+                        {
+                            Status = false,
+                            StatusMsg = "The username or password is incorrect!"
+                        };
+                    }
+
+                    result.LastIp = data.LastIp;
+                    result.LastLogin = data.LastLogin;
+
+                    db.Entry(result).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return new ULoginResp
+                    {
+                        Status = true,
+                        UserMinimal = new UserMinimal
+                        {
+                            Id = result.Id,
+                            Username = result.Username,
+                            Email = result.Email,
+                            LastLogin = result.LastLogin ?? DateTime.Now,
+                            LastIp = result.LastIp,
+                            Level = result.Level ?? URole.User
+                        }
                     };
                 }
-
-                using (var todo = new UserContext())
-                {
-                    result.LastIp = data.LastIp;
-                    result.Level = data.Level;
-                    result.LastLogin = data.LastLogin;
-                    todo.Entry(result).State = EntityState.Modified;
-                    todo.SaveChanges();
-                }
-
-                var userMinimal = new UserMinimal
-                {
-                    Id = result.Id,
-                    Username = result.Username,
-                    Email = result.Email,
-                    LastLogin = result.LastLogin ?? DateTime.Now,
-                    LastIp = result.LastIp,
-                    Level = result.Level ?? URole.User
-                };
-
-                return new ULoginResp 
-                { 
-                    Status = true, 
-                    UserMinimal = userMinimal 
-                };
             }
-            else
+            catch (Exception ex)
             {
-                var pass = LoginHelper.HashGen(data.Password);
-                using (var db = new UserContext())
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ULoginResp
                 {
-                    result = db.Users.FirstOrDefault(u => u.Username == data.Username && u.Password == pass);
-                }
-
-                if (result == null)
-                {
-                    return new ULoginResp 
-                    { 
-                        Status = false,
-                        StatusMsg = "The username or password is incorrect!" 
-                    };
-                }
-
-                using (var todo = new UserContext())
-                {
-                    result.LastIp = data.LastIp;
-                    result.Level = data.Level;
-                    result.LastLogin = data.LastLogin;
-                    todo.Entry(result).State = EntityState.Modified;
-                    todo.SaveChanges();
-                }
-
-                var userMinimal = new UserMinimal
-                {
-                    Id = result.Id,
-                    Username = result.Username,
-                    Email = result.Email,
-                    LastLogin = result.LastLogin ?? DateTime.Now,
-                    LastIp = result.LastIp,
-                    Level = result.Level ?? URole.User
-                };
-
-                return new ULoginResp 
-                { 
-                    Status = true, 
-                    UserMinimal = userMinimal 
+                    Status = false,
+                    StatusMsg = "An unexpected error occurred during login!"
                 };
             }
         }
 
         internal HttpCookie Cookie(string loginCredential)
         {
-            var apiCookie = new HttpCookie("X-KEY")
+            try
             {
-                Value = CookieGenerator.Create(loginCredential)
-            };
-
-            using (var db = new SessionContext())
-            {
-                Session curent;
-                var validate = new EmailAddressAttribute();
-
-                if (validate.IsValid(loginCredential))
+                var apiCookie = new HttpCookie("X-KEY")
                 {
-                    curent = (from e in db.Sessions where e.Username == loginCredential select e).FirstOrDefault();
-                }
-                else
-                {
-                    curent = (from e in db.Sessions where e.Username == loginCredential select e).FirstOrDefault();
-                }
+                    Value = CookieGenerator.Create(loginCredential)
+                };
 
-                if (curent != null)
+                using (var db = new SessionContext())
                 {
-                    curent.CookieString = apiCookie.Value;
-                    curent.ExpireTime = DateTime.Now.AddMinutes(60);
+                    Session curent;
+                    var validate = new EmailAddressAttribute();
 
-                    using (var todo = new SessionContext())
+                    curent = db.Sessions
+                        .FirstOrDefault(e => e.Username == loginCredential);
+
+                    if (curent != null)
                     {
-                        todo.Entry(curent).State = EntityState.Modified;
-                        todo.SaveChanges();
+                        curent.CookieString = apiCookie.Value;
+                        curent.ExpireTime = DateTime.Now.AddMinutes(60);
+
+                        using (var todo = new SessionContext())
+                        {
+                            todo.Entry(curent).State = EntityState.Modified;
+                            todo.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        db.Sessions.Add(new Session
+                        {
+                            Username = loginCredential,
+                            CookieString = apiCookie.Value,
+                            ExpireTime = DateTime.Now.AddMinutes(60)
+                        });
+
+                        db.SaveChanges();
                     }
                 }
-                else
-                {
-                    db.Sessions.Add(new Session
-                    {
-                        Username = loginCredential,
-                        CookieString = apiCookie.Value,
-                        ExpireTime = DateTime.Now.AddMinutes(60)
-                    });
-                    db.SaveChanges();
-                }
-            }
 
-            return apiCookie;
+                return apiCookie;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return null;
+            }
         }
 
         internal UserMinimal UserCookie(string cookie)
         {
-            Session session;
-            UDbTable curentUser;
-
-            using (var db = new SessionContext())
+            try
             {
-                session = db.Sessions.FirstOrDefault(s => s.CookieString == cookie && s.ExpireTime > DateTime.Now);
-            }
+                Session session;
+                UDbTable curentUser;
 
-            if (session == null) return null;
-
-            using (var db = new UserContext())
-            {
-                var validate = new EmailAddressAttribute();
-
-                if (validate.IsValid(session.Username))
+                using (var db = new SessionContext())
                 {
-                    curentUser = db.Users.FirstOrDefault(u => u.Email == session.Username);
+                    session = db.Sessions
+                        .FirstOrDefault(s => s.CookieString == cookie && s.ExpireTime > DateTime.Now);
                 }
-                else
+
+                if (session == null) return null;
+
+                using (var db = new UserContext())
                 {
-                    curentUser = db.Users.FirstOrDefault(u => u.Username == session.Username);
+                    var validate = new EmailAddressAttribute();
+
+                    if (validate.IsValid(session.Username))
+                    {
+                        curentUser = db.Users
+                            .FirstOrDefault(u => u.Email == session.Username);
+                    }
+                    else
+                    {
+                        curentUser = db.Users
+                            .FirstOrDefault(u => u.Username == session.Username);
+                    }
                 }
+
+                if (curentUser == null) return null;
+
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<UDbTable, UserMinimal>();
+                });
+
+                var mapper = config.CreateMapper();
+                UserMinimal userMinimal = mapper.Map<UserMinimal>(curentUser);
+
+                return userMinimal;
             }
-
-            var config = new MapperConfiguration(cfg =>
+            catch (Exception ex)
             {
-                cfg.CreateMap<UDbTable, UserMinimal>();
-            });
-
-            var mapper = config.CreateMapper();
-            UserMinimal userMinimal = mapper.Map<UserMinimal>(curentUser);
-
-            return userMinimal;
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return null;
+            }
         }
 
         internal ProductResp CreateProductAction(ProductData productData, int userId)
@@ -439,7 +411,8 @@ namespace eUseControl.BusinessLogic.Core
                             ProductDescription = product.ProductDescription,
                             ProductCategory = categoryName,
                             ProductPostDate = product.ProductPostDate,
-                            ProductRating = product.ProductRating
+                            ProductRating = product.ProductRating,
+                            UserId = product.UserId
                         };
 
                         return productData;
@@ -559,7 +532,9 @@ namespace eUseControl.BusinessLogic.Core
                 UDbTable user;
                 using (var userDb = new UserContext())
                 {
-                    user = userDb.Users.FirstOrDefault(u => u.Id == userId);
+                    user = userDb.Users
+                        .FirstOrDefault(u => u.Id == userId);
+
                     if (user == null)
                     {
                         return null;
@@ -569,7 +544,8 @@ namespace eUseControl.BusinessLogic.Core
                 ProfileData profile = null;
                 using (var profileDb = new ProfileContext())
                 {
-                    var userProfile = profileDb.UserProfiles.FirstOrDefault(p => p.UserId == userId);
+                    var userProfile = profileDb.UserProfiles
+                        .FirstOrDefault(p => p.UserId == userId);
 
                     if (userProfile == null)
                     {
@@ -607,7 +583,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ProfileResp UpdateProfileAction(int userId, ProfileData profileData)
+        internal ProfileResp UpdateProfileAction(ProfileData profileData)
         {
             try
             {
@@ -638,12 +614,12 @@ namespace eUseControl.BusinessLogic.Core
                     };
                 }
 
-                if (string.IsNullOrWhiteSpace(profileData.PhoneNumber) || !Regex.IsMatch(profileData.PhoneNumber, @"^\d{9}$"))
+                if (string.IsNullOrWhiteSpace(profileData.PhoneNumber) || !Regex.IsMatch(profileData.PhoneNumber, @"^\+?\d{7,15}$"))
                 {
                     return new ProfileResp
                     {
                         Status = false,
-                        StatusMsg = "Phone number must contain exactly 9 digits!"
+                        StatusMsg = "Please enter a valid phone number!"
                     };
                 }
 
@@ -656,10 +632,10 @@ namespace eUseControl.BusinessLogic.Core
                     };
                 }
 
-                using (var profileDb = new ProfileContext())
                 using (var userDb = new UserContext())
                 {
-                    var existingEmailUser = userDb.Users.FirstOrDefault(u => u.Email == profileData.Email && u.Id != userId);
+                    var existingEmailUser = userDb.Users
+                        .FirstOrDefault(u => u.Email == profileData.Email && u.Id != profileData.UserId);
 
                     if (existingEmailUser != null)
                     {
@@ -670,41 +646,48 @@ namespace eUseControl.BusinessLogic.Core
                         };
                     }
 
-                    var userProfile = profileDb.UserProfiles.FirstOrDefault(p => p.UserId == userId);
-                    if (userProfile == null)
+                    using (var profileDb = new ProfileContext())
                     {
-                        return new ProfileResp 
-                        { 
-                            Status = false, 
-                            StatusMsg = "We couldn't find your profile!" 
-                        };
+                        var userProfile = profileDb.UserProfiles
+                            .FirstOrDefault(p => p.UserId == profileData.UserId);
+
+                        if (userProfile == null)
+                        {
+                            return new ProfileResp
+                            {
+                                Status = false,
+                                StatusMsg = "We couldn't find your profile!"
+                            };
+                        }
+
+                        userProfile.FirstName = profileData.FirstName;
+                        userProfile.LastName = profileData.LastName;
+                        userProfile.Email = profileData.Email;
+                        userProfile.Address = profileData.Address;
+                        userProfile.PhoneNumber = profileData.PhoneNumber;
+                        if (!string.IsNullOrEmpty(profileData.ProfileImageUrl))
+                            userProfile.ProfileImageUrl = profileData.ProfileImageUrl;
+                        userProfile.LastProfileUpdate = DateTime.Now;
+                        profileDb.Entry(userProfile).State = EntityState.Modified;
+                        profileDb.SaveChanges();
+
+                        var user = userDb.Users
+                            .FirstOrDefault(u => u.Id == profileData.UserId);
+
+                        if (user != null)
+                        {
+                            user.Email = profileData.Email;
+                            userDb.Entry(user).State = EntityState.Modified;
+                            userDb.SaveChanges();
+                        }
                     }
 
-                    userProfile.FirstName = profileData.FirstName;
-                    userProfile.LastName = profileData.LastName;
-                    userProfile.Email = profileData.Email;
-                    userProfile.Address = profileData.Address;
-                    userProfile.PhoneNumber = profileData.PhoneNumber;
-                    if (!string.IsNullOrEmpty(profileData.ProfileImageUrl))
-                        userProfile.ProfileImageUrl = profileData.ProfileImageUrl;
-                    userProfile.LastProfileUpdate = DateTime.Now;
-                    profileDb.Entry(userProfile).State = EntityState.Modified;
-                    profileDb.SaveChanges();
-
-                    var user = userDb.Users.FirstOrDefault(u => u.Id == userId);
-                    if (user != null)
+                    return new ProfileResp
                     {
-                        user.Email = profileData.Email;
-                        userDb.Entry(user).State = EntityState.Modified;
-                        userDb.SaveChanges();
-                    }
+                        Status = true,
+                        StatusMsg = "Your profile has been updated!"
+                    };
                 }
-
-                return new ProfileResp 
-                { 
-                    Status = true, 
-                    StatusMsg = "Your profile has been updated!" 
-                };
             }
             catch (Exception ex)
             {
@@ -762,7 +745,8 @@ namespace eUseControl.BusinessLogic.Core
 
                 using (var db = new UserContext())
                 {
-                    var user = db.Users.FirstOrDefault(u => u.Id == userId && u.Password == hashedCurrent);
+                    var user = db.Users
+                        .FirstOrDefault(u => u.Id == userId && u.Password == hashedCurrent);
 
                     if (user == null)
                     {
@@ -1192,6 +1176,31 @@ namespace eUseControl.BusinessLogic.Core
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
+
+        internal UserSummary GetUserByIdAction(int userId)
+        {
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var userData = db.Users.FirstOrDefault(u => u.Id == userId);
+                    if (userData == null) return null;
+
+                    var config = new MapperConfiguration(cfg =>
+                    {
+                        cfg.CreateMap<UDbTable, UserSummary>();
+                    });
+
+                    var mapper = config.CreateMapper();
+                    return mapper.Map<UserSummary>(userData);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return null;
             }
         }
     }

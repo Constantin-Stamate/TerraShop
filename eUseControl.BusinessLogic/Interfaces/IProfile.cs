@@ -6,7 +6,7 @@ namespace eUseControl.BusinessLogic.Interfaces
     {
         ProfileData GetProfileByUserId(int userId);
 
-        ProfileResp UpdateProfile(int userId, ProfileData profileData);
+        ProfileResp UpdateProfile(ProfileData profileData);
 
         ProfileResp ChangePassword(string currentPassword, string newPassword, int userId);
     }
