@@ -1,8 +1,8 @@
-﻿namespace eUseControl.BusinessLogic.Migrations.Product
+﻿namespace eUseControl.BusinessLogic.Migrations.Products
 {
     using System.Data.Entity.Migrations;
 
-    public partial class CreateProductsTable : DbMigration
+    public partial class IntegrateProductsTable : DbMigration
     {
         public override void Up()
         {
@@ -23,8 +23,9 @@
                         ProductDescription = c.String(nullable: false, maxLength: 500),
                         ProductPostDate = c.DateTime(nullable: false),
                         ProductStatus = c.Int(nullable: false),
+                        ProductRating = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.Id) 
+                .PrimaryKey(t => t.Id)
                 .Index(t => t.UserId)
                 .Index(t => t.CategoryId);
 
@@ -32,7 +33,7 @@
             AddForeignKey("dbo.Products", "CategoryId", "dbo.Categories", "Id", cascadeDelete: true);
 
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.Products", "CategoryId", "dbo.Categories");

@@ -1,4 +1,4 @@
-﻿namespace eUseControl.BusinessLogic.Migrations.ProductCategory
+﻿namespace eUseControl.BusinessLogic.Migrations.ProductType
 {
     using System.Data.Entity.Migrations;
     using eUseControl.Domain.Entities.Product;
@@ -8,7 +8,7 @@
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            MigrationsDirectory = @"Migrations\ProductCategory";
+            MigrationsDirectory = @"Migrations\ProductType";
         }
 
         protected override void Seed(eUseControl.BusinessLogic.DBModel.CategoryContext context)

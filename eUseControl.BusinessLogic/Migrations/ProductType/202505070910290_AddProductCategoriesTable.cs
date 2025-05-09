@@ -1,8 +1,8 @@
-﻿namespace eUseControl.BusinessLogic.Migrations.ProductCategory
+﻿namespace eUseControl.BusinessLogic.Migrations.ProductType
 {
     using System.Data.Entity.Migrations;
 
-    public partial class CreateProductCategoriesTable : DbMigration
+    public partial class AddProductCategoriesTable : DbMigration
     {
         public override void Up()
         {
