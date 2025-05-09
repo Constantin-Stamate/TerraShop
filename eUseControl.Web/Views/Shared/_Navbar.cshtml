@@ -2,6 +2,8 @@
     ViewBag.Title = "_Navbar";
 }
 
+@model eUseControl.Web.Models.Product.ProductCatalogViewModel
+
 <div class="container topbar bg-primary d-none d-lg-block">
     <div class="d-flex justify-content-between">
         <div class="top-info ps-2">
@@ -35,26 +37,24 @@
             <div class="navbar-nav mx-auto">
                 <a href="@Url.Action("Index", "Main")" class="nav-item nav-link">Home</a>
                 <a href="@Url.Action("Shop", "Shop")" class="nav-item nav-link">Shop</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Categories</a>
-                    <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                        <a href="#" class="dropdown-item">Personal Care</a>
-                        <a href="#" class="dropdown-item">Household</a>
-                        <a href="#" class="dropdown-item">Kitchen</a>
-                        <a href="#" class="dropdown-item">Eco Fashion</a>
-                        <a href="#" class="dropdown-item">Organic Cosmetics</a>
-                        <a href="#" class="dropdown-item">Health Care</a>
-                        <a href="#" class="dropdown-item">Eco Chemicals</a>
-                        <a href="#" class="dropdown-item">Renewable Energy</a>
-                        <a href="#" class="dropdown-item">Biodegradable Tableware</a>
-                        <a href="#" class="dropdown-item">Eco Transport</a>
-                        <a href="#" class="dropdown-item">Eco Car Cleaning</a>
-                        <a href="#" class="dropdown-item">Eco Construction</a>
-                        <a href="#" class="dropdown-item">Pet Care</a>
-                        <a href="#" class="dropdown-item">Eco Gardening</a>
-                        <a href="#" class="dropdown-item">Eco Stationery</a>
+                @if (Session["LoginStatus"] != null && Session["LoginStatus"].ToString() == "login")
+                {
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Categories</a>
+                        <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                            @foreach (var category in Model.Categories)
+                            {
+                                <a href="@Url.Action("Shop", "Shop", new { categoryId = category.Key.Id })" class="dropdown-item">
+                                    @category.Key.CategoryName
+                                </a>
+                            }
+                        </div>
                     </div>
-                </div>
+                }
+                else
+                {
+                    <a href="@Url.Action("Login", "Login")" class="nav-item nav-link">Categories</a>
+                }
                 <a href="@Url.Action("Contact", "Contact")" class="nav-item nav-link">Contact</a>
             </div>
             <div class="d-flex m-3 me-0 navbar-nav">
@@ -66,14 +66,20 @@
                         data-bs-toggle="modal" data-bs-target="#searchModal">
                     <i class="fas fa-search text-primary"></i>
                 </button>
-                <a href="@Url.Action("Cart", "Cart")" class="position-relative me-4 my-auto">
-                    <i class="fa fa-shopping-bag fa-2x"></i>
-                    <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
-                          style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
-                </a>
-                <a href="@Url.Action("GeneralProfile", "Profile")" class="my-auto">
-                    <i class="fas fa-user fa-2x"></i>
-                </a>
+                @if (Session["LoginStatus"] != null && Session["LoginStatus"].ToString() == "login")
+                {
+                    <a href="@Url.Action("Cart", "Cart")" class="position-relative me-4 my-auto">
+                        <i class="fa fa-shopping-bag fa-2x"></i>
+                        <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
+                              style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
+                    </a>
+                }
+                @if (Session["LoginStatus"] != null && Session["LoginStatus"].ToString() == "login")
+                {
+                    <a href="@Url.Action("GeneralProfile", "Profile")" class="my-auto">
+                        <i class="fas fa-user fa-2x"></i>
+                    </a>
+                }
                 @if (Session["LoginStatus"] != null && Session["LoginStatus"].ToString() == "login")
                 {
                     <a href="@Url.Action("Logout", "Account")" class="nav-item nav-link">Logout</a>
