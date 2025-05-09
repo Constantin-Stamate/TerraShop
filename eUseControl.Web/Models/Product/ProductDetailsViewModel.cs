@@ -7,6 +7,8 @@ namespace eUseControl.Web.Models.Product
 {
     public class ProductDetailsViewModel
     {
+        public UserCompact SessionUser {  get; set; }
+
         public Product Product { get; set; }
 
         public UserCompact UserCompact { get; set; }
