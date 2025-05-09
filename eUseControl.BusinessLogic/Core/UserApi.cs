@@ -14,6 +14,7 @@ using eUseControl.Helpers;
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Profile;
 using System.Text.RegularExpressions;
+using eUseControl.Domain.Entities.Review;
 
 namespace eUseControl.BusinessLogic.Core
 {
@@ -283,7 +284,7 @@ namespace eUseControl.BusinessLogic.Core
             return userMinimal;
         }
 
-        internal ProductResp CreateProductAction(ProductData productData, string cookie)
+        internal ProductResp CreateProductAction(ProductData productData, int userId)
         {
             try
             {
@@ -323,7 +324,9 @@ namespace eUseControl.BusinessLogic.Core
                 Category category;
                 using (var db = new CategoryContext())
                 {
-                    category = db.Categories.FirstOrDefault(c => c.CategoryName == productData.ProductCategory);
+                    category = db.Categories
+                        .FirstOrDefault(c => c.CategoryName == productData.ProductCategory);
+
                     if (category == null)
                     {
                         return new ProductResp 
@@ -332,16 +335,6 @@ namespace eUseControl.BusinessLogic.Core
                             StatusMsg = "Invalid category!" 
                         };
                     }
-                }
-
-                var userMinimal = UserCookie(cookie);
-                if (userMinimal == null)
-                {
-                    return new ProductResp 
-                    { 
-                        Status = false, 
-                        StatusMsg = "User not authenticated!" 
-                    };          
                 }
 
                 using (var db = new ProductContext())
@@ -357,9 +350,10 @@ namespace eUseControl.BusinessLogic.Core
                         ProductImageUrl = productData.ProductImageUrl,
                         ProductDescription = productData.ProductDescription,
                         ProductPostDate = DateTime.Now,
-                        UserId = userMinimal.Id,
+                        UserId = userId,
                         CategoryId = category.Id,
-                        ProductStatus = ProductStatus.Available
+                        ProductStatus = ProductStatus.Available,
+                        ProductRating = 5
                     };
 
                     db.Products.Add(product);
@@ -369,7 +363,7 @@ namespace eUseControl.BusinessLogic.Core
                 return new ProductResp 
                 { 
                     Status = true, 
-                    StatusMsg = "Product created successfully!" 
+                    StatusMsg = "The product has been successfully created!"
                 };
             }
             catch (Exception ex) 
@@ -383,47 +377,42 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal List<ProductMinimal> GetProducts(string cookie)
+        internal List<ProductMinimal> GetProductsByUserIdAction(int userId)
         {
-            var userMinimal = UserCookie(cookie);
-            if (userMinimal == null)
+            try
             {
-                return new List<ProductMinimal>();
-            }
-
-            using (var db = new ProductContext())
-            {
-                var products = db.Products
-                    .Where(p => p.UserId == userMinimal.Id)
-                    .ToList();
-
-                var config = new MapperConfiguration(cfg =>
+                using (var db = new ProductContext())
                 {
-                    cfg.CreateMap<ProductDbTable, ProductMinimal>()
-                       .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                       .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ProductName))
-                       .ForMember(dest => dest.ProductDescription, opt => opt.MapFrom(src => src.ProductDescription))
-                       .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.ProductPrice))
-                       .ForMember(dest => dest.ProductImageUrl, opt => opt.MapFrom(src => src.ProductImageUrl));
-                });
+                    var products = db.Products
+                        .Where(p => p.UserId == userId)
+                        .ToList();
 
-                var mapper = config.CreateMapper();
-                var productMinimals = mapper.Map<List<ProductMinimal>>(products);
+                    var config = new MapperConfiguration(cfg =>
+                    {
+                        cfg.CreateMap<ProductDbTable, ProductMinimal>();
+                    });
 
-                return productMinimals;
+                    var mapper = config.CreateMapper();
+                    var productMinimals = mapper.Map<List<ProductMinimal>>(products);
+
+                    return productMinimals;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<ProductMinimal>();
             }
         }
 
-        internal ProductData GetProductByIdAction(int productId, string cookie)
+        internal ProductData GetProductByIdAction(int productId)
         {
             try
             {
                 using (var db = new ProductContext()) 
                 {
-                    var userMinimal = UserCookie(cookie);
-
                     var product = db.Products
-                                    .Where(p => p.Id == productId && p.UserId == userMinimal.Id)
+                                    .Where(p => p.Id == productId)
                                     .FirstOrDefault();
 
                     if (product == null)
@@ -449,6 +438,8 @@ namespace eUseControl.BusinessLogic.Core
                             ProductImageUrl = product.ProductImageUrl,
                             ProductDescription = product.ProductDescription,
                             ProductCategory = categoryName,
+                            ProductPostDate = product.ProductPostDate,
+                            ProductRating = product.ProductRating
                         };
 
                         return productData;
@@ -462,7 +453,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ProductResp UpdateProductAction(ProductData productData, string cookie, int productId)
+        internal ProductResp UpdateProductAction(ProductData productData)
         {
             try
             {
@@ -470,7 +461,6 @@ namespace eUseControl.BusinessLogic.Core
                     string.IsNullOrWhiteSpace(productData.ProductAddress) ||
                     string.IsNullOrWhiteSpace(productData.ProductQuality) ||
                     string.IsNullOrWhiteSpace(productData.ProductRegion) ||
-                    string.IsNullOrWhiteSpace(productData.ProductImageUrl) ||
                     string.IsNullOrWhiteSpace(productData.ProductDescription) ||
                     string.IsNullOrWhiteSpace(productData.ProductCategory))
                 {
@@ -502,7 +492,9 @@ namespace eUseControl.BusinessLogic.Core
                 Category category;
                 using (var db = new CategoryContext())
                 {
-                    category = db.Categories.FirstOrDefault(c => c.CategoryName == productData.ProductCategory);
+                    category = db.Categories
+                        .FirstOrDefault(c => c.CategoryName == productData.ProductCategory);
+
                     if (category == null)
                     {
                         return new ProductResp 
@@ -513,20 +505,12 @@ namespace eUseControl.BusinessLogic.Core
                     }
                 }
 
-                var userMinimal = UserCookie(cookie);
-                if (userMinimal == null)
-                {
-                    return new ProductResp 
-                    { 
-                        Status = false, 
-                        StatusMsg = "User not authenticated!" 
-                    };
-                }
-
                 ProductDbTable product;
                 using (var db = new ProductContext())
                 {
-                    product = db.Products.FirstOrDefault(p => p.Id == productId && p.UserId == userMinimal.Id);
+                    product = db.Products
+                        .FirstOrDefault(p => p.Id == productData.Id);
+
                     if (product == null)
                     {
                         return new ProductResp 
@@ -542,7 +526,8 @@ namespace eUseControl.BusinessLogic.Core
                     product.ProductQuality = productData.ProductQuality;
                     product.ProductPrice = productData.ProductPrice;
                     product.ProductRegion = productData.ProductRegion;
-                    product.ProductImageUrl = productData.ProductImageUrl;
+                    if (!string.IsNullOrEmpty(productData.ProductImageUrl))
+                        product.ProductImageUrl = productData.ProductImageUrl;
                     product.ProductDescription = productData.ProductDescription;
                     product.CategoryId = category.Id;
 
@@ -807,6 +792,406 @@ namespace eUseControl.BusinessLogic.Core
                     Status = false, 
                     StatusMsg = "An error occurred while updating the password!" 
                 };
+            }
+        }
+
+        internal List<ProductSummary> GetAvailableProductsAction()
+        {
+            try
+            {
+                using (var db = new ProductContext())
+                {
+                    var products = db.Products
+                        .Where(p => p.ProductStatus == ProductStatus.Available)
+                        .ToList();
+
+                    var productsList = new List<ProductSummary>();
+
+                    using (var categoryDb = new CategoryContext())
+                    {
+                        foreach (var product in products)
+                        {
+                            var category = categoryDb.Categories
+                                .FirstOrDefault(c => c.Id == product.CategoryId);
+
+                            if (category != null)
+                            {
+                                var productSummary = new ProductSummary
+                                {
+                                    Id = product.Id,
+                                    ProductCategory = category.CategoryName,
+                                    ProductName = product.ProductName,
+                                    ProductDescription = product.ProductDescription,
+                                    ProductPrice = product.ProductPrice,
+                                    ProductImageUrl = product.ProductImageUrl,
+                                };
+
+                                productsList.Add(productSummary);
+                            }
+                        }
+                    }
+
+                    return productsList;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<ProductSummary>();
+            }
+        }
+
+        internal void UpdateProductStatusAction(int productId)
+        {
+            try
+            {
+                using (var db = new ProductContext())
+                {
+                    var product = db.Products
+                        .FirstOrDefault(p => p.Id == productId);
+
+                    if (product != null)
+                    {
+                        product.ProductStatus = product.ProductStatus == ProductStatus.Available ? ProductStatus.Unavailable : ProductStatus.Available;
+
+                        db.Entry(product).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
+
+        internal Dictionary<Category, int> GetCategoryProductCountsAction()
+        {
+            try
+            {
+                using (var categoryDb = new CategoryContext())
+                {
+                    var categories = categoryDb.Categories
+                        .ToList();
+
+                    using (var productDb = new ProductContext())
+                    {
+                        var products = productDb.Products
+                            .Where(p => p.ProductStatus == ProductStatus.Available)
+                            .ToList();
+
+                        var result = new Dictionary<Category, int>();
+
+                        foreach (var category in categories)
+                        {
+                            int count = products
+                                .Count(p => p.CategoryId == category.Id);
+
+                            result[category] = count;
+                        }
+
+                        return result;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new Dictionary<Category, int>();
+            }
+        }
+
+        internal List<ProductSummary> GetAvailableProductsByCategoryIdAction(int? categoryId)
+        {
+            try
+            {
+                using (var db = new ProductContext())
+                {
+                    var products = db.Products
+                        .Where(p => p.CategoryId == categoryId && p.ProductStatus == ProductStatus.Available)
+                        .ToList();
+
+                    var productsList = new List<ProductSummary>();
+
+                    using (var categoryDb = new CategoryContext())
+                    {
+                        var category = categoryDb.Categories
+                            .FirstOrDefault(c => c.Id == categoryId);
+
+                        if (category != null)
+                        {
+                            foreach (var product in products)
+                            {
+                                var productSummary = new ProductSummary
+                                {
+                                    Id = product.Id,
+                                    ProductCategory = category.CategoryName,
+                                    ProductName = product.ProductName,
+                                    ProductDescription = product.ProductDescription,
+                                    ProductPrice = product.ProductPrice,
+                                    ProductImageUrl = product.ProductImageUrl,
+                                };
+
+                                productsList.Add(productSummary);
+                            }
+                        }
+                    }
+
+                    return productsList;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<ProductSummary>();
+            }
+        }
+
+        internal ReviewResp CreateReviewAction(ReviewData data, int userId)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(data.Review))
+                {
+                    return new ReviewResp
+                    {
+                        Status = false,
+                        StatusMsg = "Please enter a review before submitting!"
+                    };
+                }
+
+                if (data.Rating <= 0)
+                {
+                    return new ReviewResp
+                    {
+                        Status = false,
+                        StatusMsg = "Please select a rating for the product before submitting your review!"
+                    };
+                }
+
+                using (var db = new ReviewContext())
+                {
+                    var review = new ReviewDbTable
+                    {
+                        UserId = userId,
+                        ProductId = data.ProductId,
+                        ReviewPostDate = DateTime.Now,
+                        Review = data.Review,
+                        Rating = data.Rating
+                    };
+
+                    db.Reviews.Add(review);
+                    db.SaveChanges();
+                }
+
+                return new ReviewResp
+                {
+                    Status = true,
+                    StatusMsg = "Your review has been successfully created!"
+                };
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ReviewResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while submitting your review!"
+                };
+            }
+        }
+
+        internal List<ReviewData> GetReviewsByProductIdAction(int productId)
+        {
+            try
+            {
+                using (var db = new ReviewContext())
+                {
+                    var allReviews = db.Reviews
+                        .Where(r => r.ProductId == productId)
+                        .ToList();
+
+                    var config = new MapperConfiguration(cfg =>
+                    {
+                        cfg.CreateMap<ReviewDbTable, ReviewData>();
+                    });
+
+                    var mapper = config.CreateMapper();
+                    var reviews = mapper.Map<List<ReviewData>>(allReviews);
+
+                    return reviews;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<ReviewData>();
+            }
+        }
+
+        internal ReviewResp DeleteReviewAction(int reviewId)
+        {
+            try
+            {
+                using (var db = new ReviewContext())
+                {
+                    var review = db.Reviews
+                        .FirstOrDefault(r => r.Id == reviewId);
+
+                    if (review == null)
+                    {
+                        return new ReviewResp
+                        {
+                            Status = false,
+                            StatusMsg = "Hmm... we couldn't find the review you were trying to delete!"
+                        };
+                    }
+
+                    db.Reviews.Remove(review);
+                    db.SaveChanges();
+
+                    return new ReviewResp
+                    {
+                        Status = true,
+                        StatusMsg = "Your review has been successfully deleted!"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ReviewResp
+                {
+                    Status = false,
+                    StatusMsg = "Oops! Something went wrong while trying to delete the review!"
+                };
+            }
+        }
+
+        internal ReviewData GetReviewByIdAction(int? reviewId)
+        {
+            try
+            {
+                using (var db = new ReviewContext())
+                {
+                    var reviewData = db.Reviews
+                        .FirstOrDefault(r => r.Id == reviewId);
+
+                    if (reviewData == null)
+                    {
+                        return null;
+                    }
+
+                    var config = new MapperConfiguration(cfg =>
+                    {
+                        cfg.CreateMap<ReviewDbTable, ReviewData>();
+                    });
+
+                    var mapper = config.CreateMapper();
+                    var review = mapper.Map<ReviewData>(reviewData);
+
+                    return review;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        internal ReviewResp UpdateReviewAction(ReviewData data)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(data.Review))
+                {
+                    return new ReviewResp
+                    {
+                        Status = false,
+                        StatusMsg = "Please enter a review before submitting!"
+                    };
+                }
+
+                if (data.Rating <= 0)
+                {
+                    return new ReviewResp
+                    {
+                        Status = false,
+                        StatusMsg = "Please select a rating for the product before submitting your review!"
+                    };
+                }
+
+                using (var db = new ReviewContext())
+                {
+                    var reviewData = db.Reviews
+                        .FirstOrDefault(r => r.Id == data.Id);
+
+                    if (reviewData == null)
+                    {
+                        return new ReviewResp
+                        {
+                            Status = false,
+                            StatusMsg = "Hmm... we couldn't find the review you were trying to update!"
+                        };
+                    }
+
+                    reviewData.Review = data.Review;
+                    reviewData.Rating = data.Rating;
+                    reviewData.ReviewPostDate = DateTime.Now;
+
+                    db.Entry(reviewData).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return new ReviewResp
+                    {
+                        Status = true,
+                        StatusMsg = "Your review has been successfully updated!"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ReviewResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while updating your review!"
+                };
+            }
+        }
+
+        internal void UpdateProductRatingAction(int productId)
+        {
+            try
+            {
+                using (var db = new ReviewContext())
+                {
+                    var ratings = db.Reviews
+                        .Where(r => r.ProductId == productId)
+                        .Select(r => r.Rating)
+                        .ToList();
+
+                    double average = ratings.Any() ? ratings.Average() : 5;
+                    int rating = (int)Math.Ceiling(average);
+
+                    using (var productDb = new ProductContext())
+                    {
+                        var product = productDb.Products
+                            .FirstOrDefault(p => p.Id == productId);
+
+                        if (product != null)
+                        {
+                            product.ProductRating = rating;
+                            productDb.Entry(product).State = EntityState.Modified;
+                            productDb.SaveChanges();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
             }
         }
     }

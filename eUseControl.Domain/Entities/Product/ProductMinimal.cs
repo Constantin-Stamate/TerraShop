@@ -1,4 +1,6 @@
-﻿namespace eUseControl.Domain.Entities.Product
+﻿using eUseControl.Domain.Enums;
+
+namespace eUseControl.Domain.Entities.Product
 {
     public class ProductMinimal
     {
@@ -11,5 +13,7 @@
         public decimal ProductPrice { get; set; }
 
         public string ProductImageUrl { get; set; }
+
+        public ProductStatus ProductStatus { get; set; }
     }
 }

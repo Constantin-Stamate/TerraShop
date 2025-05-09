@@ -3,7 +3,7 @@
     ViewBag.Title = "AddProduct";
 }
 
-@model eUseControl.Web.Models.Product 
+@model eUseControl.Web.Models.Product.Product
 
 <div class="mask d-flex align-items-center gradient-custom-3" style="min-height: 100vh;">
     <div class="container" style="padding-top: 40px;">
@@ -106,7 +106,7 @@
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <div class="border-bottom rounded">
-                                            <input type="file" id="ProductImageUrl" name="ProductImageUrl" accept="image/*"
+                                            <input type="file" id="productImageUrl" name="productImageUrl" accept="image/*"
                                                    class="form-control border-0 me-4" placeholder="Click to upload an image"
                                                    onchange="displayFileName(event)" style="background-color: white;">
                                         </div>

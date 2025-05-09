@@ -7,24 +7,49 @@ namespace eUseControl.BusinessLogic.BusinessLayer
 {
     public class ProductBL : UserApi, IProduct
     {
-        public ProductResp CreateProduct(ProductData productData, string cookie)
+        public ProductResp CreateProduct(ProductData productData, int userId)
         {
-            return CreateProductAction(productData, cookie);
+            return CreateProductAction(productData, userId);
         }
 
-        public List<ProductMinimal> GetProductsByUser(string cookie)
+        public List<ProductMinimal> GetProductsByUserId(int userId)
         {
-            return GetProducts(cookie);
+            return GetProductsByUserIdAction(userId);
         }
 
-        public ProductResp UpdateProduct(ProductData productData, string cookie, int productId)
+        public ProductResp UpdateProduct(ProductData productData)
         {
-            return UpdateProductAction(productData, cookie, productId);
+            return UpdateProductAction(productData);
         } 
 
-        public ProductData GetProductById(int productId, string cookie)
+        public ProductData GetProductById(int productId)
         {
-            return GetProductByIdAction(productId, cookie);
+            return GetProductByIdAction(productId);
+        }
+
+        public List<ProductSummary> GetAvailableProducts()
+        {
+            return GetAvailableProductsAction();
+        }
+
+        public void UpdateProductStatus(int productId)
+        {
+            UpdateProductStatusAction(productId);
+        } 
+
+        public Dictionary<Category, int> GetCategoryProductCounts()
+        {
+            return GetCategoryProductCountsAction();
+        }
+
+        public List<ProductSummary> GetAvailableProductsByCategoryId(int? categoryId)
+        {
+            return GetAvailableProductsByCategoryIdAction(categoryId);
+        }
+
+        public void UpdateProductRating(int productId)
+        {
+            UpdateProductRatingAction(productId);
         }
     }
 }

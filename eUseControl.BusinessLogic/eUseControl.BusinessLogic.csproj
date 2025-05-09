@@ -55,32 +55,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLayer\ReviewBL.cs" />
     <Compile Include="BusinessLogicManager.cs" />
     <Compile Include="Core\AdminApi.cs" />
     <Compile Include="Core\UserApi.cs" />
     <Compile Include="DBModel\CategoryContext.cs" />
     <Compile Include="DBModel\ProductContext.cs" />
     <Compile Include="DBModel\ProfileContext.cs" />
+    <Compile Include="DBModel\ReviewContext.cs" />
     <Compile Include="DBModel\SessionContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="Interfaces\IProduct.cs" />
     <Compile Include="Interfaces\IProfile.cs" />
+    <Compile Include="Interfaces\IReview.cs" />
     <Compile Include="Interfaces\ISession.cs" />
-    <Compile Include="Migrations\ProductCategory\202504281602085_CreateProductCategoriesTable.cs" />
-    <Compile Include="Migrations\ProductCategory\202504281602085_CreateProductCategoriesTable.Designer.cs">
-      <DependentUpon>202504281602085_CreateProductCategoriesTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\ProductCategory\Configuration.cs" />
-    <Compile Include="Migrations\Product\202504281611217_CreateProductsTable.cs" />
-    <Compile Include="Migrations\Product\202504281611217_CreateProductsTable.Designer.cs">
-      <DependentUpon>202504281611217_CreateProductsTable.cs</DependentUpon>
+    <Compile Include="Migrations\Product\202505070935331_IntegrateProductsTable.cs" />
+    <Compile Include="Migrations\Product\202505070935331_IntegrateProductsTable.Designer.cs">
+      <DependentUpon>202505070935331_IntegrateProductsTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Product\Configuration.cs" />
+    <Compile Include="Migrations\ProductType\202505070910290_AddProductCategoriesTable.cs" />
+    <Compile Include="Migrations\ProductType\202505070910290_AddProductCategoriesTable.Designer.cs">
+      <DependentUpon>202505070910290_AddProductCategoriesTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\ProductType\Configuration.cs" />
     <Compile Include="Migrations\Profile\202504281629134_CreateUserProfilesTable.cs" />
     <Compile Include="Migrations\Profile\202504281629134_CreateUserProfilesTable.Designer.cs">
       <DependentUpon>202504281629134_CreateUserProfilesTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Profile\Configuration.cs" />
+    <Compile Include="Migrations\Review\202505070940597_IntegrateReviewsTable.cs" />
+    <Compile Include="Migrations\Review\202505070940597_IntegrateReviewsTable.Designer.cs">
+      <DependentUpon>202505070940597_IntegrateReviewsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Review\Configuration.cs" />
     <Compile Include="Migrations\Session\202504281540471_CreateSessionsTable.cs" />
     <Compile Include="Migrations\Session\202504281540471_CreateSessionsTable.Designer.cs">
       <DependentUpon>202504281540471_CreateSessionsTable.cs</DependentUpon>
@@ -111,14 +119,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\ProductCategory\202504281602085_CreateProductCategoriesTable.resx">
-      <DependentUpon>202504281602085_CreateProductCategoriesTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Product\202505070935331_IntegrateProductsTable.resx">
+      <DependentUpon>202505070935331_IntegrateProductsTable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Product\202504281611217_CreateProductsTable.resx">
-      <DependentUpon>202504281611217_CreateProductsTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\ProductType\202505070910290_AddProductCategoriesTable.resx">
+      <DependentUpon>202505070910290_AddProductCategoriesTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Profile\202504281629134_CreateUserProfilesTable.resx">
       <DependentUpon>202504281629134_CreateUserProfilesTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Review\202505070940597_IntegrateReviewsTable.resx">
+      <DependentUpon>202505070940597_IntegrateReviewsTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Session\202504281540471_CreateSessionsTable.resx">
       <DependentUpon>202504281540471_CreateSessionsTable.cs</DependentUpon>

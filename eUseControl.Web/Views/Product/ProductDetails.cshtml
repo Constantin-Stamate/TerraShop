@@ -3,31 +3,39 @@
     ViewBag.Title = "ProductDetails";
 }
 
+@model eUseControl.Web.Models.Product.ProductDetailsViewModel
+
 <div class="container py-5">
     <div class="row g-4 mb-5">
         <div class="col-lg-8 col-xl-9">
             <div class="row g-4">
                 <div class="col-lg-6">
-                    <div class="border rounded" style="margin-top: -42px;">
+                    <div class="border rounded">
                         <a href="#">
-                            <img src="@Url.Content("~/Assets/img/banner.jpg")" class="img-fluid rounded" alt="Image">
+                            <img src="@Url.Content(Model.Product.ProductImageUrl)" class="img-fluid rounded" alt="Image">
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-6" style="margin-top: -20px;">
-                    <h4 class="fw-bold mb-3" style="margin-top: 14px;">Brocoli</h4>
-                    <p class="mb-3">Category: Vegetables</p>
-                    <p class="mb-3">Updated at: 2025-12-12</p>
-                    <p class="mb-3">Posted by: costea</p>
-                    <p class="mb-3">Contact: +40 123 456 789</p>
-                    <p class="mb-3">Region: Cantemir, strada 1, casa 9</p>
-                    <h5 class="fw-bold mb-3">3,35 $</h5>
+                    <h4 class="fw-bold mb-3" style="margin-top: 14px;">@Model.Product.ProductName</h4>
+                    <p class="mb-3">Category: @Model.Product.ProductCategory</p>
+                    <p class="mb-3">Updated at: @Model.Product.ProductPostDate</p>
+                    <p class="mb-3">Posted by: @Model.UserCompact.Username</p>
+                    <p class="mb-3">Contact: @Model.UserCompact.Email</p>
+                    <p class="mb-3">Address: @Model.Product.ProductAddress</p>
+                    <h5 class="fw-bold mb-3">$@Model.Product.ProductPrice</h5>
                     <div class="d-flex mb-4">
-                        <i class="fa fa-star text-secondary"></i>
-                        <i class="fa fa-star text-secondary"></i>
-                        <i class="fa fa-star text-secondary"></i>
-                        <i class="fa fa-star text-secondary"></i>
-                        <i class="fa fa-star"></i>
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= Model.Product.ProductRating)
+                            {
+                                <i class="fa fa-star text-secondary"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-star"></i>
+                            }
+                        }
                     </div>
                     <div class="input-group quantity mb-5" style="width: 100px;">
                         <div class="input-group-btn">
@@ -42,7 +50,7 @@
                             </button>
                         </div>
                     </div>
-                    <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary">
+                    <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary" style="margin-top: -31px;">
                         <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
                     </a>
                 </div>
@@ -64,15 +72,7 @@
                     <div class="tab-content mb-5">
                         <div class="tab-pane active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
                             <p>
-                                The generated Lorem Ipsum is therefore always free from repetition injected humour,
-                                or non-characteristic words etc.
-                                Susp endisse ultricies nisi vel quam suscipit
-                            </p>
-                            <p>
-                                Sabertooth peacock flounder; chain pickerel hatchetfish, pencilfish snailfish
-                                filefish Antarctic
-                                icefish goldeye aholehole trumpetfish pilot fish airbreathing catfish, electric ray
-                                sweeper.
+                                @Model.Product.ProductDescription
                             </p>
                             <div class="px-2">
                                 <div class="row g-4">
@@ -82,7 +82,7 @@
                                                 <p class="mb-0">Quantity</p>
                                             </div>
                                             <div class="col-6">
-                                                <p class="mb-0">20 kg</p>
+                                                <p class="mb-0">@Model.Product.ProductQuantity</p>
                                             </div>
                                         </div>
                                         <div class="row text-center align-items-center justify-content-center py-2">
@@ -90,7 +90,7 @@
                                                 <p class="mb-0">Quality</p>
                                             </div>
                                             <div class="col-6">
-                                                <p class="mb-0">High</p>
+                                                <p class="mb-0">@Model.Product.ProductQuality</p>
                                             </div>
                                         </div>
                                         <div class="row bg-light text-center align-items-center justify-content-center py-2">
@@ -98,15 +98,15 @@
                                                 <p class="mb-0">Price</p>
                                             </div>
                                             <div class="col-6">
-                                                <p class="mb-0">$17.99</p>
+                                                <p class="mb-0">$@Model.Product.ProductPrice</p>
                                             </div>
                                         </div>
                                         <div class="row text-center align-items-center justify-content-center py-2">
                                             <div class="col-6">
-                                                <p class="mb-0">Seller</p>
+                                                <p class="mb-0">Region</p>
                                             </div>
                                             <div class="col-6">
-                                                <p class="mb-0">Costea</p>
+                                                <p class="mb-0">@Model.Product.ProductRegion</p>
                                             </div>
                                         </div>
                                     </div>
@@ -114,78 +114,136 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="nav-mission" role="tabpanel" aria-labelledby="nav-mission-tab">
-                            <div class="d-flex mb-4">
-                                <img src="@Url.Content("~/Assets/img/testimonial/testimonial_1.jpg")" class="img-fluid rounded-circle p-3"
-                                     style="width: 100px; height: 100px;" alt="">
-                                <div>
-                                    <p class="mb-2" style="font-size: 14px;">April 12, 2024</p>
-                                    <div class="d-flex justify-content-between">
-                                        <h5>Jason Smith</h5>
-                                        <div class="d-flex mb-3">
-                                            <i class="fa fa-star text-secondary"></i>
-                                            <i class="fa fa-star text-secondary"></i>
-                                            <i class="fa fa-star text-secondary"></i>
-                                            <i class="fa fa-star text-secondary"></i>
-                                            <i class="fa fa-star"></i>
+                            @if (Model.Reviews != null && Model.Reviews.Any())
+                            {
+                                foreach (var pair in Model.Reviews)
+                                {
+                                    var review = pair.Key;
+                                    var profile = pair.Value;
+
+                                    <div class="d-flex mb-4">
+                                        <img src="@Url.Content(profile.ProfileImageUrl)" class="img-fluid rounded-circle p-3"
+                                             style="width: 100px; height: 100px;" alt="">
+                                        <div>
+                                            <p class="mb-2" style="font-size: 14px;">@review.ReviewPostDate</p>
+                                            <div class="d-flex justify-content-between">
+                                                <h5>@profile.FirstName @profile.LastName</h5>
+                                                <div style="position: absolute; right: 29%; white-space: nowrap;">
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i <= review.Rating)
+                                                        {
+                                                            <i class="fa fa-star text-secondary"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="fa fa-star"></i>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                            <p>
+                                                @review.Review
+                                            </p>
+                                            @if (review.UserId == Model.UserCompact.Id)
+                                            {
+                                                <div class="d-flex gap-2 mt-2">
+                                                    <form method="get" action="@Url.Action("ProductDetails", "Product")" class="d-inline">
+                                                        <input type="hidden" name="reviewId" value="@review.Id" />
+                                                        <input type="hidden" name="productId" value="@review.ProductId" />
+                                                        <button type="submit" class="btn border-secondary text-uppercase w-5 h-3 text-primary">
+                                                            Edit
+                                                        </button>
+                                                    </form>
+                                                    <form action="@Url.Action("DeleteReview", "Review")" method="post" class="d-inline">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="reviewId" value="@review.Id" />
+                                                        <input type="hidden" name="productId" value="@review.ProductId" />
+                                                        <button type="submit"
+                                                                class="btn border-secondary text-uppercase w-5 h-3 text-primary"
+                                                                onclick="return confirm('Are you sure you want to delete this review?');">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
-                                    <p>
-                                        The generated Lorem Ipsum is therefore always free from repetition injected
-                                        humour, or non-characteristic
-                                        words etc. Susp endisse ultricies nisi vel quam suscipit
-                                    </p>
-                                    <div class="d-flex gap-2 mt-2">
-                                        <button class="btn border-secondary text-uppercase w-5 h-3 text-primary">
-                                            Edit
-                                        </button>
-                                        <button class="btn border-secondary text-uppercase w-5 h-3 text-primary">
-                                            Delete
-                                        </button>
-                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="info-message text-center mt-5">
+                                    <p>There are no reviews for this product yet. Please check back later to see what others think!</p>
                                 </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
-                <form action="#">
+                @using (Html.BeginForm("PostReview", "Review", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.ReviewCompact.ProductId)
+                    @Html.HiddenFor(m => m.ReviewCompact.Id)
+
                     <h4 class="mb-5 fw-bold">Leave a Reply</h4>
+                    <div style="margin-top: -10px;">
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <div class="text-danger no-bullets" style="margin-top: -30px">
+                                <ul>
+                                    <li>@TempData["ErrorMessage"]</li>
+                                </ul>
+                            </div>
+                        }
+
+                        @if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="text-success no-bullets" style="margin-top: -30px">
+                                <ul>
+                                    <li>@TempData["SuccessMessage"]</li>
+                                </ul>
+                            </div>
+                        }
+                    </div>
                     <div class="row g-4">
                         <div class="col-lg-6">
-                            <div class="border-bottom rounded">
-                                <input type="text" class="form-control border-0 me-4" placeholder="Your Name *">
+                            <div class="border-bottom rounded" style="margin-top: 20px">
+                                @Html.HiddenFor(m => m.ReviewCompact.Username)
+                                <input class="form-control border-0 me-4" type="text" value="@Model.UserCompact.Username" readonly />
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <div class="border-bottom rounded">
-                                <input type="email" class="form-control border-0" placeholder="Your Email *">
+                            <div class="border-bottom rounded" style="margin-top: 20px">
+                                @Html.HiddenFor(m => m.ReviewCompact.Email)
+                                <input class="form-control border-0" type="email" value="@Model.UserCompact.Email" readonly />
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="border-bottom rounded my-4">
-                                <textarea name="" id="" class="form-control border-0" cols="30" rows="8"
-                                          placeholder="Your Review *" spellcheck="false"></textarea>
+                                @Html.TextAreaFor(m => m.ReviewCompact.Review, new { @class = "form-control border-0", placeholder = "Your Review *", spellcheck = "false", cols = 30, rows = 8, required = "required" })
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="d-flex justify-content-between py-3 mb-5">
                                 <div class="d-flex align-items-center">
                                     <p class="mb-0 me-3" style="font-size: 16px;">Please rate:</p>
-                                    <div class="d-flex align-items-center star-rating"
-                                         style="font-size: 14px; cursor: pointer;">
+                                    <div class="d-flex align-items-center star-rating" style="font-size: 14px; cursor: pointer;">
                                         <i class="fa fa-star text-muted" data-index="1"></i>
                                         <i class="fa fa-star text-muted" data-index="2"></i>
                                         <i class="fa fa-star text-muted" data-index="3"></i>
                                         <i class="fa fa-star text-muted" data-index="4"></i>
                                         <i class="fa fa-star text-muted" data-index="5"></i>
                                     </div>
+                                    @Html.HiddenFor(m => m.ReviewCompact.Rating, new { @id = "RatingInput" })
                                 </div>
-                                <a href="#" class="btn border border-secondary text-primary rounded-pill px-4 py-3">
+                                <button type="submit" class="btn border border-secondary text-primary rounded-pill px-4 py-3">
                                     Post Comment
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>
-                </form>
+                }
             </div>
         </div>
         <div class="col-lg-4 col-xl-3">
@@ -352,3 +410,48 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const ratingValue = parseInt(document.getElementById("RatingInput").value);
+        const stars = document.querySelectorAll(".star-rating .fa-star");
+
+        stars.forEach((star, index) => {
+            if (index < ratingValue) {
+                star.classList.remove("text-muted");
+                star.classList.add("text-secondary");
+            } else {
+                star.classList.remove("text-secondary");
+                star.classList.add("text-muted");
+            }
+        });
+
+        stars.forEach((star, index) => {
+            star.addEventListener("click", () => {
+                document.getElementById("RatingInput").value = index + 1;
+
+                stars.forEach((s, i) => {
+                    if (i <= index) {
+                        s.classList.remove("text-muted");
+                        s.classList.add("text-secondary");
+                    } else {
+                        s.classList.remove("text-secondary");
+                        s.classList.add("text-muted");
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+<style>
+    .no-bullets ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+    }
+
+    .info-message {
+        font-size: 16px;
+    }
+</style>

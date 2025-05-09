@@ -64,7 +64,10 @@ namespace eUseControl.Web.Controllers
 
             bool isLoginPage = currentController.Equals("Login", StringComparison.OrdinalIgnoreCase);
 
-            if (!isHomePage && !isLoginPage)
+            bool isNavbar = currentController.Equals("Main", StringComparison.OrdinalIgnoreCase) &&
+                            currentAction.Equals("Navbar", StringComparison.OrdinalIgnoreCase);
+
+            if (!isHomePage && !isLoginPage && !isNavbar)
             {
                 var loginStatus = System.Web.HttpContext.Current.Session["LoginStatus"];
                 if (loginStatus == null || loginStatus.ToString() != "login")

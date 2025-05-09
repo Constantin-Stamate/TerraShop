@@ -1,4 +1,6 @@
-﻿namespace eUseControl.Domain.Entities.Product
+﻿using System;
+
+namespace eUseControl.Domain.Entities.Product
 {
     public class ProductData
     {
@@ -21,5 +23,9 @@
         public string ProductDescription { get; set; }
 
         public string ProductCategory { get; set; }
+
+        public DateTime ProductPostDate { get; set; }
+
+        public int ProductRating { get; set; }
     }
 }

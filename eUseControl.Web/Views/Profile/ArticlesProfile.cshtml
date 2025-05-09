@@ -3,7 +3,8 @@
     ViewBag.Title = "ArticlesProfile";
 }
 
-@model IEnumerable<eUseControl.Web.Models.ProductCompact>
+@model IEnumerable<eUseControl.Web.Models.Product.ProductCompact>
+@using eUseControl.Domain.Enums
 
 <div class="card profile-card overflow-hidden">
     <div class="row no-gutters">
@@ -42,8 +43,8 @@
             <h4 style="color: #81c408;">My Articles</h4>
             @if (Model == null || !Model.Any())
             {
-                <div class="no-products-message" style="color: #888; font-size: 0.95em; margin-bottom: 50px;">
-                    You haven't added any products yet.
+                <div class="no-products-message" style="color: #888; font-size: 1em; margin-bottom: 50px; margin-top: 23px;">
+                    Let’s get started! Add your first product now!
                 </div>
             }
             else
@@ -54,24 +55,34 @@
                         <div class="col" style="margin-top: 2px; margin-bottom: 20px;">
                             <div class="card h-100 rounded position-relative shadow-sm border-0 anim">
                                 <div class="fruite2-img position-relative">
-                                    <a href="#">
+                                    <a href="@Url.Action("ProductDetails", "Product", new { productId = product.Id })">
                                         <img src="@Url.Content(product.ProductImageUrl)"
                                              class="img-fluid w-100 rounded-top card-img-top"
                                              alt="Product Image"
-                                             style="object-fit: cover; height: 250px;">
+                                             style="object-fit: cover; height: 200px;">
                                     </a>
                                     <div class="position-absolute top-0 end-0 m-2">
-                                        <form action="#" method="post">
-                                            <button type="submit" class="btn btn-sm px-3"
-                                                    style="background-color: #FFB524; color: white;">
-                                                Activate
-                                            </button>
+                                        <form action="@Url.Action("ChangeProductStatus", "Product", new { productId = product.Id })" method="post">
+                                            @Html.AntiForgeryToken()
+
+                                            @if (product.ProductStatus == ProductStatus.Available)
+                                            {
+                                                <button type="submit" class="btn btn-sm px-3" style="background-color: #FFB524; color: white;">
+                                                    Deactivate
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn btn-sm px-3" style="background-color: #FFB524; color: white;">
+                                                    Activate
+                                                </button>
+                                            }
                                         </form>
                                     </div>
                                 </div>
                                 <div class="card-body p-4 border border-top-0 rounded-bottom"
                                      style="border-color: #f6ba31; min-height: 200px;">
-                                    <h5 class="card-title text-center">@product.ProductName</h5>
+                                    <h5 class="card-title text-center product-name">@product.ProductName</h5>
                                     <p class="card-text text-muted small product-description text-center">
                                         @product.ProductDescription
                                     </p>
@@ -103,12 +114,26 @@
 <style>
     .product-description {
         display: -webkit-box;
-        -webkit-line-clamp: 3; 
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: normal; 
-        min-height: 60px;
+        white-space: normal;
+        height: 3em;
+        line-height: 1.5em;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
+    .product-name {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 1.5em;
+        line-height: 1.5em;
+        word-wrap: break-word;
     }
 
     .card-body {
@@ -119,14 +144,14 @@
     }
 
         .card-body .product-description {
-            flex-grow: 1; 
+            flex-grow: 1;
         }
 
         .card-body .btn {
-            margin-top: 10px; 
+            margin-top: 10px;
         }
 
         .card-body p.text-dark {
-            margin-bottom: 10px; 
+            margin-bottom: 10px;
         }
 </style>

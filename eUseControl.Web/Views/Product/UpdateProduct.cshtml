@@ -3,7 +3,7 @@
     ViewBag.Title = "AddProduct";
 }
 
-@model eUseControl.Web.Models.Product
+@model eUseControl.Web.Models.Product.Product
 
 <div class="mask d-flex align-items-center gradient-custom-3" style="min-height: 100vh;">
     <div class="container" style="padding-top: 40px;">
@@ -23,6 +23,21 @@
                                         <li>@TempData["ErrorMessage"]</li>
                                     </ul>
                                 </div>
+                            }
+
+                            @if (TempData["SuccessMessage"] != null)
+                            {
+                                <div class="text-success no-bullets" style="text-align: center; margin-top: -10px">
+                                    <ul>
+                                        <li>@TempData["SuccessMessage"]</li>
+                                    </ul>
+                                </div>
+
+                                <script>
+                                    setTimeout(function () {
+                                        window.location.href = '@Url.Action("ArticlesProfile", "Profile")';
+                                    }, 3500);
+                                </script>
                             }
 
                             @using (Html.BeginForm("UpdateProduct", "Product", FormMethod.Post, new { @id = "UpdateProduct", enctype = "multipart/form-data" }))
@@ -92,7 +107,7 @@
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <div class="border-bottom rounded">
-                                            <input type="file" id="ProductImageUrl" name="ProductImageUrl" accept="image/*"
+                                            <input type="file" id="productImageUrl" name="productImageUrl" accept="image/*"
                                                    class="form-control border-0 me-4" placeholder="Click to upload an image"
                                                    onchange="displayFileName(event)" style="background-color: white;">
                                         </div>

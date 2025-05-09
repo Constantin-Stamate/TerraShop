@@ -170,6 +170,37 @@
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="Uploads\avatars\avatar.jpg" />
+    <Content Include="Uploads\avatars\profile.jpg" />
+    <Content Include="Uploads\products\item-30.jpg" />
+    <Content Include="Uploads\products\item-29.jpg" />
+    <Content Include="Uploads\products\item-28.jpg" />
+    <Content Include="Uploads\products\item-27.jpg" />
+    <Content Include="Uploads\products\item-20.jpg" />
+    <Content Include="Uploads\products\item-18.jpg" />
+    <Content Include="Uploads\products\item-17.jpg" />
+    <Content Include="Uploads\products\item-16.jpeg" />
+    <Content Include="Uploads\products\item-15.jpg" />
+    <Content Include="Uploads\products\item-14.jpg" />
+    <Content Include="Uploads\products\item-13.jpeg" />
+    <Content Include="Uploads\products\item-11.jpg" />
+    <Content Include="Uploads\products\item-1.jpg" />
+    <Content Include="Uploads\products\item-10.jpg" />
+    <Content Include="Uploads\products\item-2.jpg" />
+    <Content Include="Uploads\products\item-3.jpg" />
+    <Content Include="Uploads\products\item-4.jpg" />
+    <Content Include="Uploads\products\item-5.jpg" />
+    <Content Include="Uploads\products\item-6.jpg" />
+    <Content Include="Uploads\products\item-7.jpg" />
+    <Content Include="Uploads\products\item-8.jpg" />
+    <Content Include="Uploads\products\item-9.jpg" />
+    <Content Include="Uploads\products\item-12.jpg" />
+    <Content Include="Uploads\products\item-22.jpg" />
+    <Content Include="Uploads\products\item-23.jpg" />
+    <Content Include="Uploads\products\item-24.jpg" />
+    <Content Include="Uploads\products\item-25.jpg" />
+    <Content Include="Uploads\products\item-26.jpg" />
+    <Content Include="Uploads\products\item-19.jpg" />
+    <Content Include="Uploads\products\item-21.jpg" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -188,14 +219,22 @@
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
+    <Compile Include="Controllers\ReviewController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Extension\HttpContextExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Product.cs" />
-    <Compile Include="Models\ProductCompact.cs" />
+    <Compile Include="Models\Product\Product.cs" />
+    <Compile Include="Models\Product\ProductCategory.cs" />
+    <Compile Include="Models\Product\ProductCompact.cs" />
+    <Compile Include="Models\Product\ProductDetailsViewModel.cs" />
+    <Compile Include="Models\Product\ProductMini.cs" />
     <Compile Include="Models\ProfileCompact.cs" />
+    <Compile Include="Models\Profile\ProfileMini.cs" />
+    <Compile Include="Models\Review\ReviewCompact.cs" />
+    <Compile Include="Models\Product\ProductCatalogViewModel.cs" />
+    <Compile Include="Models\User\UserCompact.cs" />
     <Compile Include="Models\UserLogin.cs" />
     <Compile Include="Models\UserRegister.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

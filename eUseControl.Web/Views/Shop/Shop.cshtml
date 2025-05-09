@@ -3,6 +3,8 @@
     ViewBag.Title = "Shop";
 }
 
+@model eUseControl.Web.Models.Product.ProductCatalogViewModel
+
 <div class="container py-5">
     <h1 class="mb-4">TerraBio Market</h1>
     <div class="row g-4">
@@ -44,101 +46,22 @@
                                 <h4>Categories</h4>
                                 <ul class="list-unstyled fruite-categorie" style="margin-left: 7px;">
                                     <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>All Products</a>
-                                            <span style="margin-left: 134px;">(3)</span>
+                                        <div class="d-flex fruite-name">
+                                            <a href="@Url.Action("Shop", "Shop")" class="me-2"><i class="fas fa-seedling me-2"></i>All Products</a>
+                                            <span class="ms-auto" style="margin-right: 25px;">(@Model.Categories.Values.Sum())</span>
                                         </div>
                                     </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Personal Care</a>
-                                            <span style="margin-left: 118px;">(3)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Household</a>
-                                            <span style="margin-left: 141px;">(3)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Kitchen</a>
-                                            <span style="margin-left: 166px;">(3)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Eco Fashion</a>
-                                            <span style="margin-left: 133px;">(3)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Organic Cosmetics</a>
-                                            <span style="margin-left: 84px;">(3)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Health Care</a>
-                                            <span style="margin-left: 134px;">(3)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Eco Chemicals</a>
-                                            <span style="margin-left: 116px;">(3)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Renewable Energy</a>
-                                            <span style="margin-left: 86px;">(3)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Bio Tableware</a>
-                                            <span style="margin-left: 117px;">(3)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Eco Transport</a>
-                                            <span style="margin-left: 119px;">(3)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Eco Car Cleaning</a>
-                                            <span style="margin-left: 99px;">(3)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Eco Construction</a>
-                                            <span style="margin-left: 97px;">(3)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Pet Care</a>
-                                            <span style="margin-left: 161px;">(3)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Eco Gardening</a>
-                                            <span style="margin-left: 116px;">(3)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-start fruite-name">
-                                            <a href="#"><i class="fas fa-seedling me-2"></i>Eco Stationery</a>
-                                            <span style="margin-left: 117px;">(3)</span>
-                                        </div>
-                                    </li>
+                                    @foreach (var category in Model.Categories)
+                                    {
+                                        <li>
+                                            <div class="d-flex fruite-name">
+                                                <a href="@Url.Action("Shop", "Shop", new { categoryId = category.Key.Id })" class="me-2">
+                                                    <i class="fas fa-seedling me-2"></i>@category.Key.CategoryName
+                                                </a>
+                                                <span class="ms-auto" style="margin-right: 25px;">(@category.Value)</span>
+                                            </div>
+                                        </li>
+                                    }
                                 </ul>
                             </div>
                         </div>
@@ -235,44 +158,64 @@
                 </div>
                 <div class="col-lg-9">
                     <div class="row g-4 justify-content-center">
-                        <div class="col-md-6 col-lg-6 col-xl-4" style="margin-top: 40px">
-                            <div class="rounded position-relative fruite-item">
-                                <div class="fruite-img">
-                                    <a href="@Url.Action("ProductDetails", "Product")">
-                                        <img src="@Url.Content("~/Assets/img/volunteer-categories/volunteer-category-1.jpg")"
-                                             class="img-fluid w-100 rounded-top" alt="">
-                                    </a>
-                                </div>
-                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                     style="top: 10px; left: 10px;">
-                                    Fruits
-                                </div>
-                                <div class="p-4 border border-secondary border-top-0 rounded-bottom text-center">
-                                    <h4>Oranges</h4>
-                                    <p class="truncate-text">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit
-                                        sed do eiusmod te incididunt.
-                                    </p>
-                                    <div class="d-flex justify-content-between flex-lg-wrap">
-                                        <p class="text-dark fs-5 fw-bold mb-0">$4.99 / kg</p>
-                                        <a href="#"
-                                           class="btn border border-secondary rounded-pill px-3 text-primary">
-                                            <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
-                                        </a>
+                        @if (Model.Products != null && Model.Products.Any())
+                        {
+                            foreach (var product in Model.Products)
+                            {
+                                <div class="col-md-6 col-lg-6 col-xl-4" style="margin-top: 40px">
+                                    <div class="rounded position-relative fruite-item">
+                                        <div class="fruite-img">
+                                            <a href="@Url.Action("ProductDetails", "Product", new { productId = product.Id })">
+                                                <img src="@Url.Content(product.ProductImageUrl)"
+                                                     class="img-fluid w-100 rounded-top custom-image"
+                                                     alt="Product Image">
+                                            </a>
+                                        </div>
+                                        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                                             style="top: 10px; left: 10px;">
+                                            @product.ProductCategory
+                                        </div>
+                                        <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                            <h4 class="text-center product-name">@product.ProductName</h4>
+                                            <p class="product-description">
+                                                @product.ProductDescription
+                                            </p>
+                                            <div class="d-flex justify-content-between flex-lg-wrap">
+                                                <p class="text-dark fs-5 fw-bold mb-0">$@product.ProductPrice</p>
+                                                <a href="#"
+                                                   class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                    <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="info-message text-center mt-5">
+                                <p>We’re out of products in this category for now. Try browsing other categories or come back later!</p>
                             </div>
-                        </div>
+                        }
                         <div class="col-12">
-                            <div class="pagination d-flex justify-content-center mt-5">
-                                <a href="#" class="rounded">&laquo;</a>
-                                <a href="#" class="active rounded">1</a>
-                                <a href="#" class="rounded">2</a>
-                                <a href="#" class="rounded">3</a>
-                                <a href="#" class="rounded">4</a>
-                                <a href="#" class="rounded">5</a>
-                                <a href="#" class="rounded">6</a>
-                                <a href="#" class="rounded">&raquo;</a>
+                            <div class="col-12">
+                                <div class="pagination d-flex justify-content-center mt-5">
+                                    @if (Model.CurrentPage > 1)
+                                    {
+                                        <a href="@Url.Action("Shop", "Shop", new { page = Model.CurrentPage - 1, categoryId = Model.CategoryId })" class="rounded">&laquo;</a>
+                                    }
+
+                                    @for (var i = 1; i <= Model.TotalPages; i++)
+                                    {
+                                        <a href="@Url.Action("Shop", "Shop", new { page = i, categoryId = Model.CategoryId })" class="rounded @(i == Model.CurrentPage ? "active" : "")">@i</a>
+                                    }
+
+                                    @if (Model.CurrentPage < Model.TotalPages)
+                                    {
+                                        <a href="@Url.Action("Shop", "Shop", new { page = Model.CurrentPage + 1, categoryId = Model.CategoryId })" class="rounded">&raquo;</a>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -309,3 +252,38 @@
         </div>
     </div>
 </div>
+
+<style>
+    .product-description {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.5em;
+        height: 4.5em;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
+    .product-name {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 1.5em;
+        line-height: 1.5em;
+        word-wrap: break-word;
+    }
+
+    .custom-image {
+        height: 210px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .info-message {
+        font-size: 16px;
+    }
+</style>
