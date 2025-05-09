@@ -1,5 +1,4 @@
 ﻿using System;
-using eUseControl.Domain.Enums;
 
 namespace eUseControl.Domain.Entities.User
 {
@@ -10,8 +9,6 @@ namespace eUseControl.Domain.Entities.User
         public string Password { get; set; }
 
         public string LastIp { get; set; }
-
-        public URole Level { get; set; }
 
         public DateTime LastLogin { get; set; }
     }

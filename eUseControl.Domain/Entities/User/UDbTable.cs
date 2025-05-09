@@ -14,31 +14,37 @@ namespace eUseControl.Domain.Entities
 
         [Required]
         [Display(Name = "Username")]
-        [StringLength(30, MinimumLength = 5, ErrorMessage = "Username cannot be longer than 30 characters")]
+        [StringLength(30)]
         public string Username { get; set; }
 
         [Required]
         [Display(Name = "Password")]
-        [StringLength(50, MinimumLength = 8, ErrorMessage = "Password cannot be shorter than 8 characters")]
+        [StringLength(50)]
         public string Password { get; set; }
 
         [Required]
-        [Display(Name = "Email Address")]
+        [Display(Name = "Email")]
         [StringLength(30)]
         public string Email { get; set; }
 
         [DataType(DataType.Date)]
+        [Display(Name = "LastLogin")]
         public DateTime? LastLogin { get; set; }
 
         [DataType(DataType.Date)]
+        [Display(Name = "RegistrationDateTime")]
         public DateTime RegistrationDateTime { get; set; }
 
         [StringLength(30)]
+        [Display(Name = "LastIp")]
         public string LastIp { get; set; }
 
         [StringLength(30)]
+        [Display(Name = "RegistrationIp")]
         public string RegistrationIp { get; set; }
 
+        [EnumDataType(typeof(URole))]
+        [Display(Name = "Level")]
         public URole? Level { get; set; }
     }
 }

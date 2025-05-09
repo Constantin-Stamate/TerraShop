@@ -13,12 +13,15 @@ namespace eUseControl.Domain.Entities
 
         [Required]
         [StringLength(30)]
+        [Display(Name = "Username")]
         public string Username { get; set; }
 
         [Required]
+        [Display(Name = "CookieString")]
         public string CookieString { get; set; }
 
         [Required]
+        [Display(Name = "ExpireTime")]
         public DateTime ExpireTime { get; set; }
     }
 }

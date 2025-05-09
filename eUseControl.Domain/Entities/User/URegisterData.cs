@@ -1,4 +1,5 @@
 ﻿using System;
+using eUseControl.Domain.Enums;
 
 namespace eUseControl.Domain.Entities
 {
@@ -13,5 +14,7 @@ namespace eUseControl.Domain.Entities
         public string RegistrationIp { get; set; }
 
         public DateTime RegistrationDateTime { get; set; }
+
+        public URole Level { get; set; }
     }
 }
