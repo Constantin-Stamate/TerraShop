@@ -230,13 +230,13 @@
     <Compile Include="Models\Product\ProductCompact.cs" />
     <Compile Include="Models\Product\ProductDetailsViewModel.cs" />
     <Compile Include="Models\Product\ProductMini.cs" />
-    <Compile Include="Models\ProfileCompact.cs" />
+    <Compile Include="Models\Profile\ProfileCompact.cs" />
     <Compile Include="Models\Profile\ProfileMini.cs" />
     <Compile Include="Models\Review\ReviewCompact.cs" />
     <Compile Include="Models\Product\ProductCatalogViewModel.cs" />
     <Compile Include="Models\User\UserCompact.cs" />
-    <Compile Include="Models\UserLogin.cs" />
-    <Compile Include="Models\UserRegister.cs" />
+    <Compile Include="Models\User\UserLogin.cs" />
+    <Compile Include="Models\User\UserRegister.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

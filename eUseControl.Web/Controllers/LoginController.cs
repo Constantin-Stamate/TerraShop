@@ -5,8 +5,7 @@ using AutoMapper;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities.User;
-using eUseControl.Domain.Enums;
-using eUseControl.Web.Models;
+using eUseControl.Web.Models.User;
 
 namespace eUseControl.Web.Controllers
 {
@@ -42,7 +41,6 @@ namespace eUseControl.Web.Controllers
 
                 data.LastIp = Request.UserHostAddress;
                 data.LastLogin = DateTime.Now;
-                data.Level = URole.User;
 
                 var userLogin = _session.UserLogin(data);
 
@@ -64,8 +62,11 @@ namespace eUseControl.Web.Controllers
                     return RedirectToAction("Login", "Login", new { error = true });
                 }
             }
-
-            return View();
+            else
+            {
+                TempData["ErrorMessage"] = "The model you submitted is invalid!";
+                return RedirectToAction("Login", "Login", new { error = true });
+            }
         }
     }
 }

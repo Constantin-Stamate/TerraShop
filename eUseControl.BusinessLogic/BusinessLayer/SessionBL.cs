@@ -27,5 +27,10 @@ namespace eUseControl.BusinessLogic.BusinessLayer
         {
             return UserLoginAction(data);
         }
+
+        public UserSummary GetUserById(int userId)
+        {
+            return GetUserByIdAction(userId);
+        }
     }
 }

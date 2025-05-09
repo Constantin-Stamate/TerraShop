@@ -11,9 +11,9 @@ namespace eUseControl.BusinessLogic.BusinessLayer
             return GetProfileByUserIdAction(userId);
         }
 
-        public ProfileResp UpdateProfile(int  userId, ProfileData profileData)
+        public ProfileResp UpdateProfile(ProfileData profileData)
         {
-            return UpdateProfileAction(userId, profileData);
+            return UpdateProfileAction(profileData);
         }
 
         public ProfileResp ChangePassword(string currentPassword, string newPassword, int userId)

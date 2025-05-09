@@ -184,6 +184,7 @@
     <Compile Include="Entities\User\URegisterData.cs" />
     <Compile Include="Entities\User\URegisterResp.cs" />
     <Compile Include="Entities\User\UserMinimal.cs" />
+    <Compile Include="Entities\User\UserSummary.cs" />
     <Compile Include="Enums\ProductStatus.cs" />
     <Compile Include="Enums\URole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

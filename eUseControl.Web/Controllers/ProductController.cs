@@ -15,6 +15,7 @@ using eUseControl.Web.Models.Product;
 using eUseControl.Web.Models.User;
 using eUseControl.Web.Models.Profile;
 using eUseControl.Web.Models.Review;
+using eUseControl.Domain.Entities.User;
 
 namespace eUseControl.Web.Controllers
 {
@@ -268,6 +269,12 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Shop", "Shop", new { error = true });
             }
 
+            var userData = _session.GetUserById(productData.UserId);
+            if (userData == null)
+            {
+                return RedirectToAction("Shop", "Shop", new { error = true });
+            }
+
             var allReviews = _review.GetReviewsByProductId(productId);
 
             var config = new MapperConfiguration(cfg =>
@@ -275,6 +282,7 @@ namespace eUseControl.Web.Controllers
                 cfg.CreateMap<ReviewData, ReviewCompact>();
                 cfg.CreateMap<ProfileData, ProfileMini>();
                 cfg.CreateMap<ProductData, Product>();
+                cfg.CreateMap<UserSummary, UserCompact>();
                 cfg.CreateMap<UserMinimal, UserCompact>();
             });
 
@@ -294,7 +302,8 @@ namespace eUseControl.Web.Controllers
             }
 
             var product = mapper.Map<Product>(productData);
-            var user = mapper.Map<UserCompact>(userMinimal);
+            var user = mapper.Map<UserCompact>(userData);
+            var activeUser = mapper.Map<UserCompact>(userMinimal);
 
             ReviewCompact reviewToEdit;
             if (reviewId.HasValue && reviewId != 0)
@@ -317,7 +326,8 @@ namespace eUseControl.Web.Controllers
                 Product = product,
                 UserCompact = user,
                 ReviewCompact = reviewToEdit,
-                Reviews = reviewProfileDict
+                Reviews = reviewProfileDict,
+                SessionUser = activeUser
             };
 
             return View(model);

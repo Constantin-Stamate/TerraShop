@@ -5,7 +5,8 @@ using AutoMapper;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities;
-using eUseControl.Web.Models;
+using eUseControl.Domain.Enums;
+using eUseControl.Web.Models.User;
 
 namespace eUseControl.Web.Controllers
 {
@@ -41,6 +42,7 @@ namespace eUseControl.Web.Controllers
 
                 data.RegistrationIp = Request.UserHostAddress;
                 data.RegistrationDateTime = DateTime.Now;
+                data.Level = URole.User;
 
                 var userRegister = _session.UserRegister(data);
 
@@ -51,7 +53,7 @@ namespace eUseControl.Web.Controllers
                     HttpCookie cookie = _session.GenCookie(register.Username);
                     ControllerContext.HttpContext.Response.Cookies.Add(cookie);
 
-                    TempData["SuccessMessage"] = "You have successfully registered!";
+                    TempData["SuccessMessage"] = userRegister.StatusMsg;
                     return RedirectToAction("Register", "Register", new { success = true });
                 }
                 else
