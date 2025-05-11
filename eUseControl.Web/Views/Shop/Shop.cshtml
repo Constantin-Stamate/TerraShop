@@ -11,14 +11,29 @@
         <div class="col-lg-12">
             <div class="row g-4">
                 <div class="col-xl-3">
-                    <div class="input-group w-100 mx-auto d-flex">
-                        <input type="search" class="form-control p-3" placeholder="Search"
-                               aria-describedby="search-icon-1">
+                    <form method="get" action="@Url.Action("Shop", "Shop")" class="input-group w-100 mx-auto d-flex">
+                        @if (Model.CategoryId != null && Model.CategoryId != 0)
+                        {
+                            <input type="hidden" name="categoryId" value="@Model.CategoryId" />
+                        }
+                        @if (!string.IsNullOrEmpty(Model.SortOption))
+                        {
+                            <input type="hidden" name="sortOption" value="@Model.SortOption" />
+                        }
+                        @if (Model.MaxPrice > 0)
+                        {
+                            <input type="hidden" name="maxPrice" value="@Model.MaxPrice" />
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Country))
+                        {
+                            <input type="hidden" name="country" value="@Model.Country" />
+                        }
+                        <input type="search" name="searchQuery" class="form-control p-3 border border-secondary" placeholder="Search" aria-describedby="search-icon-1" style="border-top-left-radius: 0.375rem; border-bottom-left-radius: 0.375rem;" />
                         <button type="submit" class="btn btn-primary p-3"
                                 style="background-color: #FFB524; border-color: #FFB524;">
                             <i class="fa fa-search"></i>
                         </button>
-                    </div>
+                    </form>
                 </div>
                 <div class="col-6"></div>
                 <div class="col-xl-3">
@@ -28,13 +43,32 @@
                             Default
                             Sorting:
                         </label>
-                        <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light"
-                                style="padding: 3px 5px; width: 110px;">
-                            <option value="lowToHigh">Price ↑</option>
-                            <option value="highToLow">Price ↓</option>
-                            <option value="oldest">Old →</option>
-                            <option value="newest">New →</option>
-                        </select>
+                        <form method="get" action="@Url.Action("Shop", "Shop")">
+                            @if (Model.CategoryId != null && Model.CategoryId != 0)
+                            {
+                                <input type="hidden" name="categoryId" value="@Model.CategoryId" />
+                            }
+                            @if (Model.MaxPrice > 0)
+                            {
+                                <input type="hidden" name="maxPrice" value="@Model.MaxPrice" />
+                            }
+                            @if (!string.IsNullOrEmpty(Model.SearchQuery))
+                            {
+                                <input type="hidden" name="searchQuery" value="@Model.SearchQuery" />
+                            }
+                            @if (!string.IsNullOrEmpty(Model.Country))
+                            {
+                                <input type="hidden" name="country" value="@Model.Country" />
+                            }
+                            <select id="sortOption" name="sortOption" class="border-0 form-select-sm bg-light"
+                                    style="padding: 3px 5px; width: 110px;" onchange="this.form.submit()">
+                                <option value="" disabled @(string.IsNullOrEmpty(Model.SortOption) ? "selected" : "")>Option</option>
+                                <option value="lowToHigh" @(Model.SortOption == "lowToHigh" ? "selected" : "")>Price ↑</option>
+                                <option value="highToLow" @(Model.SortOption == "highToLow" ? "selected" : "")>Price ↓</option>
+                                <option value="oldest" @(Model.SortOption == "oldest" ? "selected" : "")>Old →</option>
+                                <option value="newest" @(Model.SortOption == "newest" ? "selected" : "")>New →</option>
+                            </select>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -65,95 +99,332 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="mb-3">
-                                <h4 class="mb-2">Price</h4>
-                                <input type="range" class="form-range w-100" id="rangeInput" name="rangeInput"
-                                       min="0" max="5000" value="0" oninput="amount.value=rangeInput.value">
-                                <output id="amount" name="amount" min-vlue="0" max-value="5000" for="rangeInput">
-                                    0
-                                </output>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-center my-4">
-                            <a href="#"
-                               class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100"
-                               style="margin-top: -20px; margin-left: -15px;">Filter</a>
-                        </div>
-                        <div class="col-lg-12">
-                            <h4 class="mb-3">Popular products</h4>
-                            <div class="d-flex align-items-center justify-content-start">
-                                <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                    <img src="@Url.Content("~/Assets/img/popular-products/popular-product-2.jpg")" class="img-fluid rounded" alt=""
-                                         style="margin-top: 9px; width: 1100px; height: 70px;">
-                                </div>
-                                <div>
-                                    <h6 class="mb-2">Bamboo brush</h6>
-                                    <div class="d-flex mb-2">
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="d-flex mb-2">
-                                        <h5 class="fw-bold me-2">1.99 $</h5>
-                                        <h5 class="text-danger text-decoration-line-through">2.59 $</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start">
-                                <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                    <img src="@Url.Content("~/Assets/img/popular-products/popular-product-3.jpg")" class="img-fluid rounded" alt=""
-                                         style="margin-top: 9px; width: 1100px; height: 70px;">
-                                </div>
-                                <div>
-                                    <h6 class="mb-2">Bio detergents</h6>
-                                    <div class="d-flex mb-2">
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="d-flex mb-2">
-                                        <h5 class="fw-bold me-2">8.99 $</h5>
-                                        <h5 class="text-danger text-decoration-line-through">11.99 $</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start">
-                                <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                    <img src="@Url.Content("~/Assets/img/popular-products/popular-product-4.jpg")" class="img-fluid rounded" alt=""
-                                         style="margin-top: 9px; width: 1100px; height: 70px;">
-                                </div>
-                                <div>
-                                    <h6 class="mb-2">Natural soaps</h6>
-                                    <div class="d-flex mb-2">
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                    </div>
-                                    <div class="d-flex mb-2">
-                                        <h5 class="fw-bold me-2">6.99 $</h5>
-                                        <h5 class="text-danger text-decoration-line-through">10.99 $</h5>
-                                    </div>
+                        <form method="get" action="@Url.Action("Shop", "Shop")">
+                            @if (Model.CategoryId != null && Model.CategoryId != 0)
+                            {
+                                <input type="hidden" name="categoryId" value="@Model.CategoryId" />
+                            }
+                            @if (!string.IsNullOrEmpty(Model.SortOption))
+                            {
+                                <input type="hidden" name="sortOption" value="@Model.SortOption" />
+                            }
+                            @if (!string.IsNullOrEmpty(Model.SearchQuery))
+                            {
+                                <input type="hidden" name="searchQuery" value="@Model.SearchQuery" />
+                            }
+                            @if (!string.IsNullOrEmpty(Model.Country))
+                            {
+                                <input type="hidden" name="country" value="@Model.Country" />
+                            }
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <h4 class="mb-2">Price</h4>
+                                    <input type="range" class="form-range w-100" id="maxPrice" name="maxPrice"
+                                           min="0" max="3000" value="1" oninput="amount.value=this.value">
+                                    <output id="amount" for="maxPrice">1</output>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center my-4">
-                                <a href="@Url.Action("Shop", "Shop")"
-                                   class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100"
-                                   style="margin-left: -40px;">View More</a>
+                                <button type="submit"
+                                        class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100"
+                                        style="margin-top: -20px; margin-left: -15px;">
+                                    Filter
+                                </button>
                             </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="position-relative">
-                                <img src="@Url.Content("~/Assets/img/banner.jpg")" class="img-fluid w-100 rounded" style="margin-left: -20px;"
-                                     alt="">
+                        </form>
+                        <form action="@Url.Action("Shop", "Shop")" method="get">
+                            @if (Model.CategoryId != null && Model.CategoryId != 0)
+                            {
+                                <input type="hidden" name="categoryId" value="@Model.CategoryId" />
+                            }
+                            @if (!string.IsNullOrEmpty(Model.SortOption))
+                            {
+                                <input type="hidden" name="sortOption" value="@Model.SortOption" />
+                            }
+                            @if (!string.IsNullOrEmpty(Model.SearchQuery))
+                            {
+                                <input type="hidden" name="searchQuery" value="@Model.SearchQuery" />
+                            }
+                            @if (Model.MaxPrice > 0)
+                            {
+                                <input type="hidden" name="maxPrice" value="@Model.MaxPrice" />
+                            }
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <h4 class="mb-2">Country</h4>
+                                    <input list="countries" name="country" class="form-control p-3 border border-secondary" placeholder="Enter country" style="width: 297px; margin-left: -10px;" onchange="this.form.submit()">
+                                    <datalist id="countries">
+                                        <option value="Afghanistan">
+                                        <option value="Albania">
+                                        <option value="Algeria">
+                                        <option value="Andorra">
+                                        <option value="Angola">
+                                        <option value="Argentina">
+                                        <option value="Armenia">
+                                        <option value="Australia">
+                                        <option value="Austria">
+                                        <option value="Azerbaijan">
+                                        <option value="Bahamas">
+                                        <option value="Bahrain">
+                                        <option value="Bangladesh">
+                                        <option value="Barbados">
+                                        <option value="Belarus">
+                                        <option value="Belgium">
+                                        <option value="Belize">
+                                        <option value="Benin">
+                                        <option value="Bhutan">
+                                        <option value="Bolivia">
+                                        <option value="Bosnia and Herzegovina">
+                                        <option value="Botswana">
+                                        <option value="Brazil">
+                                        <option value="Brunei">
+                                        <option value="Bulgaria">
+                                        <option value="Burkina Faso">
+                                        <option value="Burundi">
+                                        <option value="Cambodia">
+                                        <option value="Cameroon">
+                                        <option value="Canada">
+                                        <option value="Cape Verde">
+                                        <option value="Central African Republic">
+                                        <option value="Chad">
+                                        <option value="Chile">
+                                        <option value="China">
+                                        <option value="Colombia">
+                                        <option value="Comoros">
+                                        <option value="Congo (Brazzaville)">
+                                        <option value="Congo (Kinshasa)">
+                                        <option value="Costa Rica">
+                                        <option value="Croatia">
+                                        <option value="Cuba">
+                                        <option value="Cyprus">
+                                        <option value="Czech Republic">
+                                        <option value="Denmark">
+                                        <option value="Djibouti">
+                                        <option value="Dominica">
+                                        <option value="Dominican Republic">
+                                        <option value="East Timor">
+                                        <option value="Ecuador">
+                                        <option value="Egypt">
+                                        <option value="El Salvador">
+                                        <option value="Equatorial Guinea">
+                                        <option value="Eritrea">
+                                        <option value="Estonia">
+                                        <option value="Eswatini">
+                                        <option value="Ethiopia">
+                                        <option value="Fiji">
+                                        <option value="Finland">
+                                        <option value="France">
+                                        <option value="Gabon">
+                                        <option value="Gambia">
+                                        <option value="Georgia">
+                                        <option value="Germany">
+                                        <option value="Ghana">
+                                        <option value="Greece">
+                                        <option value="Grenada">
+                                        <option value="Guatemala">
+                                        <option value="Guinea">
+                                        <option value="Guinea-Bissau">
+                                        <option value="Guyana">
+                                        <option value="Haiti">
+                                        <option value="Honduras">
+                                        <option value="Hungary">
+                                        <option value="Iceland">
+                                        <option value="India">
+                                        <option value="Indonesia">
+                                        <option value="Iran">
+                                        <option value="Iraq">
+                                        <option value="Ireland">
+                                        <option value="Israel">
+                                        <option value="Italy">
+                                        <option value="Jamaica">
+                                        <option value="Japan">
+                                        <option value="Jordan">
+                                        <option value="Kazakhstan">
+                                        <option value="Kenya">
+                                        <option value="Kiribati">
+                                        <option value="Kuwait">
+                                        <option value="Kyrgyzstan">
+                                        <option value="Laos">
+                                        <option value="Latvia">
+                                        <option value="Lebanon">
+                                        <option value="Lesotho">
+                                        <option value="Liberia">
+                                        <option value="Libya">
+                                        <option value="Liechtenstein">
+                                        <option value="Lithuania">
+                                        <option value="Luxembourg">
+                                        <option value="Madagascar">
+                                        <option value="Malawi">
+                                        <option value="Malaysia">
+                                        <option value="Maldives">
+                                        <option value="Mali">
+                                        <option value="Malta">
+                                        <option value="Marshall Islands">
+                                        <option value="Mauritania">
+                                        <option value="Mauritius">
+                                        <option value="Mexico">
+                                        <option value="Micronesia">
+                                        <option value="Moldova">
+                                        <option value="Monaco">
+                                        <option value="Mongolia">
+                                        <option value="Montenegro">
+                                        <option value="Morocco">
+                                        <option value="Mozambique">
+                                        <option value="Myanmar">
+                                        <option value="Namibia">
+                                        <option value="Nauru">
+                                        <option value="Nepal">
+                                        <option value="Netherlands">
+                                        <option value="New Zealand">
+                                        <option value="Nicaragua">
+                                        <option value="Niger">
+                                        <option value="Nigeria">
+                                        <option value="North Korea">
+                                        <option value="North Macedonia">
+                                        <option value="Norway">
+                                        <option value="Oman">
+                                        <option value="Pakistan">
+                                        <option value="Palau">
+                                        <option value="Panama">
+                                        <option value="Papua New Guinea">
+                                        <option value="Paraguay">
+                                        <option value="Peru">
+                                        <option value="Philippines">
+                                        <option value="Poland">
+                                        <option value="Portugal">
+                                        <option value="Qatar">
+                                        <option value="Romania">
+                                        <option value="Russia">
+                                        <option value="Rwanda">
+                                        <option value="Saint Kitts and Nevis">
+                                        <option value="Saint Lucia">
+                                        <option value="Saint Vincent and the Grenadines">
+                                        <option value="Samoa">
+                                        <option value="San Marino">
+                                        <option value="Sao Tome and Principe">
+                                        <option value="Saudi Arabia">
+                                        <option value="Senegal">
+                                        <option value="Serbia">
+                                        <option value="Seychelles">
+                                        <option value="Sierra Leone">
+                                        <option value="Singapore">
+                                        <option value="Slovakia">
+                                        <option value="Slovenia">
+                                        <option value="Solomon Islands">
+                                        <option value="Somalia">
+                                        <option value="South Africa">
+                                        <option value="South Korea">
+                                        <option value="South Sudan">
+                                        <option value="Spain">
+                                        <option value="Sri Lanka">
+                                        <option value="Sudan">
+                                        <option value="Suriname">
+                                        <option value="Sweden">
+                                        <option value="Switzerland">
+                                        <option value="Syria">
+                                        <option value="Taiwan">
+                                        <option value="Tajikistan">
+                                        <option value="Tanzania">
+                                        <option value="Thailand">
+                                        <option value="Togo">
+                                        <option value="Tonga">
+                                        <option value="Trinidad and Tobago">
+                                        <option value="Tunisia">
+                                        <option value="Turkey">
+                                        <option value="Turkmenistan">
+                                        <option value="Tuvalu">
+                                        <option value="Uganda">
+                                        <option value="Ukraine">
+                                        <option value="United Arab Emirates">
+                                        <option value="United Kingdom">
+                                        <option value="United States">
+                                        <option value="Uruguay">
+                                        <option value="Uzbekistan">
+                                        <option value="Vanuatu">
+                                        <option value="Vatican City">
+                                        <option value="Venezuela">
+                                        <option value="Vietnam">
+                                        <option value="Yemen">
+                                        <option value="Zambia">
+                                        <option value="Zimbabwe">
+                                    </datalist>
+                                </div>
                             </div>
-                        </div>
+                        </form>
+                            <div class="col-lg-12">
+                                <h4 class="mb-3">Popular products</h4>
+                                <div class="d-flex align-items-center justify-content-start">
+                                    <div class="rounded me-4" style="width: 100px; height: 100px;">
+                                        <img src="@Url.Content("~/Assets/img/popular-products/popular-product-2.jpg")" class="img-fluid rounded" alt=""
+                                             style="margin-top: 9px; width: 1100px; height: 70px;">
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-2">Bamboo brush</h6>
+                                        <div class="d-flex mb-2">
+                                            <i class="fa fa-star text-secondary"></i>
+                                            <i class="fa fa-star text-secondary"></i>
+                                            <i class="fa fa-star text-secondary"></i>
+                                            <i class="fa fa-star text-secondary"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                        <div class="d-flex mb-2">
+                                            <h5 class="fw-bold me-2">1.99 $</h5>
+                                            <h5 class="text-danger text-decoration-line-through">2.59 $</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-start">
+                                    <div class="rounded me-4" style="width: 100px; height: 100px;">
+                                        <img src="@Url.Content("~/Assets/img/popular-products/popular-product-3.jpg")" class="img-fluid rounded" alt=""
+                                             style="margin-top: 9px; width: 1100px; height: 70px;">
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-2">Bio detergents</h6>
+                                        <div class="d-flex mb-2">
+                                            <i class="fa fa-star text-secondary"></i>
+                                            <i class="fa fa-star text-secondary"></i>
+                                            <i class="fa fa-star text-secondary"></i>
+                                            <i class="fa fa-star text-secondary"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                        <div class="d-flex mb-2">
+                                            <h5 class="fw-bold me-2">8.99 $</h5>
+                                            <h5 class="text-danger text-decoration-line-through">11.99 $</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-start">
+                                    <div class="rounded me-4" style="width: 100px; height: 100px;">
+                                        <img src="@Url.Content("~/Assets/img/popular-products/popular-product-4.jpg")" class="img-fluid rounded" alt=""
+                                             style="margin-top: 9px; width: 1100px; height: 70px;">
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-2">Natural soaps</h6>
+                                        <div class="d-flex mb-2">
+                                            <i class="fa fa-star text-secondary"></i>
+                                            <i class="fa fa-star text-secondary"></i>
+                                            <i class="fa fa-star text-secondary"></i>
+                                            <i class="fa fa-star text-secondary"></i>
+                                            <i class="fa fa-star text-secondary"></i>
+                                        </div>
+                                        <div class="d-flex mb-2">
+                                            <h5 class="fw-bold me-2">6.99 $</h5>
+                                            <h5 class="text-danger text-decoration-line-through">10.99 $</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center my-4">
+                                    <a href="@Url.Action("Shop", "Shop")"
+                                       class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100"
+                                       style="margin-left: -40px;">View More</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="position-relative">
+                                    <img src="@Url.Content("~/Assets/img/banner.jpg")" class="img-fluid w-100 rounded" style="margin-left: -20px;"
+                                         alt="">
+                                </div>
+                            </div>
                     </div>
                 </div>
                 <div class="col-lg-9">
@@ -203,17 +474,17 @@
                                 <div class="pagination d-flex justify-content-center mt-5">
                                     @if (Model.CurrentPage > 1)
                                     {
-                                        <a href="@Url.Action("Shop", "Shop", new { page = Model.CurrentPage - 1, categoryId = Model.CategoryId })" class="rounded">&laquo;</a>
+                                        <a href="@Url.Action("Shop", "Shop", new { page = Model.CurrentPage - 1, categoryId = Model.CategoryId != null ? Model.CategoryId : (int?)null, sortOption = !string.IsNullOrEmpty(Model.SortOption) ? Model.SortOption : null, maxPrice = Model.MaxPrice != 0 ? Model.MaxPrice : (int?)null, searchQuery = !string.IsNullOrEmpty(Model.SearchQuery) ? Model.SearchQuery : null, country = !string.IsNullOrEmpty(Model.Country) ? Model.Country : null })" class="rounded">&laquo;</a>
                                     }
 
                                     @for (var i = 1; i <= Model.TotalPages; i++)
                                     {
-                                        <a href="@Url.Action("Shop", "Shop", new { page = i, categoryId = Model.CategoryId })" class="rounded @(i == Model.CurrentPage ? "active" : "")">@i</a>
+                                        <a href="@Url.Action("Shop", "Shop", new { page = i, categoryId = Model.CategoryId != null ? Model.CategoryId : (int?)null, sortOption = !string.IsNullOrEmpty(Model.SortOption) ? Model.SortOption : null, maxPrice = Model.MaxPrice != 0 ? Model.MaxPrice : (int?)null, searchQuery = !string.IsNullOrEmpty(Model.SearchQuery) ? Model.SearchQuery : null, country = !string.IsNullOrEmpty(Model.Country) ? Model.Country : null })" class="rounded @(i == Model.CurrentPage ? "active" : "")">@i</a>
                                     }
 
                                     @if (Model.CurrentPage < Model.TotalPages)
                                     {
-                                        <a href="@Url.Action("Shop", "Shop", new { page = Model.CurrentPage + 1, categoryId = Model.CategoryId })" class="rounded">&raquo;</a>
+                                        <a href="@Url.Action("Shop", "Shop", new { page = Model.CurrentPage + 1, categoryId = Model.CategoryId != null ? Model.CategoryId : (int?)null, sortOption = !string.IsNullOrEmpty(Model.SortOption) ? Model.SortOption : null, maxPrice = Model.MaxPrice != 0 ? Model.MaxPrice : (int?)null, searchQuery = !string.IsNullOrEmpty(Model.SearchQuery) ? Model.SearchQuery : null, country = !string.IsNullOrEmpty(Model.Country) ? Model.Country : null })" class="rounded">&raquo;</a>
                                     }
                                 </div>
                             </div>

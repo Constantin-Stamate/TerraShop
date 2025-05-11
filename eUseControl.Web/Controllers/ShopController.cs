@@ -21,7 +21,7 @@ namespace eUseControl.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Shop(int? categoryId, int page = 1)
+        public ActionResult Shop(string country, string searchQuery, string maxPrice, string sortOption, int? categoryId, int page = 1)
         {
             var cookie = Request.Cookies["X-KEY"].Value;
             if (string.IsNullOrEmpty(cookie))
@@ -30,16 +30,38 @@ namespace eUseControl.Web.Controllers
             }
 
             List<ProductSummary> productsList;
+            int value = 0;
+
+            if (!string.IsNullOrEmpty(maxPrice) && maxPrice != "0")
+            {
+                value = int.Parse(maxPrice);
+            }
 
             if (categoryId == 0 || !categoryId.HasValue)
             {
                 productsList = _product.GetAvailableProducts();
-
             }
             else
             {
                 productsList = _product.GetAvailableProductsByCategoryId(categoryId);
             }
+
+            if (value != 0)
+            {
+                productsList = _product.GetProductsByMaxPrice(value, productsList);
+            }
+
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                productsList = _product.GetProductsBySearchQuery(searchQuery, productsList);
+            }
+
+            if (!string.IsNullOrEmpty(country))
+            {
+                productsList = _product.GetProductsByCountry(country, productsList);
+            }
+
+            productsList = _product.SortProducts(sortOption, productsList);
 
             var categoryProductCounts = _product.GetCategoryProductCounts();
 
@@ -69,7 +91,11 @@ namespace eUseControl.Web.Controllers
                 Categories = productCountsByCategory,
                 CurrentPage = page,
                 TotalPages = totalPages,
-                CategoryId = categoryId
+                CategoryId = categoryId,
+                SortOption = sortOption,
+                MaxPrice = value,
+                SearchQuery = searchQuery,
+                Country = country
             };
 
             return View(model);
