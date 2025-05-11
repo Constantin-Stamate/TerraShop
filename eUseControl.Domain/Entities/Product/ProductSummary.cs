@@ -1,4 +1,6 @@
-﻿namespace eUseControl.Domain.Entities.Product
+﻿using System;
+
+namespace eUseControl.Domain.Entities.Product
 {
     public class ProductSummary
     {
@@ -13,5 +15,9 @@
         public decimal ProductPrice { get; set; }
 
         public string ProductImageUrl { get; set; }
+
+        public DateTime ProductPostDate { get; set; }
+
+        public string ProductRegion { get; set; }
     }
 }
