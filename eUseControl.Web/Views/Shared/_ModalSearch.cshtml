@@ -9,14 +9,16 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body d-flex align-items-center">
-            <div class="input-group w-75 mx-auto d-flex">
-                <input type="search" class="form-control p-3" placeholder="Search by keyword"
-                       aria-describedby="search-icon-1">
-                <button type="submit" class="btn btn-primary p-3"
-                        style="background-color: #FFB524; border-color: #FFB524;">
-                    <i class="fa fa-search"></i>
-                </button>
-            </div>
+            <form method="get" action="@Url.Action("Shop", "Shop")" class="w-75 mx-auto">
+                <div class="input-group d-flex">
+                    <input type="search" name="searchQuery" class="form-control p-3" placeholder="Search by keyword"
+                           aria-describedby="search-icon-1">
+                    <button type="submit" class="btn btn-primary p-3"
+                            style="background-color: #FFB524; border-color: #FFB524;">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
