@@ -51,5 +51,25 @@ namespace eUseControl.BusinessLogic.BusinessLayer
         {
             UpdateProductRatingAction(productId);
         }
+
+        public List<ProductSummary> SortProducts(string sortOption, List<ProductSummary> products)
+        {
+            return SortProductsAction(sortOption, products);
+        }
+
+        public List<ProductSummary> GetProductsByMaxPrice(int maxPrice, List<ProductSummary> products)
+        {
+            return GetProductsByMaxPriceAction(maxPrice, products);
+        }
+
+        public List<ProductSummary> GetProductsBySearchQuery(string searchQuery, List<ProductSummary> products)
+        {
+            return GetProductsBySearchQueryAction(searchQuery, products);
+        }
+
+        public List<ProductSummary> GetProductsByCountry(string country, List<ProductSummary> products)
+        {
+            return GetProductsByCountryAction(country, products);
+        }
     }
 }

@@ -808,6 +808,8 @@ namespace eUseControl.BusinessLogic.Core
                                     ProductDescription = product.ProductDescription,
                                     ProductPrice = product.ProductPrice,
                                     ProductImageUrl = product.ProductImageUrl,
+                                    ProductPostDate = product.ProductPostDate,
+                                    ProductRegion = product.ProductRegion
                                 };
 
                                 productsList.Add(productSummary);
@@ -914,6 +916,8 @@ namespace eUseControl.BusinessLogic.Core
                                     ProductDescription = product.ProductDescription,
                                     ProductPrice = product.ProductPrice,
                                     ProductImageUrl = product.ProductImageUrl,
+                                    ProductPostDate = product.ProductPostDate,
+                                    ProductRegion = product.ProductRegion
                                 };
 
                                 productsList.Add(productSummary);
@@ -1185,7 +1189,9 @@ namespace eUseControl.BusinessLogic.Core
             {
                 using (var db = new UserContext())
                 {
-                    var userData = db.Users.FirstOrDefault(u => u.Id == userId);
+                    var userData = db.Users
+                        .FirstOrDefault(u => u.Id == userId);
+
                     if (userData == null) return null;
 
                     var config = new MapperConfiguration(cfg =>
@@ -1201,6 +1207,110 @@ namespace eUseControl.BusinessLogic.Core
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return null;
+            }
+        }
+
+        internal List<ProductSummary> SortProductsAction(string sortOption, List<ProductSummary> products)
+        {
+            try
+            {
+                switch (sortOption)
+                {
+                    case "lowToHigh":
+                        return products
+                            .OrderBy(p => p.ProductPrice)
+                            .ToList();
+
+                    case "highToLow":
+                        return products
+                            .OrderByDescending(p => p.ProductPrice)
+                            .ToList();
+
+                    case "oldest":
+                        return products
+                            .OrderBy(p => p.ProductPostDate)
+                            .ToList();
+
+                    case "newest":
+                        return products
+                            .OrderByDescending(p => p.ProductPostDate)
+                            .ToList();
+
+                    default:
+                        return products;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return products ?? new List<ProductSummary>();
+            }
+        }
+
+        internal List<ProductSummary> GetProductsByMaxPriceAction(int maxPrice, List<ProductSummary> products)
+        {
+            try
+            {
+                var filteredProducts = products
+                    .Where(p => p.ProductPrice <= maxPrice)
+                    .ToList();
+
+                return filteredProducts;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<ProductSummary>();
+            }
+        }
+
+        internal List<ProductSummary> GetProductsBySearchQueryAction(string searchQuery, List<ProductSummary> products)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(searchQuery))
+                {
+                    return products;
+                }
+
+                var searchWords = searchQuery
+                    .Split(new[] { ' ', ',', '.', ';', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
+
+                var filteredProducts = products
+                    .Where(p => searchWords.Any(word =>
+                        (!string.IsNullOrEmpty(p.ProductName) && p.ProductName.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                        (!string.IsNullOrEmpty(p.ProductDescription) && p.ProductDescription.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
+                    ))
+                    .ToList();
+
+                return filteredProducts;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<ProductSummary>();
+            }
+        }
+
+        internal List<ProductSummary> GetProductsByCountryAction(string country, List<ProductSummary> products)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(country))
+                {
+                    return products;
+                }
+
+                var filteredProducts = products
+                    .Where(p => string.Equals(p.ProductRegion, country, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                return filteredProducts;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<ProductSummary>();
             }
         }
     }

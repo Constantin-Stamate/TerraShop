@@ -22,5 +22,13 @@ namespace eUseControl.BusinessLogic.Interfaces
         List<ProductSummary> GetAvailableProductsByCategoryId(int? categoryId);
 
         void UpdateProductRating(int productId);
+
+        List<ProductSummary> SortProducts(string sortOption, List<ProductSummary> products);
+
+        List<ProductSummary> GetProductsByMaxPrice(int maxPrice, List<ProductSummary> products);
+
+        List<ProductSummary> GetProductsBySearchQuery(string searchQuery, List<ProductSummary> products);
+
+        List<ProductSummary> GetProductsByCountry(string country, List<ProductSummary> products);
     }
 }
