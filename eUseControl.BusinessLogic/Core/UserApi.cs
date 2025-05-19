@@ -14,6 +14,7 @@ using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Profile;
 using System.Text.RegularExpressions;
 using eUseControl.Domain.Entities.Review;
+using eUseControl.Domain.Entities.Wishlist;
 
 namespace eUseControl.BusinessLogic.Core
 {
@@ -275,7 +276,7 @@ namespace eUseControl.BusinessLogic.Core
                     };
                 }
 
-                if (productData.ProductQuantity <= 0)
+                if (productData.ProductQuantity < 0)
                 {
                     return new ProductResp 
                     { 
@@ -444,7 +445,7 @@ namespace eUseControl.BusinessLogic.Core
                     };
                 }
 
-                if (productData.ProductQuantity <= 0)
+                if (productData.ProductQuantity < 0)
                 {
                     return new ProductResp 
                     { 
@@ -809,7 +810,8 @@ namespace eUseControl.BusinessLogic.Core
                                     ProductPrice = product.ProductPrice,
                                     ProductImageUrl = product.ProductImageUrl,
                                     ProductPostDate = product.ProductPostDate,
-                                    ProductRegion = product.ProductRegion
+                                    ProductRegion = product.ProductRegion,
+                                    ProductQuantity = product.ProductQuantity
                                 };
 
                                 productsList.Add(productSummary);
@@ -917,7 +919,8 @@ namespace eUseControl.BusinessLogic.Core
                                     ProductPrice = product.ProductPrice,
                                     ProductImageUrl = product.ProductImageUrl,
                                     ProductPostDate = product.ProductPostDate,
-                                    ProductRegion = product.ProductRegion
+                                    ProductRegion = product.ProductRegion,
+                                    ProductQuantity = product.ProductQuantity
                                 };
 
                                 productsList.Add(productSummary);
@@ -1311,6 +1314,128 @@ namespace eUseControl.BusinessLogic.Core
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return new List<ProductSummary>();
+            }
+        }
+
+        internal void AddProductToWishlistAction(int userId, int productId)
+        {
+            try
+            {
+                using (var db = new WishlistContext())
+                {
+                    var existingProduct = db.WishlistProducts
+                        .FirstOrDefault(w => w.UserId == userId && w.ProductId == productId);
+
+                    if (existingProduct == null)
+                    {
+                        var wishlistItem = new WishlistDbTable
+                        {
+                            UserId = userId,
+                            ProductId = productId,
+                            AddedDate = DateTime.Now
+                        };
+
+                        db.WishlistProducts.Add(wishlistItem);
+                        db.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
+
+        internal List<ProductLite> GetAllWishlistProductsAction(int userId)
+        {
+            try
+            {
+                using (var db = new WishlistContext())
+                {
+                    var productIds = db.WishlistProducts
+                        .Where(w => w.UserId == userId)
+                        .Select(w => w.ProductId)
+                        .ToList();
+
+                    if (!productIds.Any()) return new List<ProductLite>();
+
+                    using (var productsDb = new ProductContext())
+                    {
+                        var products = productsDb.Products
+                            .Where(p => productIds.Contains(p.Id))
+                            .ToList();
+
+                        var config = new MapperConfiguration(cfg =>
+                        {
+                            cfg.CreateMap<ProductDbTable, ProductLite>();
+                        });
+
+                        var mapper = config.CreateMapper();
+                        return mapper.Map<List<ProductLite>>(products);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<ProductLite>();
+            }
+        }
+
+        internal List<int> GetWishlistProductIdsAction(int userId)
+        {
+            try
+            {
+                using (var db = new WishlistContext())
+                {
+                    var productIds = db.WishlistProducts
+                        .Where(w => w.UserId == userId)
+                        .Select(w => w.ProductId)
+                        .ToList();
+
+                    return productIds;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<int>();
+            }
+        }
+
+        internal int GetWishlistCountByUserIdAction(int userId)
+        {
+            try
+            {
+                using (var db = new WishlistContext())
+                {
+                    return db.WishlistProducts
+                             .Count(w => w.UserId == userId);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        internal void RemoveProductFromWishlistAction(int productId, int userId)
+        {
+            try
+            {
+                using (var db = new WishlistContext())
+                {
+                    var wishlistItem = db.WishlistProducts
+                        .FirstOrDefault(w => w.UserId == userId && w.ProductId == productId);
+
+                    db.WishlistProducts.Remove(wishlistItem);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
             }
         }
     }
