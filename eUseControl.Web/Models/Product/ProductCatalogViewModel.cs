@@ -18,6 +18,8 @@ namespace eUseControl.Web.Models.Product
 
         public string Country { get; set; }
 
+        public List<int> WishlistProductIds { get; set; } 
+
         public IEnumerable<ProductMini> Products { get; set; }
 
         public Dictionary<ProductCategory, int> Categories { get; set; }
