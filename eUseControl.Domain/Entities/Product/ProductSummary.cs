@@ -19,5 +19,7 @@ namespace eUseControl.Domain.Entities.Product
         public DateTime ProductPostDate { get; set; }
 
         public string ProductRegion { get; set; }
+
+        public int ProductQuantity { get; set; }
     }
 }
