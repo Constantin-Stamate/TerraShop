@@ -52,9 +52,20 @@
                             </button>
                         </div>
                     </div>
-                    <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary" style="margin-top: -31px;">
-                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
-                    </a>
+                    @if (Model.Product.ProductQuantity > 0)
+                    {
+                        <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary pulse-js" style="margin-top: -31px;">
+                            <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to Cart
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="#"
+                           class="btn border border-secondary rounded-pill px-4 py-2 mb-4 pulse-js"
+                           style="background-color: #fff; color: #ccc; cursor: not-allowed; margin-top: -31px; pointer-events: none;">
+                            <i class="fa fa-shopping-bag me-2" style="color: #ccc;"></i> Add to Cart
+                        </a>
+                    }
                 </div>
                 <div class="col-lg-12">
                     <nav>
@@ -442,6 +453,19 @@
                     }
                 });
             });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const buttons = document.querySelectorAll(".pulse-js");
+
+        buttons.forEach(button => {
+            setInterval(() => {
+                button.style.transform = "scale(1.05)";
+                setTimeout(() => {
+                    button.style.transform = "scale(1)";
+                }, 300);
+            }, 1000);
         });
     });
 </script>
