@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLayer\ReviewBL.cs" />
+    <Compile Include="BusinessLayer\WishlistBL.cs" />
     <Compile Include="BusinessLogicManager.cs" />
     <Compile Include="Core\AdminApi.cs" />
     <Compile Include="Core\UserApi.cs" />
@@ -65,10 +66,12 @@
     <Compile Include="DBModel\ReviewContext.cs" />
     <Compile Include="DBModel\SessionContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
+    <Compile Include="DBModel\WishlistContext.cs" />
     <Compile Include="Interfaces\IProduct.cs" />
     <Compile Include="Interfaces\IProfile.cs" />
     <Compile Include="Interfaces\IReview.cs" />
     <Compile Include="Interfaces\ISession.cs" />
+    <Compile Include="Interfaces\IWishlist.cs" />
     <Compile Include="Migrations\Product\202505070935331_IntegrateProductsTable.cs" />
     <Compile Include="Migrations\Product\202505070935331_IntegrateProductsTable.Designer.cs">
       <DependentUpon>202505070935331_IntegrateProductsTable.cs</DependentUpon>
@@ -101,6 +104,11 @@
     <Compile Include="Migrations\User\Configuration.cs" />
     <Compile Include="BusinessLayer\ProductBL.cs" />
     <Compile Include="BusinessLayer\ProfileBL.cs" />
+    <Compile Include="Migrations\Wishlist\202505181532184_IntegrateWishlistProductsTable.cs" />
+    <Compile Include="Migrations\Wishlist\202505181532184_IntegrateWishlistProductsTable.Designer.cs">
+      <DependentUpon>202505181532184_IntegrateWishlistProductsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Wishlist\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BusinessLayer\SessionBL.cs" />
   </ItemGroup>
@@ -136,6 +144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\User\202504281533102_CreateUsersTable.resx">
       <DependentUpon>202504281533102_CreateUsersTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Wishlist\202505181532184_IntegrateWishlistProductsTable.resx">
+      <DependentUpon>202505181532184_IntegrateWishlistProductsTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

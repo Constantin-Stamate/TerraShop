@@ -221,6 +221,7 @@
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
+    <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="Extension\HttpContextExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -229,7 +230,9 @@
     <Compile Include="Models\Product\ProductCategory.cs" />
     <Compile Include="Models\Product\ProductCompact.cs" />
     <Compile Include="Models\Product\ProductDetailsViewModel.cs" />
+    <Compile Include="Models\Product\ProductInfo.cs" />
     <Compile Include="Models\Product\ProductMini.cs" />
+    <Compile Include="Models\Product\ProductNavigationViewModel.cs" />
     <Compile Include="Models\Profile\ProfileCompact.cs" />
     <Compile Include="Models\Profile\ProfileMini.cs" />
     <Compile Include="Models\Review\ReviewCompact.cs" />
@@ -379,6 +382,8 @@
     <Content Include="Views\Shared\_LayoutShop.cshtml" />
     <Content Include="Views\Payment\Payment.cshtml" />
     <Content Include="Views\Shared\_LayoutPayment.cshtml" />
+    <Content Include="Views\Wishlist\Wishlist.cshtml" />
+    <Content Include="Views\Shared\_LayoutWishlist.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
