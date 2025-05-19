@@ -168,6 +168,7 @@
     <Compile Include="Entities\Product\Category.cs" />
     <Compile Include="Entities\Product\ProductData.cs" />
     <Compile Include="Entities\Product\ProductDbTable.cs" />
+    <Compile Include="Entities\Product\ProductLite.cs" />
     <Compile Include="Entities\Product\ProductMinimal.cs" />
     <Compile Include="Entities\Product\ProductResp.cs" />
     <Compile Include="Entities\Product\ProductSummary.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="Entities\User\URegisterResp.cs" />
     <Compile Include="Entities\User\UserMinimal.cs" />
     <Compile Include="Entities\User\UserSummary.cs" />
+    <Compile Include="Entities\Wishlist\WishlistDbTable.cs" />
     <Compile Include="Enums\ProductStatus.cs" />
     <Compile Include="Enums\URole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

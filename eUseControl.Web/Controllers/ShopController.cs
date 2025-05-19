@@ -13,11 +13,15 @@ namespace eUseControl.Web.Controllers
     public class ShopController : BaseController
     {
         private readonly IProduct _product;
+        private readonly IWishlist _wishlist;
+        private readonly ISession _session;
 
         public ShopController()
         {
             var bl = new BusinessLogicManager();
             _product = bl.GetProductBL();
+            _wishlist = bl.GetWishlistBL();
+            _session = bl.GetSessionBL();
         }
 
         [HttpGet]
@@ -25,6 +29,12 @@ namespace eUseControl.Web.Controllers
         {
             var cookie = Request.Cookies["X-KEY"].Value;
             if (string.IsNullOrEmpty(cookie))
+            {
+                return RedirectToAction("Login", "Login", new { error = true });
+            }
+
+            var user = _session.GetUserByCookie(cookie);
+            if (user == null)
             {
                 return RedirectToAction("Login", "Login", new { error = true });
             }
@@ -85,6 +95,8 @@ namespace eUseControl.Web.Controllers
                 .Take(pageSize)
                 .ToList();
 
+            var productIds = _wishlist.GetWishlistProductIds(user.Id);
+
             var model = new ProductCatalogViewModel
             {
                 Products = productsForCurrentPage,
@@ -95,7 +107,8 @@ namespace eUseControl.Web.Controllers
                 SortOption = sortOption,
                 MaxPrice = value,
                 SearchQuery = searchQuery,
-                Country = country
+                Country = country,
+                WishlistProductIds = productIds
             };
 
             return View(model);

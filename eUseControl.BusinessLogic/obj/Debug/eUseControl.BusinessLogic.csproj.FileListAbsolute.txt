@@ -24,3 +24,4 @@ C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUs
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.ProductType.AddProductCategoriesTable.resources
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Products.IntegrateProductsTable.resources
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Review.IntegrateReviewsTable.resources
+C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Wishlist.IntegrateWishlistProductsTable.resources

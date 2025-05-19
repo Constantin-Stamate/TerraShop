@@ -24,5 +24,10 @@ namespace eUseControl.BusinessLogic
         {
             return new ReviewBL();
         }
+
+        public IWishlist GetWishlistBL()
+        {
+            return new WishlistBL();
+        }
     }
 }

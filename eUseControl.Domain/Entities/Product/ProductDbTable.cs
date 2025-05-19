@@ -31,7 +31,7 @@ namespace eUseControl.Domain.Entities.Product
         public string ProductAddress { get; set; }
 
         [Required]
-        [Range(1, int.MaxValue)]
+        [Range(0, int.MaxValue)]
         [Display(Name = "ProductQuantity")]
         public int ProductQuantity { get; set; }
 

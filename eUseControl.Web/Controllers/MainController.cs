@@ -11,11 +11,15 @@ namespace eUseControl.Web.Controllers
     public class MainController : BaseController
     {
         private readonly IProduct _product;
+        private readonly IWishlist _wishlist;
+        private readonly ISession _session;
 
         public MainController()
         {
             var bl = new BusinessLogicManager();
             _product = bl.GetProductBL();
+            _wishlist = bl.GetWishlistBL();
+            _session = bl.GetSessionBL();
         }
 
         [HttpGet]
@@ -28,7 +32,28 @@ namespace eUseControl.Web.Controllers
         [HttpGet]
         public ActionResult Navbar()
         {
+            var cookie = Request.Cookies["X-KEY"];
+            if (cookie == null || string.IsNullOrEmpty(cookie.Value))
+            {
+                return PartialView("_Navbar", new ProductNavigationViewModel
+                {
+                    Categories = new Dictionary<ProductCategory, int>(),
+                    WishlistCount = 0
+                });
+            }
+
+            var user = _session.GetUserByCookie(cookie.Value);
+            if (user == null)
+            {
+                return PartialView("_Navbar", new ProductNavigationViewModel
+                {
+                    Categories = new Dictionary<ProductCategory, int>(),
+                    WishlistCount = 0
+                });
+            }
+
             var categoryProductCounts = _product.GetCategoryProductCounts();
+            var productsCount = _wishlist.GetWishlistCountByUserId(user.Id);
 
             var config = new MapperConfiguration(cfg =>
             {
@@ -39,9 +64,10 @@ namespace eUseControl.Web.Controllers
             var mapper = config.CreateMapper();
             var productCountsByCategory = mapper.Map<Dictionary<ProductCategory, int>>(categoryProductCounts);
 
-            var model = new ProductCatalogViewModel
+            var model = new ProductNavigationViewModel
             {
-                Categories = productCountsByCategory
+                Categories = productCountsByCategory,
+                WishlistCount = productsCount
             };
 
             return PartialView("_Navbar", model);
