@@ -29,5 +29,10 @@ namespace eUseControl.BusinessLogic
         {
             return new WishlistBL();
         }
+
+        public ICart GetCartBL()
+        {
+            return new CartBL();
+        }
     }
 }
