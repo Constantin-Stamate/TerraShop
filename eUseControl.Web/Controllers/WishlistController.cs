@@ -64,9 +64,16 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            _wishlist.AddProductToWishlist(user.Id, productId);
+            var result = _wishlist.AddProductToWishlist(user.Id, productId);
 
-            return RedirectToAction("Shop", "Shop", new { success = true });
+            if (result.Status)
+            {
+                return RedirectToAction("Shop", "Shop", new { success = true });
+            }
+            else
+            {
+                return RedirectToAction("Shop", "Shop", new { error = true });
+            }
         }
 
         [HttpPost]
@@ -85,9 +92,16 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            _wishlist.RemoveProductFromWishlist(productId, user.Id);
+            var result = _wishlist.RemoveProductFromWishlist(productId, user.Id);
 
-            return RedirectToAction("Shop", "shop", new { success = true });
+            if (result.Status)
+            {
+                return RedirectToAction("Shop", "Shop", new { success = true });
+            }
+            else
+            {
+                return RedirectToAction("Shop", "Shop", new { error = true });
+            }
         }
     }
 }

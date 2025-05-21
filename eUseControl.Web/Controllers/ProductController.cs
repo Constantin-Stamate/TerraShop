@@ -97,7 +97,7 @@ namespace eUseControl.Web.Controllers
                 var mapper = config.CreateMapper();
                 var productData = mapper.Map<ProductData>(product);
 
-                var cookie = Request.Cookies["X-KEY"].Value;
+                var cookie = Request.Cookies["X-KEY"]?.Value;
                 if (string.IsNullOrEmpty(cookie))
                 {
                     return RedirectToAction("Login", "Login", new { error = true });
@@ -134,7 +134,7 @@ namespace eUseControl.Web.Controllers
         [HttpGet]
         public ActionResult UpdateProduct(int Id)
         {
-            var cookie = Request.Cookies["X-KEY"].Value;
+            var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
             {
                 return RedirectToAction("Login", "Login", new { error = true });
@@ -214,7 +214,7 @@ namespace eUseControl.Web.Controllers
                 var mapper = config.CreateMapper();
                 var productData = mapper.Map<ProductData>(product);
 
-                var cookie = Request.Cookies["X-KEY"].Value;
+                var cookie = Request.Cookies["X-KEY"]?.Value;
                 if (string.IsNullOrEmpty(cookie))
                 {
                     return RedirectToAction("Login", "Login", new { error = true });
@@ -251,7 +251,7 @@ namespace eUseControl.Web.Controllers
         [HttpGet]
         public ActionResult ProductDetails(int productId, int? reviewId)
         {
-            var cookie = Request.Cookies["X-KEY"].Value;
+            var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
             {
                 return RedirectToAction("Login", "Login", new { error = true });
@@ -337,14 +337,22 @@ namespace eUseControl.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeProductStatus(int productId)
         {
-            var cookie = Request.Cookies["X-KEY"].Value;
+            var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
             {
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            _product.UpdateProductStatus(productId);
-            return RedirectToAction("Articlesprofile", "Profile", new { success = true });
+            var result = _product.UpdateProductStatus(productId);
+
+            if (result.Status)
+            {
+                return RedirectToAction("Articlesprofile", "Profile", new { success = true });
+            }
+            else
+            {
+                return RedirectToAction("Articlesprofile", "Profile", new { error = true });
+            }
         }
     }
 }

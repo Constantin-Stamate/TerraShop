@@ -27,7 +27,7 @@ namespace eUseControl.Web.Controllers
         [HttpGet]
         public ActionResult Shop(string country, string searchQuery, string maxPrice, string sortOption, int? categoryId, int page = 1)
         {
-            var cookie = Request.Cookies["X-KEY"].Value;
+            var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
             {
                 return RedirectToAction("Login", "Login", new { error = true });

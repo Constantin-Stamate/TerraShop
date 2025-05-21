@@ -31,7 +31,7 @@ namespace eUseControl.Web.Controllers
         [HttpGet]
         public ActionResult GeneralProfile()
         {
-            var cookie = Request.Cookies["X-KEY"].Value;
+            var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
             {
                 return RedirectToAction("Login", "Login", new { error = true });
@@ -63,7 +63,7 @@ namespace eUseControl.Web.Controllers
         [HttpGet]
         public ActionResult ArticlesProfile()
         {
-            var cookie = Request.Cookies["X-KEY"].Value;
+            var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
             {
                 return RedirectToAction("Login", "Login", new { error = true });
@@ -100,7 +100,7 @@ namespace eUseControl.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var cookie = Request.Cookies["X-KEY"].Value;
+                var cookie = Request.Cookies["X-KEY"]?.Value;
                 if (string.IsNullOrEmpty(cookie))
                 {
                     return RedirectToAction("Login", "Login", new { error = true });
@@ -148,7 +148,7 @@ namespace eUseControl.Web.Controllers
         [HttpGet]
         public ActionResult SettingsProfile()
         {
-            var cookie = Request.Cookies["X-KEY"].Value;
+            var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
             {
                 return RedirectToAction("Login", "Login", new { error = true });
@@ -228,7 +228,7 @@ namespace eUseControl.Web.Controllers
                 var mapper = config.CreateMapper();
                 var profile = mapper.Map<ProfileData>(profileCompact);
 
-                var cookie = Request.Cookies["X-KEY"].Value;
+                var cookie = Request.Cookies["X-KEY"]?.Value;
                 if (string.IsNullOrEmpty(cookie))
                 {
                     return RedirectToAction("Login", "Login", new { error = true });
