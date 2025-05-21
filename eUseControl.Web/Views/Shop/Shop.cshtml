@@ -467,10 +467,14 @@
                                                 <p class="text-dark fs-5 fw-bold mb-0">$@product.ProductPrice</p>
                                                 @if (product.ProductQuantity > 0)
                                                 {
-                                                    <a href="#"
-                                                       class="btn border border-secondary rounded-pill px-3 text-primary pulse-js">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to Cart
-                                                    </a>
+                                                    <form action="@Url.Action("AddProductToCart", "Cart")" method="post" class="d-inline">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="productId" value="@product.Id" />
+                                                        <button type="submit"
+                                                                class="btn border border-secondary rounded-pill px-3 text-primary pulse-js">
+                                                            <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to Cart
+                                                        </button>
+                                                    </form>
                                                 }
                                                 else
                                                 {
