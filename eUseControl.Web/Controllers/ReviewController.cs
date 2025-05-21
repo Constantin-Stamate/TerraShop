@@ -26,7 +26,7 @@ namespace eUseControl.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var cookie = Request.Cookies["X-KEY"].Value;
+                var cookie = Request.Cookies["X-KEY"]?.Value;
                 if (string.IsNullOrEmpty(cookie))
                 {
                     return RedirectToAction("Login", "Login", new { error = true });
@@ -51,12 +51,12 @@ namespace eUseControl.Web.Controllers
                 if (reviewData.Id > 0)
                 {
                     result = _review.UpdateReview(reviewData);
-                    _product.UpdateProductRating(model.ReviewCompact.ProductId);
+                    var status = _product.UpdateProductRating(model.ReviewCompact.ProductId);
                 }
                 else
                 {
                     result = _review.CreateReview(reviewData, user.Id);
-                    _product.UpdateProductRating(model.ReviewCompact.ProductId);
+                    var status = _product.UpdateProductRating(model.ReviewCompact.ProductId);
                 }
 
                 if (result.Status)
@@ -82,7 +82,7 @@ namespace eUseControl.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteReview(int reviewId, int productId)
         {
-            var cookie = Request.Cookies["X-KEY"].Value;
+            var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
             {
                 return RedirectToAction("Login", "Login", new { error = true });
@@ -95,7 +95,7 @@ namespace eUseControl.Web.Controllers
             }
 
             var result = _review.DeleteReview(reviewId);
-            _product.UpdateProductRating(productId);
+            var status = _product.UpdateProductRating(productId);
 
             if (result.Status)
             {

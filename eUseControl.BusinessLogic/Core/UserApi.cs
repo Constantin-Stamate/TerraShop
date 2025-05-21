@@ -831,7 +831,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal void UpdateProductStatusAction(int productId)
+        internal ProductResp UpdateProductStatusAction(int productId)
         {
             try
             {
@@ -842,16 +842,37 @@ namespace eUseControl.BusinessLogic.Core
 
                     if (product != null)
                     {
-                        product.ProductStatus = product.ProductStatus == ProductStatus.Available ? ProductStatus.Unavailable : ProductStatus.Available;
+                        product.ProductStatus = product.ProductStatus == ProductStatus.Available
+                            ? ProductStatus.Unavailable
+                            : ProductStatus.Available;
 
                         db.Entry(product).State = EntityState.Modified;
                         db.SaveChanges();
+
+                        return new ProductResp
+                        {
+                            Status = true,
+                            StatusMsg = "Product status updated successfully!"
+                        };
+                    }
+                    else
+                    {
+                        return new ProductResp
+                        {
+                            Status = false,
+                            StatusMsg = "Product not found!"
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ProductResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while updating the product status!"
+                };
             }
         }
 
@@ -1154,7 +1175,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal void UpdateProductRatingAction(int productId)
+        internal ProductResp UpdateProductRatingAction(int productId)
         {
             try
             {
@@ -1178,6 +1199,20 @@ namespace eUseControl.BusinessLogic.Core
                             product.ProductRating = rating;
                             productDb.Entry(product).State = EntityState.Modified;
                             productDb.SaveChanges();
+
+                            return new ProductResp
+                            {
+                                Status = true,
+                                StatusMsg = "Product rating updated successfully!"
+                            };
+                        }
+                        else
+                        {
+                            return new ProductResp
+                            {
+                                Status = false,
+                                StatusMsg = "Product not found!"
+                            };
                         }
                     }
                 }
@@ -1185,6 +1220,11 @@ namespace eUseControl.BusinessLogic.Core
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ProductResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while updating the product rating!"
+                };
             }
         }
 
@@ -1319,7 +1359,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal void AddProductToWishlistAction(int userId, int productId)
+        internal WishlistResp AddProductToWishlistAction(int userId, int productId)
         {
             try
             {
@@ -1339,12 +1379,31 @@ namespace eUseControl.BusinessLogic.Core
 
                         db.WishlistProducts.Add(wishlistItem);
                         db.SaveChanges();
+
+                        return new WishlistResp
+                        {
+                            Status = true,
+                            StatusMsg = "Product added to wishlist!"
+                        };
+                    }
+                    else
+                    {
+                        return new WishlistResp
+                        {
+                            Status = false,
+                            StatusMsg = "Product is already in the wishlist!"
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new WishlistResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while adding the product to the wishlist!"
+                };
             }
         }
 
@@ -1422,7 +1481,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal void RemoveProductFromWishlistAction(int productId, int userId)
+        internal WishlistResp RemoveProductFromWishlistAction(int productId, int userId)
         {
             try
             {
@@ -1431,13 +1490,35 @@ namespace eUseControl.BusinessLogic.Core
                     var wishlistItem = db.WishlistProducts
                         .FirstOrDefault(w => w.UserId == userId && w.ProductId == productId);
 
-                    db.WishlistProducts.Remove(wishlistItem);
-                    db.SaveChanges();
+                    if (wishlistItem != null)
+                    {
+                        db.WishlistProducts.Remove(wishlistItem);
+                        db.SaveChanges();
+
+                        return new WishlistResp
+                        {
+                            Status = true,
+                            StatusMsg = "Product removed from wishlist!"
+                        };
+                    }
+                    else
+                    {
+                        return new WishlistResp
+                        {
+                            Status = false,
+                            StatusMsg = "Product not found in wishlist!"
+                        };
+                    }
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new WishlistResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while removing the product from the wishlist!"
+                };
             }
         }
 

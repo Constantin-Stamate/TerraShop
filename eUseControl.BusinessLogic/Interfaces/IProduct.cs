@@ -15,13 +15,13 @@ namespace eUseControl.BusinessLogic.Interfaces
 
         List<ProductSummary> GetAvailableProducts();
 
-        void UpdateProductStatus(int productId);
+        ProductResp UpdateProductStatus(int productId);
 
         Dictionary<Category, int> GetCategoryProductCounts();
 
         List<ProductSummary> GetAvailableProductsByCategoryId(int? categoryId);
 
-        void UpdateProductRating(int productId);
+        ProductResp UpdateProductRating(int productId);
 
         List<ProductSummary> SortProducts(string sortOption, List<ProductSummary> products);
 

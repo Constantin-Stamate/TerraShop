@@ -191,6 +191,7 @@
     <Compile Include="Entities\User\UserMinimal.cs" />
     <Compile Include="Entities\User\UserSummary.cs" />
     <Compile Include="Entities\Wishlist\WishlistDbTable.cs" />
+    <Compile Include="Entities\Wishlist\WishlistResp.cs" />
     <Compile Include="Enums\ProductStatus.cs" />
     <Compile Include="Enums\URole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
