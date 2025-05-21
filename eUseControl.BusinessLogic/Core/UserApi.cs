@@ -15,6 +15,7 @@ using eUseControl.Domain.Entities.Profile;
 using System.Text.RegularExpressions;
 using eUseControl.Domain.Entities.Review;
 using eUseControl.Domain.Entities.Wishlist;
+using eUseControl.Domain.Entities.Cart;
 
 namespace eUseControl.BusinessLogic.Core
 {
@@ -402,6 +403,7 @@ namespace eUseControl.BusinessLogic.Core
 
                         var productData = new ProductData
                         {
+                            Id = product.Id,
                             ProductName = product.ProductName,
                             ProductAddress = product.ProductAddress,
                             ProductQuantity = product.ProductQuantity,
@@ -1436,6 +1438,289 @@ namespace eUseControl.BusinessLogic.Core
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
+
+        internal CartResp AddItemToCartAction(int productId, int userId)
+        {
+            try
+            {
+                using (var db = new CartContext())
+                {
+                    var existingItem = db.CartItems
+                        .FirstOrDefault(c => c.ProductId == productId && c.UserId == userId);
+
+                    decimal itemPrice = 0;
+                    using (var productsDb = new ProductContext())
+                    {
+                        var product = productsDb.Products
+                            .FirstOrDefault(p => p.Id == productId);
+
+                        if (product == null)
+                        {
+                            return new CartResp
+                            {
+                                Status = false,
+                                StatusMsg = "The requested product was not found!"
+                            };
+                        }
+
+                        itemPrice = product.ProductPrice;
+                    }
+
+                    if (existingItem == null)
+                    {
+                        var cartItem = new CartDbTable
+                        {
+                            UserId = userId,
+                            ProductId = productId,
+                            SelectedQuantity = 1,
+                            Subtotal = itemPrice,
+                            AddedDate = DateTime.Now
+                        };
+
+                        db.CartItems.Add(cartItem);
+                        db.SaveChanges();
+
+                        return new CartResp
+                        {
+                            Status = true,
+                            StatusMsg = "Product successfully added to the cart!"
+                        };
+                    }
+                    else
+                    {
+                        return new CartResp
+                        {
+                            Status = false,
+                            StatusMsg = "Product is already in the cart!"
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new CartResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while adding the product to the cart!"
+                };
+            }
+        }
+
+        internal List<CartData> GetCartItemsByUserIdAction(int userId)
+        {
+            var cartDataList = new List<CartData>();
+
+            try
+            {
+                using (var db = new CartContext())
+                {
+                    var allCartItems = db.CartItems
+                        .Where(c => c.UserId == userId)
+                        .ToList();
+
+                    using (var productsDb = new ProductContext())
+                    {
+                        foreach (var cartItem in allCartItems)
+                        {
+                            var product = productsDb.Products
+                                    .FirstOrDefault(p => p.Id == cartItem.ProductId);
+
+                            if (product != null)
+                            {
+                                var cartData = new CartData
+                                {
+                                    ProductId = cartItem.ProductId,
+                                    ProductName = product.ProductName,
+                                    ProductImageUrl = product.ProductImageUrl,
+                                    ProductPrice = product.ProductPrice,
+                                    ProductQuantity = product.ProductQuantity,
+                                    SelectedQuantity = cartItem.SelectedQuantity,
+                                    Subtotal = cartItem.Subtotal
+                                };
+
+                                cartDataList.Add(cartData);
+                            }
+                        }
+                    }
+
+                    return cartDataList;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<CartData>();
+            }
+        }
+
+        internal CartResp RemoveItemFromCartAction(int productId, int userId)
+        {
+            try
+            {
+                using (var db = new CartContext())
+                {
+                    var cartItem = db.CartItems
+                        .FirstOrDefault(p => p.ProductId == productId && p.UserId == userId);
+
+                    if (cartItem != null)
+                    {
+                        db.CartItems.Remove(cartItem);
+                        db.SaveChanges();
+
+                        return new CartResp
+                        {
+                            Status = true,
+                            StatusMsg = "The item has been successfully removed from the cart!"
+                        };
+                    }
+                    else
+                    {
+                        return new CartResp
+                        {
+                            Status = false,
+                            StatusMsg = "This item is not in your cart!"
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new CartResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while removing the item from the cart!"
+                };
+            }
+        }
+
+        internal int GetCartCountByUserIdAction(int userId)
+        {
+            try
+            {
+                using (var db = new CartContext())
+                {
+                    return db.CartItems
+                        .Count(c => c.UserId == userId);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        internal CartResp ChangeProductQuantityAction(int productId, int userId, int newQuantity)
+        {
+            try
+            {
+                decimal currentProductPrice;
+                using (var productsDb = new ProductContext())
+                {
+                    var product = productsDb.Products
+                        .FirstOrDefault(p => p.Id == productId);
+
+                    if (product == null)
+                    {
+                        return new CartResp
+                        {
+                            Status = false,
+                            StatusMsg = "The requested product was not found!"
+                        };
+                    }
+
+                    currentProductPrice = product.ProductPrice;
+                }
+
+                using (var db = new CartContext())
+                {
+                    var cartItem = db.CartItems
+                        .FirstOrDefault(c => c.ProductId == productId && c.UserId == userId);
+
+                    if (cartItem != null)
+                    {
+                        cartItem.SelectedQuantity = newQuantity;
+                        cartItem.Subtotal = newQuantity * currentProductPrice;
+
+                        db.Entry(cartItem).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                        return new CartResp
+                        {
+                            Status = true,
+                            StatusMsg = "The quantity has been successfully updated!"
+                        };
+                    }
+                    else
+                    {
+                        return new CartResp
+                        {
+                            Status = false,
+                            StatusMsg = "The requested item is not in your cart!"
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new CartResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while updating the quantity!"
+                };
+            }
+        }
+
+        internal decimal CalculateCartTotalAction(List<CartData> cartItems)
+        {
+            try
+            {
+                decimal totalPrice = 0;
+
+                foreach (var item in cartItems)
+                {
+                    totalPrice += item.Subtotal;
+                }
+
+                return totalPrice;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        internal decimal ApplyCouponDiscountAction(decimal totalPrice, string couponCode)
+        {
+            try
+            {
+                using (var db = new CouponContext())
+                {
+                    var coupon = db.DiscountCoupons
+                        .FirstOrDefault(c => c.Code == couponCode);
+
+                    if (coupon != null && coupon.IsActive && coupon.ExpirationDate >= DateTime.Now)
+                    {
+                        decimal discountRate = coupon.DiscountPercent * 0.01m;
+                        decimal discountAmount = totalPrice * discountRate;
+                        decimal newPrice = totalPrice - discountAmount;
+
+                        return newPrice;
+                    }
+
+                    return totalPrice;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return totalPrice;
             }
         }
     }

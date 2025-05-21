@@ -41,22 +41,28 @@
                     </div>
                     <div class="input-group quantity mb-5" style="width: 100px;">
                         <div class="input-group-btn">
-                            <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                            <button class="btn btn-sm btn-minus rounded-circle bg-light border" disabled>
                                 <i class="fa fa-minus"></i>
                             </button>
                         </div>
-                        <input type="text" class="form-control form-control-sm text-center border-0" value="1">
+                        <input type="text" class="form-control form-control-sm text-center border-0" value="1" readonly
+                               style="box-shadow: none !important; outline: none !important; border: none !important; background-color: transparent !important;">
                         <div class="input-group-btn">
-                            <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                            <button class="btn btn-sm btn-plus rounded-circle bg-light border" disabled>
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
                     </div>
                     @if (Model.Product.ProductQuantity > 0)
                     {
-                        <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary pulse-js" style="margin-top: -31px;">
-                            <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to Cart
-                        </a>
+                        <form action="@Url.Action("AddProductToCart", "Cart")" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="productId" value="@Model.Product.Id" />
+                            <button type="submit"
+                                    class="btn border border-secondary rounded-pill px-3 text-primary pulse-js">
+                                <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to Cart
+                            </button>
+                        </form>
                     }
                     else
                     {

@@ -165,6 +165,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Cart\CartData.cs" />
+    <Compile Include="Entities\Cart\CartDbTable.cs" />
+    <Compile Include="Entities\Cart\CartResp.cs" />
+    <Compile Include="Entities\Cart\Coupon.cs" />
     <Compile Include="Entities\Product\Category.cs" />
     <Compile Include="Entities\Product\ProductData.cs" />
     <Compile Include="Entities\Product\ProductDbTable.cs" />

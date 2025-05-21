@@ -67,13 +67,13 @@
 
                                             @if (product.ProductStatus == ProductStatus.Available)
                                             {
-                                                <button type="submit" class="btn btn-sm px-3" style="background-color: #FFB524; color: white;">
+                                                <button type="submit" class="btn btn-sm px-3 pulse-js" style="background-color: #FFB524; color: white;">
                                                     Deactivate
                                                 </button>
                                             }
                                             else
                                             {
-                                                <button type="submit" class="btn btn-sm px-3" style="background-color: #FFB524; color: white;">
+                                                <button type="submit" class="btn btn-sm px-3 pulse-js" style="background-color: #FFB524; color: white;">
                                                     Activate
                                                 </button>
                                             }
@@ -87,7 +87,7 @@
                                         @product.ProductDescription
                                     </p>
                                     <p class="text-dark fs-5 fw-bold mb-0">
-                                        <span>@product.ProductPrice$</span>
+                                        <span>$@product.ProductPrice</span>
                                     </p>
                                     <div class="d-flex justify-content-between flex-lg-wrap mt-3">
                                         <a href="@Url.Action("UpdateProduct", "Product", new { Id = product.Id })"
@@ -155,3 +155,18 @@
             margin-bottom: 10px;
         }
 </style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const buttons = document.querySelectorAll(".pulse-js");
+
+        buttons.forEach(button => {
+            setInterval(() => {
+                button.style.transform = "scale(1.05)";
+                setTimeout(() => {
+                    button.style.transform = "scale(1)";
+                }, 300);
+            }, 1000);
+        });
+    });
+</script>

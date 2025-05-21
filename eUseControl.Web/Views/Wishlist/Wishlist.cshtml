@@ -75,7 +75,9 @@
                                 </form>
                             </td>
                             <td>
-                                <form action="@Url.Action("Checkout", "Checkout")" style="display: inline;">
+                                <form action="@Url.Action("AddProductToCart", "Cart")" method="post" style="display: inline;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="productId" value="@product.Id" />
                                     <button type="submit"
                                             class="btn mt-4 px-4 py-2 pulse-js"
                                             style="background-color: @(product.ProductQuantity > 0 ? "#FFB524" : "#ccc"); border: none; color: @(product.ProductQuantity > 0 ? "#fff" : "#666"); border-radius: 30px; font-weight: 600; cursor: @(product.ProductQuantity > 0 ? "pointer" : "not-allowed");"

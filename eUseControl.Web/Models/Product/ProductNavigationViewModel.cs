@@ -7,5 +7,7 @@ namespace eUseControl.Web.Models.Product
         public Dictionary<ProductCategory, int> Categories { get; set; }
 
         public int WishlistCount { get; set; }
+
+        public int CartCount { get; set; }
     }
 }

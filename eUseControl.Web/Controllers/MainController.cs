@@ -13,6 +13,7 @@ namespace eUseControl.Web.Controllers
         private readonly IProduct _product;
         private readonly IWishlist _wishlist;
         private readonly ISession _session;
+        private readonly ICart _cart;
 
         public MainController()
         {
@@ -20,6 +21,7 @@ namespace eUseControl.Web.Controllers
             _product = bl.GetProductBL();
             _wishlist = bl.GetWishlistBL();
             _session = bl.GetSessionBL();
+            _cart = bl.GetCartBL();
         }
 
         [HttpGet]
@@ -53,7 +55,8 @@ namespace eUseControl.Web.Controllers
             }
 
             var categoryProductCounts = _product.GetCategoryProductCounts();
-            var productsCount = _wishlist.GetWishlistCountByUserId(user.Id);
+            var wishlistProductsCount = _wishlist.GetWishlistCountByUserId(user.Id);
+            var cartProductsCount = _cart.GetCartCountByUserId(user.Id); 
 
             var config = new MapperConfiguration(cfg =>
             {
@@ -67,7 +70,8 @@ namespace eUseControl.Web.Controllers
             var model = new ProductNavigationViewModel
             {
                 Categories = productCountsByCategory,
-                WishlistCount = productsCount
+                WishlistCount = wishlistProductsCount,
+                CartCount = cartProductsCount
             };
 
             return PartialView("_Navbar", model);

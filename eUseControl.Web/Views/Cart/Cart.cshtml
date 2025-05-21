@@ -3,67 +3,174 @@
     ViewBag.Title = "Cart";
 }
 
+@model eUseControl.Web.Models.Cart.CartViewModel
+
 <div class="container py-5">
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Products</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Handle</th>
-                    <th scope="col">Purchase</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">
-                        <div class="d-flex align-items-center">
-                            <img src="@Url.Content("~/Assets/img/volunteer-categories/volunteer-category-3.jpg")" class="img-fluid me-5 rounded-circle"
-                                 style="width: 80px; height: 80px;" alt="">
+    @if (!Model.Items.Any())
+    {
+        <div class="info-message text-center mt-5">
+            <p style="font-size: 16px;">
+                Your cart is currently empty. Start adding some products and we’ll save them here for you!
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Products</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Subtotal</th>
+                        <th scope="col">Handle</th>
+                    </tr>
+                </thead>
+                @foreach (var item in Model.Items)
+                {
+                    <tbody>
+                        <tr>
+                            <th scope="row">
+                                <div class="d-flex align-items-center">
+                                    <a href="@Url.Action("ProductDetails", "Product", new { productId = item.ProductId })">
+                                        <img src="@Url.Content(item.ProductImageUrl)" class="img-fluid me-5 rounded-circle"
+                                             style="width: 80px; height: 80px; object-fit: cover;" alt="">
+                                    </a>
+                                </div>
+                            </th>
+                            <td>
+                                <p class="mb-0 mt-4">@item.ProductName</p>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4">$@item.ProductPrice</p>
+                            </td>
+                            <td id="product-@item.ProductId">
+                                <form action="@Url.Action("UpdateProductQuantity", "Cart")" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <div class="input-group quantity mt-4" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button type="button"
+                                                    class="btn btn-sm btn-minus rounded-circle bg-light border"
+                                                    onclick="decreaseQuantity(this)"
+                                                    @(item.SelectedQuantity <= 1 ? "disabled" : "")>
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text"
+                                               class="form-control form-control-sm text-center"
+                                               value="@item.SelectedQuantity"
+                                               readonly
+                                               data-current="@item.SelectedQuantity"
+                                               style="box-shadow: none !important; outline: none !important; border: none !important; background-color: transparent !important;" />
+                                        <input type="hidden"
+                                               name="newQuantity"
+                                               value="@item.SelectedQuantity"
+                                               data-min="1"
+                                               data-max="@item.ProductQuantity" />
+                                        <div class="input-group-btn">
+                                            <button type="button"
+                                                    class="btn btn-sm btn-plus rounded-circle bg-light border"
+                                                    onclick="increaseQuantity(this)"
+                                                    @(item.SelectedQuantity >= item.ProductQuantity ? "disabled" : "")>
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4">$@item.Subtotal</p>
+                            </td>
+                            <td>
+                                <form action="@Url.Action("RemoveProductFromCart", "Cart")" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <button type="submit" class="btn btn-md rounded-circle bg-light border mt-4"
+                                            onclick="return confirm('Are you sure you want to remove this product from your cart?');">
+                                        <i class="fa fa-times text-danger"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                }
+            </table>
+        </div>
+        <form action="@Url.Action("Cart", "Cart")" method="get">
+            <div class="mt-5">
+                <input type="text" name="couponCode" class="border-0 border-bottom rounded me-5 py-3 mb-4 ps-4" placeholder="Coupon Code" />
+                <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="submit">Apply Coupon</button>
+            </div>
+        </form>
+        <div class="row g-4 justify-content-end" style="margin-top: -50px;">
+            <div class="col-8"></div>
+            <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
+                <div class="bg-light rounded">
+                    <div class="p-4">
+                        <h1 class="h4 mb-3 fw-bold text-center border-bottom pb-2">Cart Total</h1>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="fw-semibold">Subtotal:</span>
+                            <span>$@Model.InitialPrice</span>
                         </div>
-                    </th>
-                    <td>
-                        <p class="mb-0 mt-4">Big Banana</p>
-                    </td>
-                    <td>
-                        <p class="mb-0 mt-4">2.99 $</p>
-                    </td>
-                    <td>
-                        <div class="input-group quantity mt-4" style="width: 100px;">
-                            <div class="input-group-btn">
-                                <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                            </div>
-                            <input type="text" class="form-control form-control-sm text-center border-0" value="1">
-                            <div class="input-group-btn">
-                                <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="fw-semibold">Rebate:</span>
+                            <span class="text-muted">Discount rate: $@Model.DiscountRate</span>
                         </div>
-                    </td>
-                    <td>
-                        <p class="mb-0 mt-4">2.99 $</p>
-                    </td>
-                    <td>
-                        <button class="btn btn-md rounded-circle bg-light border mt-4">
-                            <i class="fa fa-times text-danger"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <form action="@Url.Action("Checkout", "Checkout")" style="display: inline;">
-                            <button type="submit" class="btn btn-success mt-4 btn-animated"
-                                    style="background-color: #FFB524; border-color: #FFB524;">
-                                Purchase
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+
+                    </div>
+                    <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between"
+                         style="font-size: 16px;">
+                        <h5 class="mb-0 ps-4 me-4">Total</h5>
+                        <p class="mb-0 pe-4">$@Model.TotalPrice</p>
+                    </div>
+                    <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text mb-4 ms-4"
+                            type="button">
+                        Proceed Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
 </div>
+
+<script>
+    function decreaseQuantity(button) {
+        const inputGroup = button.closest('.input-group');
+        const hiddenInput = inputGroup.querySelector('input[type="hidden"][name="newQuantity"]');
+        const min = parseInt(hiddenInput.getAttribute('data-min'));
+        let value = parseInt(hiddenInput.value);
+
+        if (!isNaN(value) && value > min) {
+            hiddenInput.value = value - 1;
+            hiddenInput.form.submit();
+        }
+    }
+
+    function increaseQuantity(button) {
+        const inputGroup = button.closest('.input-group');
+        const hiddenInput = inputGroup.querySelector('input[type="hidden"][name="newQuantity"]');
+        const max = parseInt(hiddenInput.getAttribute('data-max'));
+        let value = parseInt(hiddenInput.value);
+
+        if (!isNaN(value) && value < max) {
+            hiddenInput.value = value + 1;
+            hiddenInput.form.submit();
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const pid = urlParams.get("pid");
+
+        if (pid) {
+            const target = document.getElementById("product-" + pid);
+            if (target) {
+                target.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+        }
+    });
+</script>
