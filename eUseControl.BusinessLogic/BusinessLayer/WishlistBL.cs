@@ -2,14 +2,15 @@
 using eUseControl.BusinessLogic.Core;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities.Product;
+using eUseControl.Domain.Entities.Wishlist;
 
 namespace eUseControl.BusinessLogic.BusinessLayer
 {
     public class WishlistBL : UserApi, IWishlist
     {
-        public void AddProductToWishlist(int userId, int productId)
+        public WishlistResp AddProductToWishlist(int userId, int productId)
         {
-            AddProductToWishlistAction(userId, productId);
+            return AddProductToWishlistAction(userId, productId);
         }
 
         public List<ProductLite> GetAllWishlistProducts(int userId)
@@ -22,9 +23,9 @@ namespace eUseControl.BusinessLogic.BusinessLayer
             return GetWishlistCountByUserIdAction(userId);
         }
 
-        public void RemoveProductFromWishlist(int productId, int userId)
+        public WishlistResp RemoveProductFromWishlist(int productId, int userId)
         {
-            RemoveProductFromWishlistAction(productId, userId);
+            return RemoveProductFromWishlistAction(productId, userId);
         }
 
         public List<int> GetWishlistProductIds(int userId)

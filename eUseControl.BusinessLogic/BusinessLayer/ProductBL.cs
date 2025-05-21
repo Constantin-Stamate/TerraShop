@@ -32,9 +32,9 @@ namespace eUseControl.BusinessLogic.BusinessLayer
             return GetAvailableProductsAction();
         }
 
-        public void UpdateProductStatus(int productId)
+        public ProductResp UpdateProductStatus(int productId)
         {
-            UpdateProductStatusAction(productId);
+            return UpdateProductStatusAction(productId);
         } 
 
         public Dictionary<Category, int> GetCategoryProductCounts()
@@ -47,9 +47,9 @@ namespace eUseControl.BusinessLogic.BusinessLayer
             return GetAvailableProductsByCategoryIdAction(categoryId);
         }
 
-        public void UpdateProductRating(int productId)
+        public ProductResp UpdateProductRating(int productId)
         {
-            UpdateProductRatingAction(productId);
+            return UpdateProductRatingAction(productId);
         }
 
         public List<ProductSummary> SortProducts(string sortOption, List<ProductSummary> products)
