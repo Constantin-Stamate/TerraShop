@@ -55,23 +55,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLayer\CartBL.cs" />
     <Compile Include="BusinessLayer\ReviewBL.cs" />
     <Compile Include="BusinessLayer\WishlistBL.cs" />
     <Compile Include="BusinessLogicManager.cs" />
     <Compile Include="Core\AdminApi.cs" />
     <Compile Include="Core\UserApi.cs" />
+    <Compile Include="DBModel\CartContext.cs" />
     <Compile Include="DBModel\CategoryContext.cs" />
+    <Compile Include="DBModel\CouponContext.cs" />
     <Compile Include="DBModel\ProductContext.cs" />
     <Compile Include="DBModel\ProfileContext.cs" />
     <Compile Include="DBModel\ReviewContext.cs" />
     <Compile Include="DBModel\SessionContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="DBModel\WishlistContext.cs" />
+    <Compile Include="Interfaces\ICart.cs" />
     <Compile Include="Interfaces\IProduct.cs" />
     <Compile Include="Interfaces\IProfile.cs" />
     <Compile Include="Interfaces\IReview.cs" />
     <Compile Include="Interfaces\ISession.cs" />
     <Compile Include="Interfaces\IWishlist.cs" />
+    <Compile Include="Migrations\Cart\202505192158005_IntegrateCartItemsTable.cs" />
+    <Compile Include="Migrations\Cart\202505192158005_IntegrateCartItemsTable.Designer.cs">
+      <DependentUpon>202505192158005_IntegrateCartItemsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Cart\Configuration.cs" />
+    <Compile Include="Migrations\Coupon\202505210752428_IntegrateDiscountCouponsTable.cs" />
+    <Compile Include="Migrations\Coupon\202505210752428_IntegrateDiscountCouponsTable.Designer.cs">
+      <DependentUpon>202505210752428_IntegrateDiscountCouponsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Coupon\Configuration.cs" />
     <Compile Include="Migrations\Product\202505070935331_IntegrateProductsTable.cs" />
     <Compile Include="Migrations\Product\202505070935331_IntegrateProductsTable.Designer.cs">
       <DependentUpon>202505070935331_IntegrateProductsTable.cs</DependentUpon>
@@ -127,6 +141,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\Cart\202505192158005_IntegrateCartItemsTable.resx">
+      <DependentUpon>202505192158005_IntegrateCartItemsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Coupon\202505210752428_IntegrateDiscountCouponsTable.resx">
+      <DependentUpon>202505210752428_IntegrateDiscountCouponsTable.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Product\202505070935331_IntegrateProductsTable.resx">
       <DependentUpon>202505070935331_IntegrateProductsTable.cs</DependentUpon>
     </EmbeddedResource>
