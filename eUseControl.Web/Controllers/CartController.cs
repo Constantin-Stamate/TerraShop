@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
 using eUseControl.BusinessLogic;
@@ -38,10 +37,6 @@ namespace eUseControl.Web.Controllers
             }
 
             var allCartItems = _cart.GetCartItemsByUserId(user.Id);
-            if (allCartItems == null || !allCartItems.Any())
-            {
-                return RedirectToAction("Cart", "Cart", new { error = true });
-            }
 
             var totalPrice = _cart.CalculateCartTotal(allCartItems);
             decimal finalPrice = totalPrice;

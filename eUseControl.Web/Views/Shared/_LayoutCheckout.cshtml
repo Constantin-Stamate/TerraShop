@@ -104,35 +104,44 @@
 
     <script>
         function toggleCheckboxes(checkboxId1, checkboxId2, inputId1, inputId2) {
-            var checkbox1 = document.getElementById(checkboxId1);
-            var checkbox2 = document.getElementById(checkboxId2);
-            var input1 = document.getElementById(inputId1);
-            var input2 = document.getElementById(inputId2);
+            const checkbox1 = document.getElementById(checkboxId1);
+            const checkbox2 = document.getElementById(checkboxId2);
+            const input1 = document.getElementById(inputId1);
+            const input2 = document.getElementById(inputId2);
+
+            if (!checkbox1.checked && !checkbox2.checked) {
+                checkbox1.checked = true;
+            }
 
             if (checkbox1.checked) {
-                input1.disabled = false;
-                input1.classList.remove('disabled-input');
-                input2.disabled = true;
-                input2.classList.add('disabled-input');
-                input2.classList.add('disabled-shadow');
+                input1.readOnly = false;
+                input1.classList.remove('disabled-look');
+
+                input2.readOnly = true;
+                input2.classList.add('disabled-look');
+
                 checkbox2.checked = false;
-            }
-            else if (checkbox2.checked) {
-                input2.disabled = false;
-                input2.classList.remove('disabled-input');
-                input1.disabled = true;
-                input1.classList.add('disabled-input');
-                input1.classList.add('disabled-shadow');
+            } else if (checkbox2.checked) {
+                input2.readOnly = false;
+                input2.classList.remove('disabled-look');
+
+                input1.readOnly = true;
+                input1.classList.add('disabled-look');
+
                 checkbox1.checked = false;
-            } else {
-                input1.disabled = false;
-                input2.disabled = false;
-                input1.classList.remove('disabled-input');
-                input2.classList.remove('disabled-input');
-                input1.classList.remove('disabled-shadow');
-                input2.classList.remove('disabled-shadow');
             }
         }
+
+        window.onload = function () {
+            const opt3 = document.getElementById("option3");
+            const opt4 = document.getElementById("option4");
+
+            if (opt3.checked) {
+                toggleCheckboxes('option3', 'option4', 'inputLocation1', 'inputLocation2');
+            } else if (opt4.checked) {
+                toggleCheckboxes('option4', 'option3', 'inputLocation2', 'inputLocation1');
+            }
+        };
 
         function toggleCheckbox(checkboxId, otherCheckboxId) {
             var checkbox = document.getElementById(checkboxId);

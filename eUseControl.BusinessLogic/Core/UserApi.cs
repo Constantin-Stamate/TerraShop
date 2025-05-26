@@ -16,6 +16,7 @@ using System.Text.RegularExpressions;
 using eUseControl.Domain.Entities.Review;
 using eUseControl.Domain.Entities.Wishlist;
 using eUseControl.Domain.Entities.Cart;
+using eUseControl.Domain.Entities.Order;
 
 namespace eUseControl.BusinessLogic.Core
 {
@@ -1802,6 +1803,80 @@ namespace eUseControl.BusinessLogic.Core
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return totalPrice;
+            }
+        }
+
+        internal OrderResp PlaceOrderAction(OrderData orderData, int userId)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(orderData.FirstName) ||
+                    string.IsNullOrWhiteSpace(orderData.LastName) ||
+                    string.IsNullOrWhiteSpace(orderData.DeliveryAddress) ||
+                    string.IsNullOrWhiteSpace(orderData.PhoneNumber) ||
+                    string.IsNullOrWhiteSpace(orderData.Email) ||
+                    string.IsNullOrWhiteSpace(orderData.PaymentMethod))
+                {
+                    return new OrderResp
+                    {
+                        Status = false,
+                        StatusMsg = "Please complete all required fields!"
+                    };
+                }
+
+                if (!new EmailAddressAttribute().IsValid(orderData.Email))
+                {
+                    return new OrderResp
+                    {
+                        Status = false,
+                        StatusMsg = "Please enter a valid email address!"
+                    };
+                }
+
+                if (!Regex.IsMatch(orderData.PhoneNumber, @"^\+?\d{7,15}$"))
+                {
+                    return new OrderResp
+                    {
+                        Status = false,
+                        StatusMsg = "Please enter a valid phone number!"
+                    };
+                }
+
+                using (var db = new OrderContext())
+                {
+                    var newOrder = new OrderDbTable
+                    {
+                        UserId = userId,
+                        FirstName = orderData.FirstName,
+                        LastName = orderData.LastName,
+                        DeliveryAddress = orderData.DeliveryAddress,
+                        PhoneNumber = orderData.PhoneNumber,
+                        Email = orderData.Email,
+                        Notes = orderData.Notes,
+                        PaymentMethod = orderData.PaymentMethod,
+                        OrderDate = DateTime.Now,
+                        OrderStatus = OrderStatus.Pending,
+                        TotalPrice = orderData.TotalPrice
+                    };
+
+                    db.CustomerOrders.Add(newOrder);
+                    db.SaveChanges();
+
+                    return new OrderResp
+                    {
+                        Status = true,
+                        StatusMsg = "Your order has been placed successfully!"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new OrderResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while placing your order!"
+                };
             }
         }
     }

@@ -1,53 +1,72 @@
-﻿﻿@{
+﻿@{
     Layout = "~/Views/Shared/_LayoutCheckout.cshtml";
     ViewBag.Title = "Checkout";
 }
 
+@model eUseControl.Web.Models.Order.CheckoutViewModel
+
 <div class="container py-5">
     <h1 class="mb-4">Billing details</h1>
-    <form action="#">
+    @using (Html.BeginForm("PlaceOrder", "Checkout", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Order.TotalPrice)
         <div class="row g-5">
             <div class="col-md-12 col-lg-6 col-xl-7">
                 <div class="row">
                     <div class="col-md-12 col-lg-6">
                         <div class="form-item w-100">
                             <label class="form-label my-3">First Name<sup>*</sup></label>
-                            <input type="text" class="form-control">
+                            @Html.TextBoxFor(m => m.Order.FirstName, new { @class = "form-control", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Order.FirstName)
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-6">
                         <div class="form-item w-100">
                             <label class="form-label my-3">Last Name<sup>*</sup></label>
-                            <input type="text" class="form-control">
+                            @Html.TextBoxFor(m => m.Order.LastName, new { @class = "form-control", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Order.LastName)
                         </div>
                     </div>
                 </div>
                 <div class="form-item">
                     <input class="form-check-input" type="checkbox" id="option3" name="personal"
                            onclick="toggleCheckboxes('option3', 'option4', 'inputLocation1', 'inputLocation2')"
-                           style="margin-top: 20px;">
+                           style="margin-top: 20px;" checked>
                     <label class="form-label my-3">Personal Pick-up<sup>*</sup></label>
-                    <input type="text" class="form-control" id="inputLocation1">
+                    @Html.TextBox("Order.DeliveryAddress", "Bucharest Street, Chișinău", new
+                    {
+                        @class = "form-control",
+                        id = "inputLocation1",
+                        placeholder = "Pickup location",
+                        @readonly = "readonly",
+                    })
                 </div>
                 <div class="form-item">
                     <input class="form-check-input" type="checkbox" id="option4" name="livrare"
                            onclick="toggleCheckboxes('option4', 'option3', 'inputLocation2', 'inputLocation1')"
                            style="margin-top: 20px;">
                     <label class="form-label my-3">Delivery Address<sup>*</sup></label>
-                    <input type="text" class="form-control" id="inputLocation2">
+                    @Html.TextBoxFor(m => m.Order.DeliveryAddress, new
+                    {
+                        @class = "form-control",
+                        id = "inputLocation2"
+                    })
+                    @Html.ValidationMessageFor(m => m.Order.DeliveryAddress)
                 </div>
                 <div class="form-item">
                     <label class="form-label my-3">Mobile<sup>*</sup></label>
-                    <input type="tel" class="form-control">
+                    @Html.TextBoxFor(m => m.Order.PhoneNumber, new { @class = "form-control", type = "tel", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Order.PhoneNumber)
                 </div>
                 <div class="form-item">
                     <label class="form-label my-3">Email<sup>*</sup></label>
-                    <input type="email" class="form-control">
+                    @Html.TextBoxFor(m => m.Order.Email, new { @class = "form-control", type = "email", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Order.Email)
                 </div>
                 <br>
                 <div class="form-item">
-                    <textarea name="text" class="form-control" spellcheck="false" cols="30" rows="11"
-                              placeholder="Order Notes (optional)"></textarea>
+                    @Html.TextAreaFor(m => m.Order.Notes, 11, 30, new { @class = "form-control", placeholder = "Order Notes (optional)", spellcheck = "false" })
                 </div>
             </div>
             <div class="col-md-12 col-lg-6 col-xl-5">
@@ -59,47 +78,58 @@
                                 <th scope="col">Name</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Quantity</th>
-                                <th scope="col">Total</th>
+                                <th scope="col">SubTotal</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">
-                                    <div class="d-flex align-items-center mt-2">
-                                        <img src="@Url.Content("~/Assets/img/volunteer-categories/volunteer-category-3.jpg")" class="img-fluid rounded-circle"
-                                             style="width: 90px; height: 90px;" alt="">
-                                    </div>
-                                </th>
-                                <td class="py-5">Big Banana</td>
-                                <td class="py-5">$69.00</td>
-                                <td class="py-5">2</td>
-                                <td class="py-5">$138.00</td>
-                            </tr>
+                            @foreach (var item in Model.CartItems)
+                            {
+                                <tr>
+                                    <th scope="row">
+                                        <div class="d-flex align-items-center">
+                                            <a href="@Url.Action("ProductDetails", "Product", new { productId = item.ProductId })">
+                                                <img src="@Url.Content(item.ProductImageUrl)" class="img-fluid me-5 rounded-circle"
+                                                     style="width: 80px; height: 80px; object-fit: cover;" alt="">
+                                            </a>
+                                        </div>
+                                    </th>
+                                    <td class="py-5">@item.ProductName</td>
+                                    <td class="py-5">@item.ProductPrice</td>
+                                    <td class="py-5">@item.SelectedQuantity</td>
+                                    <td class="py-5">$@item.Subtotal</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
                 <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                     <div class="form-check" style="margin-left: 40px;">
-                        <input class="form-check-input" type="checkbox" id="option1" name="paymentCash"
-                               value="cash_on_delivery" onclick="toggleCheckbox('option1', 'option2')">
+                        @Html.RadioButtonFor(m => m.Order.PaymentMethod, "Cash", new { @class = "form-check-input", id = "option1" })
                         <label class="form-check-label" for="option1">
                             Cash on Delivery
                         </label>
                     </div>
                     <div class="form-check" style="margin-left: 40px;">
-                        <input class="form-check-input" type="checkbox" id="option2" name="paymentOnline"
-                               value="online_payment" onclick="toggleCheckbox('option2', 'option1')">
+                        @Html.RadioButtonFor(m => m.Order.PaymentMethod, "Card", new { @class = "form-check-input", id = "option2" })
                         <label class="form-check-label" for="option2">
                             Card Payment
                         </label>
                     </div>
                 </div>
                 <div class="row g-4 text-center align-items-center justify-content-center pt-4">
-                    <a href="@Url.Action("Payment", "Payment")" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">
+                    <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">
                         Place Order
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
-    </form>
+    }
 </div>
+
+<style>
+    .disabled-look {
+        background-color: #e9ecef; 
+        color: #6c757d; 
+        cursor: not-allowed;
+    }
+</style>
