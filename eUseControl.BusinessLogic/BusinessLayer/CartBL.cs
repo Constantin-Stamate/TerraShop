@@ -32,7 +32,7 @@ namespace eUseControl.BusinessLogic.BusinessLayer
             return ChangeProductQuantityAction(productId, userId, newQuantity);
         }
 
-        public decimal CalculateCartTotal(List<CartData> cartItems)
+        public (decimal totalPrice, decimal shippingCost) CalculateCartTotal(List<CartData> cartItems)
         {
             return CalculateCartTotalAction(cartItems);
         }
@@ -40,6 +40,11 @@ namespace eUseControl.BusinessLogic.BusinessLayer
         public decimal ApplyCouponDiscount(decimal totalPrice, string couponCode)
         {
             return ApplyCouponDiscountAction(totalPrice, couponCode);
+        }
+
+        public CartResp ClearCartItemsAfterOrder(int userId)
+        {
+            return ClearCartItemsAfterOrderAction(userId);
         }
     }
 }

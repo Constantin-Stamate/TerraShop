@@ -15,8 +15,10 @@ namespace eUseControl.BusinessLogic.Interfaces
 
         CartResp ChangeProductQuantity(int productId, int userId, int newQuantity);
 
-        decimal CalculateCartTotal(List<CartData> cartItems);
+        (decimal totalPrice, decimal shippingCost) CalculateCartTotal(List<CartData> cartItems);
 
         decimal ApplyCouponDiscount(decimal totalPrice, string couponCode);
+
+        CartResp ClearCartItemsAfterOrder(int userId);
     }
 }
