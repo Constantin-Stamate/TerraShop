@@ -39,5 +39,10 @@ namespace eUseControl.BusinessLogic
         {
             return new OrderBL();
         }
+
+        public ITransaction GetTransactionBL()
+        {
+            return new TransactionBL();
+        }
     }
 }
