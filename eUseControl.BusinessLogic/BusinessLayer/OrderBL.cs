@@ -10,5 +10,15 @@ namespace eUseControl.BusinessLogic.BusinessLayer
         {
             return PlaceOrderAction(orderData, userId);
         }
+
+        public OrderMinimal GetOrderById(int orderId)
+        {
+            return GetOrderByIdAction(orderId);
+        }
+
+        public OrderResp CancelUnpaidOrders(int userId)
+        {
+            return CancelUnpaidOrdersAction(userId);
+        }
     }
 }
