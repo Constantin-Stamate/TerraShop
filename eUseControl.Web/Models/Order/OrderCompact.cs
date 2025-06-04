@@ -40,10 +40,5 @@ namespace eUseControl.Web.Models.Order
         [StringLength(50)]
         [Display(Name = "PaymentMethod")]
         public string PaymentMethod { get; set; }
-
-        [Required]
-        [Range(0.01, double.MaxValue)]
-        [Display(Name = "TotalPrice")]
-        public decimal TotalPrice { get; set; }
     }
 }

@@ -3,10 +3,10 @@
     ViewBag.Title = "Cart";
 }
 
-@model eUseControl.Web.Models.Cart.CartViewModel
+@model IEnumerable<eUseControl.Web.Models.Cart.CartCompact>
 
 <div class="container py-5">
-    @if (!Model.Items.Any())
+    @if (!Model.Any())
     {
         <div class="info-message text-center mt-5">
             <p style="font-size: 16px;">
@@ -28,7 +28,7 @@
                         <th scope="col">Handle</th>
                     </tr>
                 </thead>
-                @foreach (var item in Model.Items)
+                @foreach (var item in Model)
                 {
                     <tbody>
                         <tr>
@@ -96,43 +96,14 @@
                             </td>
                         </tr>
                     </tbody>
-
                 }
             </table>
         </div>
-        <form action="@Url.Action("Cart", "Cart")" method="get">
-            <div class="mt-5">
-                <input type="text" name="couponCode" class="border-0 border-bottom rounded me-5 py-3 mb-4 ps-4" placeholder="Coupon Code" />
-                <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="submit">Apply Coupon</button>
-            </div>
-        </form>
-        <div class="row g-4 justify-content-end" style="margin-top: -50px;">
-            <div class="col-8"></div>
-            <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
-                <div class="bg-light rounded">
-                    <div class="p-4">
-                        <h1 class="h4 mb-3 fw-bold text-center border-bottom pb-2">Cart Total</h1>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span class="fw-semibold">Subtotal:</span>
-                            <span>$@Model.InitialPrice</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span class="fw-semibold">Rebate:</span>
-                            <span class="text-muted">Discount rate: $@Model.DiscountRate</span>
-                        </div>
-
-                    </div>
-                    <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between"
-                         style="font-size: 16px;">
-                        <h5 class="mb-0 ps-4 me-4">Total</h5>
-                        <p class="mb-0 pe-4">$@Model.TotalPrice</p>
-                    </div>
-                    <a href="@Url.Action("Checkout", "Checkout", new { totalPrice = Model.TotalPrice })"
-                       class="btn border-secondary rounded-pill px-4 py-3 text-primary text mb-4 ms-4">
-                        Proceed Checkout
-                    </a>
-                </div>
-            </div>
+        <div class="d-flex justify-content-end mt-3">
+            <a href="@Url.Action("Checkout", "Checkout")"
+               class="btn border-secondary rounded-pill px-4 py-3 text-primary me-5">
+                Proceed Checkout
+            </a>
         </div>
     }
 </div>
