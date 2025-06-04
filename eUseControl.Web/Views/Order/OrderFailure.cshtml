@@ -3,6 +3,8 @@
     ViewBag.Title = "OrderFailure";
 }
 
+@model eUseControl.Web.Models.Order.OrderMini
+
 <div class="confirmation-content">
     <h1 style="margin-top: -25px;">Order failed!</h1>
     <p class="thank-you-msg">
@@ -11,9 +13,9 @@
     </p>
     <p class="sub-msg">A problem occurred, and we could not complete your order.</p>
     <div class="order-details">
-        <p><strong>Order number:</strong> #123456</p>
-        <p><strong>Date:</strong> 2025-03-17 14:30</p>
-        <p><strong>Total:</strong> 550 MDL</p>
+        <p><strong>Order number:</strong> #@Model.Id</p>
+        <p><strong>Date:</strong> @Model.OrderDate</p>
+        <p><strong>Total:</strong> $@Model.TotalPrice</p>
     </div>
     <a href="@Url.Action("Index", "Main")" class="btn-home" style="margin-top: 31px;">Back to home page</a>
 </div>
