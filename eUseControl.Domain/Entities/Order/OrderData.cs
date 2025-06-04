@@ -19,5 +19,7 @@
         public string PaymentMethod { get; set; }
 
         public decimal TotalPrice { get; set; }
+
+        public string CouponCode { get; set; }
     }
 }

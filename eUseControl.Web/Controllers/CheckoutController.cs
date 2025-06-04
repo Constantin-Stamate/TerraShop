@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using AutoMapper;
 using eUseControl.BusinessLogic;
@@ -25,7 +26,7 @@ namespace eUseControl.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Checkout(decimal totalPrice)
+        public ActionResult Checkout(string couponCode)
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -41,6 +42,16 @@ namespace eUseControl.Web.Controllers
 
             var allCartItems = _cart.GetCartItemsByUserId(user.Id);
 
+            var totals = _cart.CalculateCartTotal(allCartItems);
+            decimal finalPrice = totals.totalPrice;
+            decimal discountRate = 0;
+
+            if (!string.IsNullOrEmpty(couponCode))
+            {
+                finalPrice = _cart.ApplyCouponDiscount(finalPrice, couponCode);
+                discountRate = _cart.ComputeDiscountAmount(totals.totalPrice, finalPrice);
+            }
+
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<CartData, CartCompact>(); 
@@ -49,13 +60,14 @@ namespace eUseControl.Web.Controllers
             var mapper = config.CreateMapper();
             var cartItems = mapper.Map<List<CartCompact>>(allCartItems);
 
-            OrderCompact orderCompact = new OrderCompact();
-            orderCompact.TotalPrice = totalPrice;
-
-            var model = new CheckoutViewModel
+            var model = new OrderViewModel
             {
                 CartItems = cartItems,
-                Order = orderCompact
+                TotalPrice = Math.Round(_cart.ComputeOrderTotal(finalPrice, totals.shippingCost), 2),
+                DiscountRate = Math.Round(discountRate, 2),
+                InitialPrice = Math.Round(totals.totalPrice, 2),
+                DeliveryPrice = Math.Round(totals.shippingCost, 2),
+                CouponCode = couponCode
             };
 
             return View(model);
@@ -63,7 +75,7 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PlaceOrder(CheckoutViewModel model)
+        public ActionResult PlaceOrder(OrderViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -79,6 +91,16 @@ namespace eUseControl.Web.Controllers
                     return RedirectToAction("Login", "Login", new { error = true });
                 }
 
+                var allCartItems = _cart.GetCartItemsByUserId(user.Id);
+
+                var totals = _cart.CalculateCartTotal(allCartItems);
+                decimal finalPrice = totals.totalPrice;
+
+                if (!string.IsNullOrEmpty(model.CouponCode))
+                {
+                    finalPrice = _cart.ApplyCouponDiscount(finalPrice, model.CouponCode);
+                }
+
                 var config = new MapperConfiguration(cfg =>
                 {
                     cfg.CreateMap<OrderCompact, OrderData>();
@@ -87,11 +109,25 @@ namespace eUseControl.Web.Controllers
                 var mapper = config.CreateMapper();
                 var orderData = mapper.Map<OrderData>(model.Order);
 
+                orderData.CouponCode = model.CouponCode;
+                orderData.TotalPrice = _cart.ComputeOrderTotal(finalPrice, totals.shippingCost);
+
+                var resultOrders = _order.CancelUnpaidOrders(user.Id);
                 var result = _order.PlaceOrder(orderData, user.Id);
 
                 if (result.Status)
                 {
-                    return RedirectToAction("Payment", "Payment", new { success = true });
+                    if (orderData.PaymentMethod == "Cash")
+                    {
+                        var clearResult = _cart.ClearCartItemsAfterOrder(user.Id);
+                        return RedirectToAction("OrderConfirmation", "Order", new { success = true, orderId = result.Id });
+                    }
+                    else if (orderData.PaymentMethod == "Card")
+                    {
+                        return RedirectToAction("Payment", "Payment", new { success = true, orderId = result.Id });
+                    }
+
+                    return RedirectToAction("Checkout", "Checkout", new { error = true });
                 }
                 else
                 {

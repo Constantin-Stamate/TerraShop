@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using eUseControl.Domain.Entities.Cart;
 using eUseControl.Domain.Enums;
 
 namespace eUseControl.Domain.Entities.Order
@@ -18,6 +19,12 @@ namespace eUseControl.Domain.Entities.Order
 
         [ForeignKey("UserId")]
         public virtual UDbTable User { get; set; }
+
+        [Display(Name = "CouponId")]
+        public int? CouponId { get; set; }
+
+        [ForeignKey("CouponId")]
+        public virtual Coupon Coupon { get; set; }
 
         [Required]
         [StringLength(30)]

@@ -227,9 +227,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Cart\CartCompact.cs" />
-    <Compile Include="Models\Cart\CartViewModel.cs" />
-    <Compile Include="Models\Order\CheckoutViewModel.cs" />
+    <Compile Include="Models\Order\OrderViewModel.cs" />
     <Compile Include="Models\Order\OrderCompact.cs" />
+    <Compile Include="Models\Order\OrderMini.cs" />
+    <Compile Include="Models\Payment\TransactionCompact.cs" />
     <Compile Include="Models\Product\Product.cs" />
     <Compile Include="Models\Product\ProductCategory.cs" />
     <Compile Include="Models\Product\ProductCompact.cs" />

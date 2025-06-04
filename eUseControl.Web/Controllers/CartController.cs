@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using AutoMapper;
 using eUseControl.BusinessLogic;
@@ -22,7 +21,7 @@ namespace eUseControl.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Cart(string couponCode)
+        public ActionResult Cart()
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -38,16 +37,6 @@ namespace eUseControl.Web.Controllers
 
             var allCartItems = _cart.GetCartItemsByUserId(user.Id);
 
-            var totalPrice = _cart.CalculateCartTotal(allCartItems);
-            decimal finalPrice = totalPrice;
-            decimal discountRate = 0;
-
-            if (!string.IsNullOrEmpty(couponCode))
-            {
-                finalPrice = _cart.ApplyCouponDiscount(totalPrice, couponCode);
-                discountRate = totalPrice - finalPrice;
-            }
-
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<CartData, CartCompact>();
@@ -56,15 +45,7 @@ namespace eUseControl.Web.Controllers
             var mapper = config.CreateMapper();
             var cartItems = mapper.Map<List<CartCompact>>(allCartItems);
 
-            var model = new CartViewModel
-            {
-                Items = cartItems,
-                TotalPrice = Math.Round(finalPrice, 2),
-                DiscountRate = Math.Round(discountRate, 2),
-                InitialPrice = Math.Round(totalPrice, 2)
-            };
-
-            return View(model);
+            return View(cartItems);
         }
 
         [HttpPost]
