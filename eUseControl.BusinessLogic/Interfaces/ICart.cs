@@ -20,5 +20,9 @@ namespace eUseControl.BusinessLogic.Interfaces
         decimal ApplyCouponDiscount(decimal totalPrice, string couponCode);
 
         CartResp ClearCartItemsAfterOrder(int userId);
+
+        decimal ComputeOrderTotal(decimal finalPrice, decimal shippingCost);
+
+        decimal ComputeDiscountAmount(decimal initialPrice, decimal finalPrice);
     }
 }

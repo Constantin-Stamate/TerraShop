@@ -46,5 +46,15 @@ namespace eUseControl.BusinessLogic.BusinessLayer
         {
             return ClearCartItemsAfterOrderAction(userId);
         }
+
+        public decimal ComputeOrderTotal(decimal finalPrice, decimal shippingCost)
+        {
+            return ComputeOrderTotalAction(finalPrice, shippingCost);
+        }
+
+        public decimal ComputeDiscountAmount(decimal initialPrice, decimal finalPrice)
+        {
+            return ComputeDiscountAmountAction(initialPrice, finalPrice);
+        }
     }
 }
