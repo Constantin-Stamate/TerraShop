@@ -171,7 +171,11 @@
     <Compile Include="Entities\Cart\Coupon.cs" />
     <Compile Include="Entities\Order\OrderData.cs" />
     <Compile Include="Entities\Order\OrderDbTable.cs" />
+    <Compile Include="Entities\Order\OrderMinimal.cs" />
     <Compile Include="Entities\Order\OrderResp.cs" />
+    <Compile Include="Entities\Payment\TransactionData.cs" />
+    <Compile Include="Entities\Payment\TransactionDbTable.cs" />
+    <Compile Include="Entities\Payment\TransactionResp.cs" />
     <Compile Include="Entities\Product\Category.cs" />
     <Compile Include="Entities\Product\ProductData.cs" />
     <Compile Include="Entities\Product\ProductDbTable.cs" />
@@ -197,6 +201,7 @@
     <Compile Include="Entities\Wishlist\WishlistResp.cs" />
     <Compile Include="Enums\OrderStatus.cs" />
     <Compile Include="Enums\ProductStatus.cs" />
+    <Compile Include="Enums\TransactionStatus.cs" />
     <Compile Include="Enums\URole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

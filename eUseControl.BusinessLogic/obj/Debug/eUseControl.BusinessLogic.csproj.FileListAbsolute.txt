@@ -29,3 +29,5 @@ C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUs
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Coupon.IntegrateDiscountCouponsTable.resources
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Order.IntegrateCustomerOrdersTable.resources
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Order.AddTotalPriceToCustomerOrders.resources
+C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Order.AddCouponIdToCustomerOrders.resources
+C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Payment.AddUserTransactionsTable.resources

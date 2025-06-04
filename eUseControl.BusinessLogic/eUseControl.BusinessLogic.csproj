@@ -58,6 +58,7 @@
     <Compile Include="BusinessLayer\CartBL.cs" />
     <Compile Include="BusinessLayer\OrderBL.cs" />
     <Compile Include="BusinessLayer\ReviewBL.cs" />
+    <Compile Include="BusinessLayer\TransactionBL.cs" />
     <Compile Include="BusinessLayer\WishlistBL.cs" />
     <Compile Include="BusinessLogicManager.cs" />
     <Compile Include="Core\AdminApi.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="DBModel\ProfileContext.cs" />
     <Compile Include="DBModel\ReviewContext.cs" />
     <Compile Include="DBModel\SessionContext.cs" />
+    <Compile Include="DBModel\TransactionContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="DBModel\WishlistContext.cs" />
     <Compile Include="Interfaces\ICart.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="Interfaces\IProfile.cs" />
     <Compile Include="Interfaces\IReview.cs" />
     <Compile Include="Interfaces\ISession.cs" />
+    <Compile Include="Interfaces\ITransaction.cs" />
     <Compile Include="Interfaces\IWishlist.cs" />
     <Compile Include="Migrations\Cart\202505192158005_IntegrateCartItemsTable.cs" />
     <Compile Include="Migrations\Cart\202505192158005_IntegrateCartItemsTable.Designer.cs">
@@ -97,7 +100,16 @@
     <Compile Include="Migrations\Order\202505251807352_AddTotalPriceToCustomerOrders.Designer.cs">
       <DependentUpon>202505251807352_AddTotalPriceToCustomerOrders.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Order\202505311328410_AddCouponIdToCustomerOrders.cs" />
+    <Compile Include="Migrations\Order\202505311328410_AddCouponIdToCustomerOrders.Designer.cs">
+      <DependentUpon>202505311328410_AddCouponIdToCustomerOrders.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Order\Configuration.cs" />
+    <Compile Include="Migrations\Payment\202506031933420_AddUserTransactionsTable.cs" />
+    <Compile Include="Migrations\Payment\202506031933420_AddUserTransactionsTable.Designer.cs">
+      <DependentUpon>202506031933420_AddUserTransactionsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Payment\Configuration.cs" />
     <Compile Include="Migrations\Product\202505070935331_IntegrateProductsTable.cs" />
     <Compile Include="Migrations\Product\202505070935331_IntegrateProductsTable.Designer.cs">
       <DependentUpon>202505070935331_IntegrateProductsTable.cs</DependentUpon>
@@ -164,6 +176,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Order\202505251807352_AddTotalPriceToCustomerOrders.resx">
       <DependentUpon>202505251807352_AddTotalPriceToCustomerOrders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Order\202505311328410_AddCouponIdToCustomerOrders.resx">
+      <DependentUpon>202505311328410_AddCouponIdToCustomerOrders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Payment\202506031933420_AddUserTransactionsTable.resx">
+      <DependentUpon>202506031933420_AddUserTransactionsTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Product\202505070935331_IntegrateProductsTable.resx">
       <DependentUpon>202505070935331_IntegrateProductsTable.cs</DependentUpon>
