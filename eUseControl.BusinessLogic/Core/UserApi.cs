@@ -17,6 +17,7 @@ using eUseControl.Domain.Entities.Review;
 using eUseControl.Domain.Entities.Wishlist;
 using eUseControl.Domain.Entities.Cart;
 using eUseControl.Domain.Entities.Order;
+using eUseControl.Domain.Entities.Payment;
 
 namespace eUseControl.BusinessLogic.Core
 {
@@ -1758,23 +1759,31 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal decimal CalculateCartTotalAction(List<CartData> cartItems)
+        internal (decimal totalPrice, decimal shippingCost) CalculateCartTotalAction(List<CartData> cartItems)
         {
             try
             {
                 decimal totalPrice = 0;
+                int totalQuantity = 0;
 
                 foreach (var item in cartItems)
                 {
                     totalPrice += item.Subtotal;
+                    totalQuantity += item.SelectedQuantity;
                 }
 
-                return totalPrice;
+                decimal costPerItem = 1m;
+                decimal maxShipping = 8m;
+
+                decimal shippingCost = totalQuantity * costPerItem;
+                shippingCost = shippingCost > maxShipping ? maxShipping : shippingCost;
+
+                return (totalPrice, shippingCost);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return 0;
+                return (0m, 0m);
             }
         }
 
@@ -1803,6 +1812,66 @@ namespace eUseControl.BusinessLogic.Core
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return totalPrice;
+            }
+        }
+
+        internal CartResp ClearCartItemsAfterOrderAction(int userId)
+        {
+            try
+            {
+                using (var db = new CartContext())
+                {
+                    var userCartItems = db.CartItems
+                        .Where(c => c.UserId == userId)
+                        .ToList();
+
+                    if (userCartItems.Any())
+                    {
+                        db.CartItems.RemoveRange(userCartItems);
+                        db.SaveChanges();
+                    }
+
+                    return new CartResp
+                    {
+                        Status = true,
+                        StatusMsg = "Cart items cleared successfully!"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new CartResp
+                {
+                    Status = false,
+                    StatusMsg = "Failed to clear cart items!"
+                };
+            }
+        }
+
+        internal decimal ComputeOrderTotalAction(decimal finalPrice, decimal shippingCost)
+        {
+            try
+            {
+                return finalPrice + shippingCost;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return -1; 
+            }
+        }
+
+        internal decimal ComputeDiscountAmountAction(decimal initialPrice, decimal finalPrice) 
+        {
+            try
+            {
+                return initialPrice - finalPrice;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return -1;
             }
         }
 
@@ -1842,6 +1911,16 @@ namespace eUseControl.BusinessLogic.Core
                     };
                 }
 
+                Coupon coupon = null;
+                if (!string.IsNullOrWhiteSpace(orderData.CouponCode))
+                {
+                    using (var couponsDb = new CouponContext())
+                    {
+                        coupon = couponsDb.DiscountCoupons
+                            .FirstOrDefault(c => c.Code ==  orderData.CouponCode);
+                    };
+                }
+
                 using (var db = new OrderContext())
                 {
                     var newOrder = new OrderDbTable
@@ -1859,13 +1938,19 @@ namespace eUseControl.BusinessLogic.Core
                         TotalPrice = orderData.TotalPrice
                     };
 
+                    if (coupon != null && coupon.IsActive && coupon.ExpirationDate >= DateTime.Now)
+                    {
+                        newOrder.CouponId = coupon.Id;
+                    }
+
                     db.CustomerOrders.Add(newOrder);
                     db.SaveChanges();
 
                     return new OrderResp
                     {
                         Status = true,
-                        StatusMsg = "Your order has been placed successfully!"
+                        StatusMsg = "Your order has been placed successfully!",
+                        Id = newOrder.Id
                     };
                 }
             }
@@ -1876,6 +1961,266 @@ namespace eUseControl.BusinessLogic.Core
                 {
                     Status = false,
                     StatusMsg = "An error occurred while placing your order!"
+                };
+            }
+        }
+
+        internal OrderResp CancelUnpaidOrdersAction(int userId)
+        {
+            try
+            {
+                using (var db = new OrderContext())
+                {
+                    var orders = db.CustomerOrders
+                        .Where(c => c.UserId == userId && c.OrderStatus == OrderStatus.Pending && c.PaymentMethod == "Card")
+                        .ToList();
+
+                    using (var transactionsDb = new TransactionContext())
+                    {
+                        foreach (var order in orders)
+                        {
+                            bool hasTransaction = transactionsDb.UserTransactions
+                                .Any(t => t.OrderId == order.Id);
+
+                            if (!hasTransaction)
+                            {
+                                order.OrderStatus = OrderStatus.Cancelled;
+                            }
+                        }
+                    }
+
+                    db.SaveChanges();
+
+                    return new OrderResp
+                    {
+                        Status = true,
+                        StatusMsg = "Unpaid orders have been cancelled successfully!"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new OrderResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while cancelling unpaid orders!"
+                };
+            }
+        }
+
+        internal OrderMinimal GetOrderByIdAction(int orderId)
+        {
+            try
+            {
+                using (var db = new OrderContext())
+                {
+                    var orderData = db.CustomerOrders
+                        .FirstOrDefault(c => c.Id == orderId);
+
+                    if (orderData != null)
+                    {
+                        var order = new OrderMinimal
+                        {
+                            Id = orderData.Id,
+                            TotalPrice = orderData.TotalPrice,
+                            OrderDate = orderData.OrderDate
+                        };
+
+                        return order;
+                    }
+
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        internal bool IsValidCard(string cardNumber)
+        {
+            if (string.IsNullOrWhiteSpace(cardNumber))
+            {
+                return false;
+            }
+
+            string cleaned = cardNumber.Replace(" ", "");
+            return cleaned.All(char.IsDigit) && cleaned.Length >= 14 && cleaned.Length <= 16;
+        }
+
+        internal bool IsValidExpiryDate(string expiryDate)
+        {
+            var parts = expiryDate.Split('/');
+
+            if (parts.Length != 2)
+            {
+                return false;
+            }
+
+            string yearPart = parts[0];
+            string monthPart = parts[1];
+
+            if (yearPart.Length != 2 || monthPart.Length != 2 || !yearPart.All(char.IsDigit) || !monthPart.All(char.IsDigit))
+            {
+                return false;
+            }
+                
+            int year = Convert.ToInt32(yearPart);
+            int month = Convert.ToInt32(monthPart);
+
+            if (month < 1 || month > 12 || year < 0 || year > 99)
+            {
+                return false;
+            }
+                
+            int fullYear = 2000 + year;
+            var lastDay = new DateTime(fullYear, month, DateTime.DaysInMonth(fullYear, month));
+
+            return lastDay >= DateTime.Now.Date;
+        }
+
+        internal bool IsValidCVV(string cvv)
+        {
+            return !string.IsNullOrWhiteSpace(cvv) && cvv.All(char.IsDigit) && (cvv.Length == 3);
+        }
+
+        internal bool IsValidFullName(string fullName)
+        {
+            return !string.IsNullOrWhiteSpace(fullName) && fullName.Length <= 70;
+        }
+
+        internal TransactionResp MakePayment(decimal totalPrice)
+        {
+            try
+            {
+                bool success = totalPrice <= 1000;
+
+                if (!success)
+                {
+                    return new TransactionResp
+                    {
+                        Status = false,
+                        StatusMsg = "Transaction failed: insufficient funds!"
+                    };
+                }
+
+                return new TransactionResp
+                {
+                    Status = true,
+                    StatusMsg = "Transaction successful!"
+                };
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new TransactionResp
+                {
+                    Status = false,
+                    StatusMsg = "An unexpected error occurred during the payment process!"
+                };
+            }
+        }
+
+        internal TransactionResp ProcessPaymentAction(TransactionData transactionData, int userId)
+        {
+            try
+            {
+                if (!IsValidCard(transactionData.CardNumber))
+                {
+                    return new TransactionResp
+                    {
+                        Status = false,
+                        StatusMsg = "The card information you entered appears to be invalid!"
+                    };
+                }
+
+                if (!IsValidExpiryDate(transactionData.ExpiryDate))
+                {
+                    return new TransactionResp
+                    {
+                        Status = false,
+                        StatusMsg = "The expiration date you entered is invalid!"
+                    };
+                }
+
+                if (!IsValidCVV(transactionData.Cvv))
+                {
+                    return new TransactionResp
+                    {
+                        Status = false,
+                        StatusMsg = "The CVV code entered is invalid!"
+                    };
+                }
+
+                if (!IsValidFullName(transactionData.FullName))
+                {
+                    return new TransactionResp
+                    {
+                        Status = false,
+                        StatusMsg = "The full name you entered is invalid!"
+                    };
+                }
+
+                OrderDbTable order = null;
+                using (var orderDb = new OrderContext())
+                {
+                    order = orderDb.CustomerOrders
+                        .FirstOrDefault(c => c.Id == transactionData.OrderId);
+                }
+
+                if (order.TotalPrice <= 0)
+                {
+                    return new TransactionResp
+                    {
+                        Status = false,
+                        StatusMsg = "The amount entered is invalid!"
+                    };
+                }
+
+                var paymentResult = MakePayment(order.TotalPrice);
+
+                if (paymentResult.Status)
+                {
+                    using (var db = new TransactionContext())
+                    {
+                        var transaction = new TransactionDbTable
+                        {
+                            OrderId = transactionData.OrderId,
+                            UserId = userId,
+                            Amount = order.TotalPrice,
+                            TransactionDate = DateTime.Now,
+                            TransactionStatus = TransactionStatus.Successful
+                        };
+
+                        db.UserTransactions.Add(transaction);
+                        db.SaveChanges();
+
+                        return new TransactionResp
+                        {
+                            Status = true,
+                            StatusMsg = "Payment was successfully completed!"
+                        };
+                    }
+                }
+                else
+                {
+                    return new TransactionResp
+                    {
+                        Status = false,
+                        StatusMsg = "Your payment could not be processed!"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new TransactionResp
+                {
+                    Status = false,
+                    StatusMsg = "An unexpected error occurred while processing your payment!"
                 };
             }
         }
