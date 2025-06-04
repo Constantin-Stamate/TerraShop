@@ -1,4 +1,4 @@
-﻿namespace eUseControl.BusinessLogic.Migrations.Transaction
+﻿namespace eUseControl.BusinessLogic.Migrations.Payment
 {
     using System.Data.Entity.Migrations;
 
@@ -7,7 +7,7 @@
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            MigrationsDirectory = @"Migrations\Transaction";
+            MigrationsDirectory = @"Migrations\Payment";
         }
 
         protected override void Seed(eUseControl.BusinessLogic.DBModel.TransactionContext context)

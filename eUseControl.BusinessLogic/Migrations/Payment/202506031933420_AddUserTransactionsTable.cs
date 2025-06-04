@@ -1,27 +1,27 @@
-﻿namespace eUseControl.BusinessLogic.Migrations.Transaction
+﻿namespace eUseControl.BusinessLogic.Migrations.Payment
 {
     using System.Data.Entity.Migrations;
 
-    public partial class IntegrateUserTransactionsTable : DbMigration
+    public partial class AddUserTransactionsTable : DbMigration
     {
         public override void Up()
         {
             CreateTable(
                 "dbo.UserTransactions",
                 c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        OrderId = c.Int(nullable: false),
-                        UserId = c.Int(nullable: false),
-                        TransactionDate = c.DateTime(nullable: false),
-                        Amount = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        TransactionStatus = c.Int(nullable: false),
-                    })
+                {
+                    Id = c.Int(nullable: false, identity: true),
+                    OrderId = c.Int(nullable: false),
+                    UserId = c.Int(nullable: false),
+                    TransactionDate = c.DateTime(nullable: false),
+                    Amount = c.Decimal(nullable: false, precision: 18, scale: 2),
+                    TransactionStatus = c.Int(nullable: false),
+                })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.CustomerOrders", t => t.OrderId, cascadeDelete: true)
                 .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: false)
                 .Index(t => t.OrderId)
-                .Index(t => t.UserId);  
+                .Index(t => t.UserId);
         }
 
         public override void Down()
