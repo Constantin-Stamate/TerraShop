@@ -3,6 +3,7 @@
 }
 
 @using System.Web.Optimization
+@model eUseControl.Web.Models.Main.MainViewModel
 
 <!DOCTYPE html>
 <html lang="en">
@@ -697,93 +698,44 @@
                 <h1 class="display-5 mb-5 text-dark">Our Clients Saying!</h1>
             </div>
             <div class="owl-carousel testimonial-carousel">
-                <div class="testimonial-item img-border-radius bg-light rounded p-4">
-                    <div class="position-relative">
-                        <i class="fa fa-quote-right fa-2x text-secondary position-absolute"
-                           style="bottom: 30px; right: 0;"></i>
-                        <div class="mb-4 pb-4 border-bottom border-secondary">
-                            <p class="mb-0">
-                                "TerraShop has completely transformed the way I shop for eco-friendly products.
-                                The quality is exceptional and the variety is just amazing!"
-                            </p>
-                        </div>
-                        <div class="d-flex align-items-center flex-nowrap">
-                            <div class="bg-secondary rounded">
-                                <img src="@Url.Content("~/Assets/img/testimonial/testimonial_1.jpg")" class="img-fluid rounded"
-                                     style="width: 100px; height: 100px;" alt="Client Image">
+                @foreach (var item in Model.ReviewsWithProfiles)
+                {
+                    <div class="testimonial-item img-border-radius bg-light rounded p-4">
+                        <div class="position-relative">
+                            <i class="fa fa-quote-right fa-2x text-secondary position-absolute"
+                               style="bottom: 30px; right: 0;"></i>
+
+                            <div class="mb-4 pb-4 border-bottom border-secondary">
+                                <p class="mb-0">
+                                    @item.Review.Review
+                                </p>
                             </div>
-                            <div class="ms-4 d-block">
-                                <h4 class="text-dark">Jane Doe</h4>
-                                <p class="m-0 pb-3">Environmental Consultant</p>
-                                <div class="d-flex pe-5">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
+
+                            <div class="d-flex align-items-center flex-nowrap">
+                                <div class="rounded overflow-hidden" style="width: 100px; height: 100px;">
+                                    <img src="@Url.Content(item.Profile.ProfileImageUrl)" class="img-fluid w-100 h-100 object-fit-cover" alt="Client Image">
+                                </div>
+                                <div class="ms-4 d-block">
+                                    <h4 class="text-dark">@item.Profile.FirstName @item.Profile.LastName</h4>
+                                    <p class="m-0 pb-3">@item.Review.ReviewPostDate</p>
+                                    <div class="d-flex pe-5">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= item.Review.Rating)
+                                            {
+                                                <i class="fa fa-star text-secondary"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="fa fa-star"></i>
+                                            }
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="testimonial-item img-border-radius bg-light rounded p-4">
-                    <div class="position-relative">
-                        <i class="fa fa-quote-right fa-2x text-secondary position-absolute"
-                           style="bottom: 30px; right: 0;"></i>
-                        <div class="mb-4 pb-4 border-bottom border-secondary">
-                            <p class="mb-0">
-                                "The handmade toys I bought for my kids are not only beautiful but also safe and
-                                eco-friendly. I highly recommend TerraShop to all my friends!"
-                            </p>
-                        </div>
-                        <div class="d-flex align-items-center flex-nowrap">
-                            <div class="bg-secondary rounded">
-                                <img src="@Url.Content("~/Assets/img/testimonial/testimonial_1.jpg")" class="img-fluid rounded"
-                                     style="width: 100px; height: 100px;" alt="Client Image">
-                            </div>
-                            <div class="ms-4 d-block">
-                                <h4 class="text-dark">John Smith</h4>
-                                <p class="m-0 pb-3">Father & Green Lifestyle Advocate</p>
-                                <div class="d-flex pe-5">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-item img-border-radius bg-light rounded p-4">
-                    <div class="position-relative">
-                        <i class="fa fa-quote-right fa-2x text-secondary position-absolute"
-                           style="bottom: 30px; right: 0;"></i>
-                        <div class="mb-4 pb-4 border-bottom border-secondary">
-                            <p class="mb-0">
-                                "The recycled products I found at TerraShop are top-notch. It's great to know I
-                                am supporting a company that truly cares about the planet."
-                            </p>
-                        </div>
-                        <div class="d-flex align-items-center flex-nowrap">
-                            <div class="bg-secondary rounded">
-                                <img src="@Url.Content("~/Assets/img/testimonial/testimonial_1.jpg")" class="img-fluid rounded"
-                                     style="width: 100px; height: 100px;" alt="Client Image">
-                            </div>
-                            <div class="ms-4 d-block">
-                                <h4 class="text-dark">Sarah Green</h4>
-                                <p class="m-0 pb-3">Sustainability Expert</p>
-                                <div class="d-flex pe-5">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     </div>

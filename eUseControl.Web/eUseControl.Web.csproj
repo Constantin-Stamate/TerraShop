@@ -227,6 +227,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Cart\CartCompact.cs" />
+    <Compile Include="Models\Main\MainViewModel.cs" />
+    <Compile Include="Models\Main\ReviewProfileData.cs" />
     <Compile Include="Models\Order\OrderViewModel.cs" />
     <Compile Include="Models\Order\OrderCompact.cs" />
     <Compile Include="Models\Order\OrderMini.cs" />
@@ -242,6 +244,7 @@
     <Compile Include="Models\Profile\ProfileMini.cs" />
     <Compile Include="Models\Review\ReviewCompact.cs" />
     <Compile Include="Models\Product\ProductCatalogViewModel.cs" />
+    <Compile Include="Models\Review\ReviewMini.cs" />
     <Compile Include="Models\User\UserCompact.cs" />
     <Compile Include="Models\User\UserLogin.cs" />
     <Compile Include="Models\User\UserRegister.cs" />

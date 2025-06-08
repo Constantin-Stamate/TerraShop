@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using eUseControl.Domain.Entities.Profile;
 using eUseControl.Domain.Entities.Review;
 
 namespace eUseControl.BusinessLogic.Interfaces
@@ -14,5 +15,7 @@ namespace eUseControl.BusinessLogic.Interfaces
         ReviewData GetReviewById(int? reviewId);
 
         ReviewResp UpdateReview(ReviewData data);
+
+        Dictionary<ReviewData, ProfileData> RetrieveAllReviews();
     }
 }

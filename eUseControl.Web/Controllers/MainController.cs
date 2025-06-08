@@ -5,6 +5,11 @@ using AutoMapper;
 using eUseControl.Domain.Entities.Product;
 using System.Collections.Generic;
 using eUseControl.Web.Models.Product;
+using eUseControl.Domain.Entities.Profile;
+using eUseControl.Web.Models.Profile;
+using eUseControl.Domain.Entities.Review;
+using eUseControl.Web.Models.Review;
+using eUseControl.Web.Models.Main;
 
 namespace eUseControl.Web.Controllers
 {
@@ -14,6 +19,7 @@ namespace eUseControl.Web.Controllers
         private readonly IWishlist _wishlist;
         private readonly ISession _session;
         private readonly ICart _cart;
+        private readonly IReview _review;
 
         public MainController()
         {
@@ -22,13 +28,42 @@ namespace eUseControl.Web.Controllers
             _wishlist = bl.GetWishlistBL();
             _session = bl.GetSessionBL();
             _cart = bl.GetCartBL();
+            _review = bl.GetReviewBL();
         }
 
         [HttpGet]
         public ActionResult Index()
         {
+            var allReviews = _review.RetrieveAllReviews();
 
-            return View();
+            var list = new List<ReviewProfileData>();
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ProfileData, ProfileMini>();
+                cfg.CreateMap<ReviewData, ReviewMini>();
+            });
+
+            var mapper = config.CreateMapper();
+
+            foreach (var pair in allReviews)
+            {
+                var review = mapper.Map<ReviewMini>(pair.Key);
+                var profile = mapper.Map<ProfileMini>(pair.Value);
+
+                list.Add(new ReviewProfileData
+                {
+                    Review = review,
+                    Profile = profile
+                });
+            }
+
+            var model = new MainViewModel
+            {
+                ReviewsWithProfiles = list
+            };
+
+            return View(model);
         }
 
         [HttpGet]
