@@ -23,6 +23,7 @@ namespace eUseControl.Domain.Entities
         public string Password { get; set; }
 
         [Required]
+        [EmailAddress]
         [Display(Name = "Email")]
         [StringLength(30)]
         public string Email { get; set; }

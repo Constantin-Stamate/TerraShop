@@ -15,6 +15,9 @@ namespace eUseControl.Domain.Entities.Profile
         [Display(Name = "UserId")]
         public int UserId { get; set; }
 
+        [ForeignKey("UserId")]
+        public virtual UDbTable User { get; set; }
+
         [Required]
         [Display(Name = "FirstName")]
         [StringLength(30)]
@@ -28,6 +31,7 @@ namespace eUseControl.Domain.Entities.Profile
         [Required]
         [Display(Name = "Email")]
         [StringLength(30)]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Required]
@@ -38,13 +42,13 @@ namespace eUseControl.Domain.Entities.Profile
         [Required]
         [Display(Name = "PhoneNumber")]
         [StringLength(50)]
+        [Phone]
         public string PhoneNumber { get; set; }
 
         [Display(Name = "LastProfileUpdate")]
         [DataType(DataType.Date)]
         public DateTime LastProfileUpdate { get; set; }
 
-        [Required]
         [Display(Name = "ProfileImageUrl")]
         [StringLength(50)]
         public string ProfileImageUrl { get; set; }

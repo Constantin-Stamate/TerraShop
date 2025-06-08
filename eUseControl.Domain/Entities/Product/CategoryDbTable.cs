@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace eUseControl.Domain.Entities.Product
 {
-    [Table("Categories")]
-    public class Category
+    [Table("ProductCategories")]
+    public class CategoryDbTable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -12,6 +12,7 @@ namespace eUseControl.Domain.Entities.Product
 
         [Required]
         [StringLength(100)]
+        [Display(Name = "CategoryName")]
         public string CategoryName { get; set; }
     }
 }

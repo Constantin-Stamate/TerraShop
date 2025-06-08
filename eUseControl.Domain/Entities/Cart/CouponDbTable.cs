@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace eUseControl.Domain.Entities.Cart
 {
     [Table("DiscountCoupons")]
-    public class Coupon
+    public class CouponDbTable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
