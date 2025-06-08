@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using eUseControl.BusinessLogic.Core;
 using eUseControl.BusinessLogic.Interfaces;
+using eUseControl.Domain.Entities.Cart;
 using eUseControl.Domain.Entities.Product;
 
 namespace eUseControl.BusinessLogic.BusinessLayer
@@ -70,6 +71,11 @@ namespace eUseControl.BusinessLogic.BusinessLayer
         public List<ProductSummary> GetProductsByCountry(string country, List<ProductSummary> products)
         {
             return GetProductsByCountryAction(country, products);
+        }
+
+        public ProductResp UpdateProductQuantitiesAfterOrder(List<CartData> cartItems)
+        {
+            return UpdateProductQuantitiesAfterOrderAction(cartItems);
         }
     }
 }

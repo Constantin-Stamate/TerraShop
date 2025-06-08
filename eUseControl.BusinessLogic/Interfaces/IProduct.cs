@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using eUseControl.Domain.Entities.Cart;
 using eUseControl.Domain.Entities.Product;
 
 namespace eUseControl.BusinessLogic.Interfaces
@@ -30,5 +31,7 @@ namespace eUseControl.BusinessLogic.Interfaces
         List<ProductSummary> GetProductsBySearchQuery(string searchQuery, List<ProductSummary> products);
 
         List<ProductSummary> GetProductsByCountry(string country, List<ProductSummary> products);
+
+        ProductResp UpdateProductQuantitiesAfterOrder(List<CartData> cartItems);
     }
 }

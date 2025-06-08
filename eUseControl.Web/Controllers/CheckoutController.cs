@@ -16,6 +16,7 @@ namespace eUseControl.Web.Controllers
         private readonly ICart _cart;
         private readonly ISession _session;
         private readonly IOrder _order;
+        private readonly IProduct _product;
 
         public CheckoutController()
         {
@@ -23,6 +24,7 @@ namespace eUseControl.Web.Controllers
             _cart = bl.GetCartBL();
             _session = bl.GetSessionBL();
             _order = bl.GetOrderBL();
+            _product = bl.GetProductBL();
         }
 
         [HttpGet]
@@ -119,7 +121,18 @@ namespace eUseControl.Web.Controllers
                 {
                     if (orderData.PaymentMethod == "Cash")
                     {
+                        var updateResult = _product.UpdateProductQuantitiesAfterOrder(allCartItems);
+                        if (!updateResult.Status)
+                        {
+                            return RedirectToAction("Checkout", "Checkout", new { error = true });
+                        }
+
                         var clearResult = _cart.ClearCartItemsAfterOrder(user.Id);
+                        if (!clearResult.Status)
+                        {
+                            return RedirectToAction("Checkout", "Checkout", new { error = true });
+                        }
+
                         return RedirectToAction("OrderConfirmation", "Order", new { success = true, orderId = result.Id });
                     }
                     else if (orderData.PaymentMethod == "Card")
