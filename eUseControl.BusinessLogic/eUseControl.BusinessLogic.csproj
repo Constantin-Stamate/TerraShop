@@ -82,69 +82,61 @@
     <Compile Include="Interfaces\ISession.cs" />
     <Compile Include="Interfaces\ITransaction.cs" />
     <Compile Include="Interfaces\IWishlist.cs" />
-    <Compile Include="Migrations\Cart\202505192158005_IntegrateCartItemsTable.cs" />
-    <Compile Include="Migrations\Cart\202505192158005_IntegrateCartItemsTable.Designer.cs">
-      <DependentUpon>202505192158005_IntegrateCartItemsTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Cart\Configuration.cs" />
-    <Compile Include="Migrations\Coupon\202505210752428_IntegrateDiscountCouponsTable.cs" />
-    <Compile Include="Migrations\Coupon\202505210752428_IntegrateDiscountCouponsTable.Designer.cs">
-      <DependentUpon>202505210752428_IntegrateDiscountCouponsTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Coupon\Configuration.cs" />
-    <Compile Include="Migrations\Order\202505251731196_IntegrateCustomerOrdersTable.cs" />
-    <Compile Include="Migrations\Order\202505251731196_IntegrateCustomerOrdersTable.Designer.cs">
-      <DependentUpon>202505251731196_IntegrateCustomerOrdersTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Order\202505251807352_AddTotalPriceToCustomerOrders.cs" />
-    <Compile Include="Migrations\Order\202505251807352_AddTotalPriceToCustomerOrders.Designer.cs">
-      <DependentUpon>202505251807352_AddTotalPriceToCustomerOrders.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Order\202505311328410_AddCouponIdToCustomerOrders.cs" />
-    <Compile Include="Migrations\Order\202505311328410_AddCouponIdToCustomerOrders.Designer.cs">
-      <DependentUpon>202505311328410_AddCouponIdToCustomerOrders.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Order\Configuration.cs" />
-    <Compile Include="Migrations\Payment\202506031933420_AddUserTransactionsTable.cs" />
-    <Compile Include="Migrations\Payment\202506031933420_AddUserTransactionsTable.Designer.cs">
-      <DependentUpon>202506031933420_AddUserTransactionsTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Payment\Configuration.cs" />
-    <Compile Include="Migrations\Product\202505070935331_IntegrateProductsTable.cs" />
-    <Compile Include="Migrations\Product\202505070935331_IntegrateProductsTable.Designer.cs">
-      <DependentUpon>202505070935331_IntegrateProductsTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Product\Configuration.cs" />
-    <Compile Include="Migrations\ProductType\202505070910290_AddProductCategoriesTable.cs" />
-    <Compile Include="Migrations\ProductType\202505070910290_AddProductCategoriesTable.Designer.cs">
-      <DependentUpon>202505070910290_AddProductCategoriesTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\ProductType\Configuration.cs" />
-    <Compile Include="Migrations\Profile\202504281629134_CreateUserProfilesTable.cs" />
-    <Compile Include="Migrations\Profile\202504281629134_CreateUserProfilesTable.Designer.cs">
-      <DependentUpon>202504281629134_CreateUserProfilesTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Profile\Configuration.cs" />
-    <Compile Include="Migrations\Review\202505070940597_IntegrateReviewsTable.cs" />
-    <Compile Include="Migrations\Review\202505070940597_IntegrateReviewsTable.Designer.cs">
-      <DependentUpon>202505070940597_IntegrateReviewsTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Review\Configuration.cs" />
-    <Compile Include="Migrations\Session\202504281540471_CreateSessionsTable.cs" />
-    <Compile Include="Migrations\Session\202504281540471_CreateSessionsTable.Designer.cs">
-      <DependentUpon>202504281540471_CreateSessionsTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Session\Configuration.cs" />
-    <Compile Include="Migrations\User\202504281533102_CreateUsersTable.cs" />
-    <Compile Include="Migrations\User\202504281533102_CreateUsersTable.Designer.cs">
-      <DependentUpon>202504281533102_CreateUsersTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\User\Configuration.cs" />
     <Compile Include="BusinessLayer\ProductBL.cs" />
     <Compile Include="BusinessLayer\ProfileBL.cs" />
-    <Compile Include="Migrations\Wishlist\202505181532184_IntegrateWishlistProductsTable.cs" />
-    <Compile Include="Migrations\Wishlist\202505181532184_IntegrateWishlistProductsTable.Designer.cs">
-      <DependentUpon>202505181532184_IntegrateWishlistProductsTable.cs</DependentUpon>
+    <Compile Include="Migrations\Cart\202506051736132_CreateCartItemsTable.cs" />
+    <Compile Include="Migrations\Cart\202506051736132_CreateCartItemsTable.Designer.cs">
+      <DependentUpon>202506051736132_CreateCartItemsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Cart\Configuration.cs" />
+    <Compile Include="Migrations\Category\202506051620141_CreateProductCategoriesTable.cs" />
+    <Compile Include="Migrations\Category\202506051620141_CreateProductCategoriesTable.Designer.cs">
+      <DependentUpon>202506051620141_CreateProductCategoriesTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Category\Configuration.cs" />
+    <Compile Include="Migrations\Coupon\202506051719102_CreateDiscountCouponsTable.cs" />
+    <Compile Include="Migrations\Coupon\202506051719102_CreateDiscountCouponsTable.Designer.cs">
+      <DependentUpon>202506051719102_CreateDiscountCouponsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Coupon\Configuration.cs" />
+    <Compile Include="Migrations\Order\202506051745364_CreateCustomerOrdersTable.cs" />
+    <Compile Include="Migrations\Order\202506051745364_CreateCustomerOrdersTable.Designer.cs">
+      <DependentUpon>202506051745364_CreateCustomerOrdersTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Order\Configuration.cs" />
+    <Compile Include="Migrations\Product\202506051626321_CreateProductsTable.cs" />
+    <Compile Include="Migrations\Product\202506051626321_CreateProductsTable.Designer.cs">
+      <DependentUpon>202506051626321_CreateProductsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Product\Configuration.cs" />
+    <Compile Include="Migrations\Profile\202506051701151_CreateUserProfilesTable.cs" />
+    <Compile Include="Migrations\Profile\202506051701151_CreateUserProfilesTable.Designer.cs">
+      <DependentUpon>202506051701151_CreateUserProfilesTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Profile\Configuration.cs" />
+    <Compile Include="Migrations\Review\202506051705460_CreateProductReviewsTable.cs" />
+    <Compile Include="Migrations\Review\202506051705460_CreateProductReviewsTable.Designer.cs">
+      <DependentUpon>202506051705460_CreateProductReviewsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Review\Configuration.cs" />
+    <Compile Include="Migrations\Session\202506051615493_CreateUserSessionsTable.cs" />
+    <Compile Include="Migrations\Session\202506051615493_CreateUserSessionsTable.Designer.cs">
+      <DependentUpon>202506051615493_CreateUserSessionsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Session\Configuration.cs" />
+    <Compile Include="Migrations\Transaction\202506051753228_CreateUserTransactionsTable.cs" />
+    <Compile Include="Migrations\Transaction\202506051753228_CreateUserTransactionsTable.Designer.cs">
+      <DependentUpon>202506051753228_CreateUserTransactionsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Transaction\Configuration.cs" />
+    <Compile Include="Migrations\User\202506051610122_CreateUsersTable.cs" />
+    <Compile Include="Migrations\User\202506051610122_CreateUsersTable.Designer.cs">
+      <DependentUpon>202506051610122_CreateUsersTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\User\Configuration.cs" />
+    <Compile Include="Migrations\Wishlist\202506051712001_CreateWishlistProductsTable.cs" />
+    <Compile Include="Migrations\Wishlist\202506051712001_CreateWishlistProductsTable.Designer.cs">
+      <DependentUpon>202506051712001_CreateWishlistProductsTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Wishlist\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -165,44 +157,38 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\Cart\202505192158005_IntegrateCartItemsTable.resx">
-      <DependentUpon>202505192158005_IntegrateCartItemsTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Cart\202506051736132_CreateCartItemsTable.resx">
+      <DependentUpon>202506051736132_CreateCartItemsTable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Coupon\202505210752428_IntegrateDiscountCouponsTable.resx">
-      <DependentUpon>202505210752428_IntegrateDiscountCouponsTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Category\202506051620141_CreateProductCategoriesTable.resx">
+      <DependentUpon>202506051620141_CreateProductCategoriesTable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Order\202505251731196_IntegrateCustomerOrdersTable.resx">
-      <DependentUpon>202505251731196_IntegrateCustomerOrdersTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Coupon\202506051719102_CreateDiscountCouponsTable.resx">
+      <DependentUpon>202506051719102_CreateDiscountCouponsTable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Order\202505251807352_AddTotalPriceToCustomerOrders.resx">
-      <DependentUpon>202505251807352_AddTotalPriceToCustomerOrders.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Order\202506051745364_CreateCustomerOrdersTable.resx">
+      <DependentUpon>202506051745364_CreateCustomerOrdersTable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Order\202505311328410_AddCouponIdToCustomerOrders.resx">
-      <DependentUpon>202505311328410_AddCouponIdToCustomerOrders.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Product\202506051626321_CreateProductsTable.resx">
+      <DependentUpon>202506051626321_CreateProductsTable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Payment\202506031933420_AddUserTransactionsTable.resx">
-      <DependentUpon>202506031933420_AddUserTransactionsTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Profile\202506051701151_CreateUserProfilesTable.resx">
+      <DependentUpon>202506051701151_CreateUserProfilesTable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Product\202505070935331_IntegrateProductsTable.resx">
-      <DependentUpon>202505070935331_IntegrateProductsTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Review\202506051705460_CreateProductReviewsTable.resx">
+      <DependentUpon>202506051705460_CreateProductReviewsTable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\ProductType\202505070910290_AddProductCategoriesTable.resx">
-      <DependentUpon>202505070910290_AddProductCategoriesTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Session\202506051615493_CreateUserSessionsTable.resx">
+      <DependentUpon>202506051615493_CreateUserSessionsTable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Profile\202504281629134_CreateUserProfilesTable.resx">
-      <DependentUpon>202504281629134_CreateUserProfilesTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Transaction\202506051753228_CreateUserTransactionsTable.resx">
+      <DependentUpon>202506051753228_CreateUserTransactionsTable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Review\202505070940597_IntegrateReviewsTable.resx">
-      <DependentUpon>202505070940597_IntegrateReviewsTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\User\202506051610122_CreateUsersTable.resx">
+      <DependentUpon>202506051610122_CreateUsersTable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Session\202504281540471_CreateSessionsTable.resx">
-      <DependentUpon>202504281540471_CreateSessionsTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\User\202504281533102_CreateUsersTable.resx">
-      <DependentUpon>202504281533102_CreateUsersTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Wishlist\202505181532184_IntegrateWishlistProductsTable.resx">
-      <DependentUpon>202505181532184_IntegrateWishlistProductsTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Wishlist\202506051712001_CreateWishlistProductsTable.resx">
+      <DependentUpon>202506051712001_CreateWishlistProductsTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
