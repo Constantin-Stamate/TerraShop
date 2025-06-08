@@ -2234,5 +2234,47 @@ namespace eUseControl.BusinessLogic.Core
                 };
             }
         }
+
+        internal ProductResp UpdateProductQuantitiesAfterOrderAction(List<CartData> cartItems)
+        {
+            try
+            {
+                using (var db = new ProductContext())
+                {
+                    foreach (var item in cartItems)
+                    {
+                        var product = db.Products
+                            .FirstOrDefault(p => p.Id == item.ProductId);
+
+                        if (product != null)
+                        {
+                            product.ProductQuantity -= item.SelectedQuantity;
+
+                            if (product.ProductQuantity < 0)
+                            {
+                                product.ProductQuantity = 0;
+                            }
+                        }
+                    }
+
+                    db.SaveChanges();
+
+                    return new ProductResp
+                    {
+                        Status = true,
+                        StatusMsg = "Product quantities updated successfully!"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ProductResp
+                {
+                    Status = false,
+                    StatusMsg = "An unexpected error occurred while updating product stock!"
+                };
+            }
+        }
     }
 }
