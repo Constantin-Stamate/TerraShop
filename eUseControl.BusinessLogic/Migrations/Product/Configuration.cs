@@ -1,4 +1,4 @@
-﻿namespace eUseControl.BusinessLogic.Migrations.Products
+﻿namespace eUseControl.BusinessLogic.Migrations.Product
 {
     using System;
     using System.Data.Entity.Migrations;
@@ -16,6 +16,7 @@
         protected override void Seed(eUseControl.BusinessLogic.DBModel.ProductContext context)
         {
             context.Products.AddOrUpdate(p => p.ProductName,
+
                 new ProductDbTable
                 {
                     Id = 1,
@@ -31,6 +32,7 @@
                     ProductDescription = "Indulge your skin with our Nourishing Face Cream, formulated with a rich blend of natural oils, vitamins, and botanical extracts. Designed to hydrate deeply and restore the skin’s natural elasticity, this cream is perfect for daily use on all skin types. Free from parabens and synthetic fragrances, it absorbs quickly, leaving your face soft, radiant, and revitalized. A luxurious, eco-friendly choice for conscious skincare enthusiasts.",
                     ProductPostDate = DateTime.Now,
                     ProductStatus = ProductStatus.Available,
+                    RecommendationStatus = RecommendationStatus.Preferred,
                     ProductRating = 5
                 },
 
@@ -49,6 +51,7 @@
                    ProductDescription = "Make a sustainable switch with our Bamboo Toothbrush, crafted from biodegradable bamboo and soft, BPA-free bristles. Gentle on your gums and tough on plaque, it’s the perfect eco-conscious alternative to plastic brushes. Designed for comfort and effectiveness, this toothbrush helps you maintain oral hygiene while caring for the planet. Ideal for all ages, it's a simple yet impactful step towards zero-waste living.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -67,6 +70,7 @@
                    ProductDescription = "Clean your clothes with care for the planet using our Eco-Friendly Laundry Detergent. Made with natural, biodegradable ingredients, it effectively removes stains and odors without the harsh chemicals found in conventional detergents. Gentle on your skin and safe for sensitive fabrics, this detergent is perfect for households looking to minimize their environmental impact. Free from synthetic fragrances, it's a perfect choice for conscious consumers.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -85,6 +89,7 @@
                    ProductDescription = "Make an eco-friendly choice with our Biodegradable Trash Bags. Made from plant-based materials, these bags break down naturally over time, reducing plastic waste and promoting sustainability. Strong and reliable, they are perfect for daily use in homes, offices, and businesses. These trash bags are designed to handle all types of waste, while helping you contribute to a cleaner planet. Free from harmful chemicals, they offer a safe and responsible solution for waste disposal.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -103,6 +108,7 @@
                    ProductDescription = "Clean your home sustainably with our Eco-Friendly Sponges. Made from natural cellulose and loofah materials, these sponges are biodegradable and durable. Ideal for kitchen and bathroom use, they provide effective cleaning without leaving microplastics behind. A responsible choice for households seeking greener cleaning alternatives.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -121,6 +127,7 @@
                    ProductDescription = "Upgrade your kitchen essentials with our Organic Cotton Kitchen Towels, crafted from 100% certified organic cotton. These towels are soft, durable, and highly absorbent, making them perfect for drying dishes, cleaning spills, or everyday use. Free from harmful dyes and chemicals, they are a safe and eco-friendly alternative to synthetic materials. Designed to last and easy to wash, they combine functionality with sustainability for a cleaner kitchen and a healthier planet.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -139,6 +146,7 @@
                    ProductDescription = "Wear comfort and sustainability with our Organic Cotton T-shirt, made from 100% certified organic cotton. This t-shirt is soft, breathable, and designed for long-lasting comfort. Ideal for everyday wear, it’s a perfect blend of style and eco-consciousness. Free from synthetic chemicals and dyes, it’s gentle on the skin and kind to the environment. Available in various sizes, this t-shirt combines timeless fashion with a commitment to sustainability.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -157,6 +165,7 @@
                    ProductDescription = "Step into sustainability with our Hemp Shoes, crafted from durable and eco-friendly hemp fabric. These shoes are designed to provide both comfort and style, while being gentle on the environment. Lightweight, breathable, and perfect for everyday wear, they are a great choice for those who want to reduce their carbon footprint. The hemp material is naturally resistant to wear and tear. Ideal for conscious consumers who value both fashion and sustainability.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -175,6 +184,7 @@
                    ProductDescription = "Protect and nourish your lips with our Natural Lip Balm, made from organic beeswax, shea butter, and essential oils. Free from synthetic additives and preservatives, it offers a smooth, moisturizing experience that soothes dry or chapped lips. Compact and easy to carry, it's perfect for daily use and suitable for all skin types. A gentle, eco-friendly choice for healthy lips all year round.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -193,6 +203,7 @@
                    ProductDescription = "Revitalize your skin with our Organic Face Serum, enriched with powerful botanical extracts, antioxidants, and essential oils. This lightweight serum penetrates deeply to hydrate, repair, and restore your skin’s natural glow. Free from parabens, silicones, and synthetic fragrances, it’s ideal for daily use and suitable for all skin types. Embrace radiant, healthy skin with every drop of this eco-conscious skincare essential.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -211,6 +222,7 @@
                    ProductDescription = "Support your health naturally with our Plant-Based Multivitamins. Formulated using organic fruits, vegetables, and herbs, these supplements deliver essential nutrients without artificial additives. Designed to boost immunity, energy levels, and overall wellness, they are a great daily choice for those following a vegan or eco-conscious lifestyle. Free from GMOs, synthetic fillers, and animal products.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -229,6 +241,7 @@
                    ProductDescription = "Revitalize your body with our Detox Tea Blends, carefully crafted with a mix of natural herbs like dandelion root, ginger, and green tea. This blend helps support digestion, flush toxins, and boost energy levels naturally. Enjoy a soothing cup daily to feel refreshed and balanced. 100% organic, caffeine-free, and free from artificial additives.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -247,6 +260,7 @@
                    ProductDescription = "Add vibrant color with our Eco-Friendly Spray Paint, designed with low-VOC and water-based formulas. Perfect for DIY projects, crafts, or touch-ups, it provides strong coverage while being safer for you and the environment. Quick-drying, odor-reduced, and compliant with environmental safety standards, it's a smarter choice for sustainable creativity.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -265,6 +279,7 @@
                    ProductDescription = "Easily remove stubborn stickers and adhesive residue with our Biodegradable Sticker Remover. Made from plant-based ingredients, it's non-toxic and safe to use on a variety of surfaces including glass, plastic, and metal. A perfect eco-alternative to harsh chemical removers, leaving no harmful traces behind.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -283,6 +298,7 @@
                    ProductDescription = "Stay powered anywhere with our Portable Solar Charger. Designed for outdoor enthusiasts and travelers, this lightweight and compact charger uses solar energy to charge smartphones, tablets, and other USB-powered devices. Built with high-efficiency solar panels, it’s perfect for camping, hiking, or emergency use. Durable, water-resistant, and eco-friendly, this solar charger is your reliable power source on the go.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -301,6 +317,7 @@
                    ProductDescription = "Illuminate your outdoor spaces with our Solar-Powered Garden Lights. These eco-friendly lights charge during the day and automatically light up at night, creating a warm and inviting atmosphere without any wiring or electricity bills. Ideal for pathways, patios, or gardens.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -319,6 +336,7 @@
                    ProductDescription = "Serve food sustainably with our Compostable Paper Plates. Made from natural, biodegradable fibers like sugarcane, they are sturdy, grease-resistant, and break down completely after use. A perfect solution for eco-conscious parties, picnics, or catering services without compromising on convenience.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -337,6 +355,7 @@
                    ProductDescription = "Eco-friendly biodegradable cutlery set including a fork, knife, reusable straw, and sushi chopsticks, perfect for outdoor events, picnics, or everyday use. Made from sustainable plant-based materials, this set offers a great alternative to plastic utensils, ensuring minimal environmental impact. Biodegradable and compostable, it is a step towards reducing waste and living sustainably.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -355,6 +374,7 @@
                    ProductDescription = "Experience urban mobility with VoltRide, the eco-friendly electric scooter perfect for fast, emission-free commuting. Featuring a quiet 350W motor, up to 30 km range, and a foldable design, VoltRide is the ideal choice for daily city rides. Equipped with LED headlight, efficient brakes, and a durable build, it delivers both safety and comfort in a green solution.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -373,6 +393,7 @@
                    ProductDescription = "Upgrade your ride with our Eco-Friendly Car Seat Covers, crafted from sustainable materials like organic cotton and recycled PET fibers. Designed to offer comfort, durability, and a reduced environmental footprint, these covers fit most car models and help protect your vehicle’s interior with style and conscience. Machine washable and free from harmful chemicals, they’re the perfect choice for green driving enthusiasts.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -391,6 +412,7 @@
                    ProductDescription = "Keep your car spotless with our Microfiber Car Cleaning Mitt. Designed to trap dust, dirt, and grime without scratching your vehicle's surface, this eco-friendly mitt is washable and reusable. Perfect for both dry dusting and wet cleaning, it ensures a shiny finish with minimal effort. A must-have for sustainable car maintenance.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -409,6 +431,7 @@
                    ProductDescription = "Refresh your space with our Biodegradable Air Freshener, made from natural essential oils and compostable materials. Designed to neutralize odors without harming the environment, it’s perfect for cars, offices, and homes. Its sleek design and long-lasting fragrance make it a smart and sustainable choice for everyday freshness.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -427,6 +450,7 @@
                    ProductDescription = "Build responsibly with Hempcrete Blocks — an eco-friendly alternative to traditional concrete, made from hemp hurds, lime, and water. These blocks provide natural insulation, regulate humidity, and are resistant to mold and pests. Lightweight yet durable, they are ideal for sustainable construction projects focused on energy efficiency and reducing carbon footprint.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -445,6 +469,7 @@
                    ProductDescription = "Upgrade your home with our Bamboo Flooring, a durable and sustainable alternative to hardwood. Made from rapidly renewable bamboo, this flooring features a smooth finish, high resistance to wear, and a natural look that complements any space. It’s easy to install and maintain, making it ideal for eco-conscious home renovations.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -463,6 +488,7 @@
                    ProductDescription = "Give your furry friend the best with our Organic Pet Food. Made from 100% natural ingredients, this food is free from artificial additives, preservatives, and hormones. Packed with essential nutrients, vitamins, and minerals, it supports the overall health of your pet while promoting a shiny coat and strong immune system. Perfect for dogs and cats with sensitive stomachs.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -481,6 +507,7 @@
                    ProductDescription = "Treat your pet to a gentle yet effective cleanse with our Natural Pet Shampoo. Made with plant-based ingredients and essential oils, it’s perfect for pets with sensitive skin. Free from harsh chemicals, this shampoo hydrates and soothes the skin, leaving your pet feeling fresh and smelling delightful. Safe for both dogs and cats, it’s a natural way to maintain a clean and healthy coat.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -499,6 +526,7 @@
                    ProductDescription = "Grow your own organic vegetables with our high-quality Organic Vegetable Seeds. These non-GMO seeds are perfect for home gardeners looking to cultivate a variety of fresh and healthy vegetables. Free from chemicals and pesticides, they offer a sustainable and eco-friendly way to enjoy home-grown produce. Ideal for small and large gardens alike.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -517,6 +545,7 @@
                    ProductDescription = "Grow your plants in an eco-friendly way with our Biodegradable Plant Pots. Made from sustainable materials, these pots break down naturally over time, allowing your plants to grow without harming the environment. Perfect for starting seeds or growing small plants, these biodegradable pots help reduce plastic waste and promote a greener, cleaner planet.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -535,6 +564,7 @@
                    ProductDescription = "Write with a conscience using our Bamboo Pens. Crafted from sustainable bamboo, these pens are not only stylish but also eco-friendly. With a smooth writing experience, they are perfect for everyday use while contributing to reducing plastic waste. The bamboo material makes these pens a great alternative for environmentally-conscious individuals.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                },
 
@@ -553,6 +583,7 @@
                    ProductDescription = "Take notes sustainably with our Recycled Paper Notebooks. Made from 100% recycled paper, these notebooks are perfect for those who want to reduce waste while maintaining a high-quality writing experience. Whether for work, school, or personal journaling, these notebooks are durable, eco-friendly, and a great step towards a more sustainable lifestyle.",
                    ProductPostDate = DateTime.Now,
                    ProductStatus = ProductStatus.Available,
+                   RecommendationStatus = RecommendationStatus.Preferred,
                    ProductRating = 5
                }
             );
