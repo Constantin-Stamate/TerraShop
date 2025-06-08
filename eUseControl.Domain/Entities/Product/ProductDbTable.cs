@@ -16,9 +16,15 @@ namespace eUseControl.Domain.Entities.Product
         [Display(Name = "UserId")]
         public int UserId { get; set; }
 
+        [ForeignKey("UserId")]
+        public virtual UDbTable User { get; set; }
+
         [Required]
         [Display(Name = "CategoryId")]
         public int CategoryId { get; set; }
+
+        [ForeignKey("CategoryId")]
+        public virtual CategoryDbTable Category { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -67,6 +73,10 @@ namespace eUseControl.Domain.Entities.Product
         [EnumDataType(typeof(ProductStatus))]
         [Display(Name = "ProductStatus")]
         public ProductStatus ProductStatus { get; set; }
+
+        [EnumDataType(typeof(RecommendationStatus))]
+        [Display(Name = "RecommendationStatus")]
+        public RecommendationStatus RecommendationStatus { get; set; }
 
         [Range(1, int.MaxValue)]
         [Display(Name = "ProductRating")]

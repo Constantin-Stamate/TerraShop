@@ -9,6 +9,6 @@ namespace eUseControl.BusinessLogic.DBModel
         {
         }
 
-        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<CategoryDbTable> ProductCategories { get; set; }
     }
 }

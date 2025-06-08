@@ -9,6 +9,6 @@ namespace eUseControl.BusinessLogic.DBModel
         {
         }
 
-        public virtual DbSet<Coupon> DiscountCoupons { get; set; }
+        public virtual DbSet<CouponDbTable> DiscountCoupons { get; set; }
     }
 }

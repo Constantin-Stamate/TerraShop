@@ -24,7 +24,7 @@ namespace eUseControl.Domain.Entities.Order
         public int? CouponId { get; set; }
 
         [ForeignKey("CouponId")]
-        public virtual Coupon Coupon { get; set; }
+        public virtual CouponDbTable Coupon { get; set; }
 
         [Required]
         [StringLength(30)]

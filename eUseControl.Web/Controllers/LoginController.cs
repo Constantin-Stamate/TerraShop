@@ -46,7 +46,7 @@ namespace eUseControl.Web.Controllers
 
                 if (userLogin.Status)
                 {
-                    Session["Username"] = login.Username;
+                    Session["UserId"] = userLogin.UserMinimal.Id;
                     Session["User"] = userLogin.UserMinimal;
 
                     HttpCookie cookie = _session.GenCookie(login.Username);

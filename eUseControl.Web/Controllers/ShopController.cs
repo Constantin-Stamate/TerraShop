@@ -78,7 +78,7 @@ namespace eUseControl.Web.Controllers
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<ProductSummary, ProductMini>();
-                cfg.CreateMap<Category, ProductCategory>();
+                cfg.CreateMap<CategoryDbTable, ProductCategory>();
             });
 
             var mapper = config.CreateMapper();

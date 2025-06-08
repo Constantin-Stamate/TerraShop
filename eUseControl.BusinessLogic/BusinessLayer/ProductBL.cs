@@ -37,7 +37,7 @@ namespace eUseControl.BusinessLogic.BusinessLayer
             return UpdateProductStatusAction(productId);
         } 
 
-        public Dictionary<Category, int> GetCategoryProductCounts()
+        public Dictionary<CategoryDbTable, int> GetCategoryProductCounts()
         {
             return GetCategoryProductCountsAction();
         }

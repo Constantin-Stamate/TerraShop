@@ -9,6 +9,6 @@ namespace eUseControl.BusinessLogic.DBModel
         {
         }
 
-        public virtual DbSet<ReviewDbTable> Reviews { get; set; }
+        public virtual DbSet<ReviewDbTable> ProductReviews { get; set; }
     }
 }

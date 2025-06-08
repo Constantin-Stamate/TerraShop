@@ -171,28 +171,38 @@ namespace eUseControl.BusinessLogic.Core
 
                 using (var db = new SessionContext())
                 {
-                    Session curent;
+                    UDbTable user;
+                    using (var usersDb = new UserContext())
+                    {
+                        user = usersDb.Users
+                            .FirstOrDefault(u => u.Username == loginCredential);
+                    }
+
+                    if (user == null)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Current user not found!");
+                        return null;
+                    }
+
+                    SessionDbTable curent;
                     var validate = new EmailAddressAttribute();
 
-                    curent = db.Sessions
-                        .FirstOrDefault(e => e.Username == loginCredential);
+                    curent = db.UserSessions
+                        .FirstOrDefault(e => e.UserId == user.Id);
 
                     if (curent != null)
                     {
                         curent.CookieString = apiCookie.Value;
                         curent.ExpireTime = DateTime.Now.AddMinutes(60);
 
-                        using (var todo = new SessionContext())
-                        {
-                            todo.Entry(curent).State = EntityState.Modified;
-                            todo.SaveChanges();
-                        }
+                        db.Entry(curent).State = EntityState.Modified;
+                        db.SaveChanges();
                     }
                     else
                     {
-                        db.Sessions.Add(new Session
+                        db.UserSessions.Add(new SessionDbTable
                         {
-                            Username = loginCredential,
+                            UserId = user.Id,
                             CookieString = apiCookie.Value,
                             ExpireTime = DateTime.Now.AddMinutes(60)
                         });
@@ -214,34 +224,30 @@ namespace eUseControl.BusinessLogic.Core
         {
             try
             {
-                Session session;
+                SessionDbTable session;
                 UDbTable curentUser;
 
                 using (var db = new SessionContext())
                 {
-                    session = db.Sessions
+                    session = db.UserSessions
                         .FirstOrDefault(s => s.CookieString == cookie && s.ExpireTime > DateTime.Now);
                 }
 
-                if (session == null) return null;
+                if (session == null)
+                {
+                    return null;
+                }
 
                 using (var db = new UserContext())
                 {
-                    var validate = new EmailAddressAttribute();
-
-                    if (validate.IsValid(session.Username))
-                    {
-                        curentUser = db.Users
-                            .FirstOrDefault(u => u.Email == session.Username);
-                    }
-                    else
-                    {
-                        curentUser = db.Users
-                            .FirstOrDefault(u => u.Username == session.Username);
-                    }
+                    curentUser = db.Users
+                        .FirstOrDefault(u => u.Id == session.UserId);
                 }
 
-                if (curentUser == null) return null;
+                if (curentUser == null)
+                {
+                    return null;
+                }
 
                 var config = new MapperConfiguration(cfg =>
                 {
@@ -297,10 +303,10 @@ namespace eUseControl.BusinessLogic.Core
                     };
                 }
 
-                Category category;
+                CategoryDbTable category;
                 using (var db = new CategoryContext())
                 {
-                    category = db.Categories
+                    category = db.ProductCategories
                         .FirstOrDefault(c => c.CategoryName == productData.ProductCategory);
 
                     if (category == null)
@@ -329,6 +335,7 @@ namespace eUseControl.BusinessLogic.Core
                         UserId = userId,
                         CategoryId = category.Id,
                         ProductStatus = ProductStatus.Available,
+                        RecommendationStatus = RecommendationStatus.Preferred,
                         ProductRating = 5
                     };
 
@@ -398,7 +405,7 @@ namespace eUseControl.BusinessLogic.Core
 
                     using (var categoryDb = new CategoryContext())
                     {
-                        var categoryName = categoryDb.Categories
+                        var categoryName = categoryDb.ProductCategories
                                                      .Where(c => c.Id == product.CategoryId)
                                                      .Select(c => c.CategoryName)
                                                      .FirstOrDefault();
@@ -467,10 +474,10 @@ namespace eUseControl.BusinessLogic.Core
                     };
                 }
 
-                Category category;
+                CategoryDbTable category;
                 using (var db = new CategoryContext())
                 {
-                    category = db.Categories
+                    category = db.ProductCategories
                         .FirstOrDefault(c => c.CategoryName == productData.ProductCategory);
 
                     if (category == null)
@@ -561,7 +568,7 @@ namespace eUseControl.BusinessLogic.Core
                             LastName = "User", 
                             Email = user.Email,
                             Address = "N/A",
-                            PhoneNumber = "N/A",
+                            PhoneNumber = "000-000-0000",
                             LastProfileUpdate = DateTime.Now,
                             ProfileImageUrl = "/Assets/img/user.jpg"
                         };
@@ -673,6 +680,7 @@ namespace eUseControl.BusinessLogic.Core
                         if (!string.IsNullOrEmpty(profileData.ProfileImageUrl))
                             userProfile.ProfileImageUrl = profileData.ProfileImageUrl;
                         userProfile.LastProfileUpdate = DateTime.Now;
+
                         profileDb.Entry(userProfile).State = EntityState.Modified;
                         profileDb.SaveChanges();
 
@@ -763,6 +771,7 @@ namespace eUseControl.BusinessLogic.Core
                     }
 
                     user.Password = hashedNew;
+
                     db.Entry(user).State = EntityState.Modified;
                     db.SaveChanges();
 
@@ -800,7 +809,7 @@ namespace eUseControl.BusinessLogic.Core
                     {
                         foreach (var product in products)
                         {
-                            var category = categoryDb.Categories
+                            var category = categoryDb.ProductCategories
                                 .FirstOrDefault(c => c.Id == product.CategoryId);
 
                             if (category != null)
@@ -878,13 +887,13 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal Dictionary<Category, int> GetCategoryProductCountsAction()
+        internal Dictionary<CategoryDbTable, int> GetCategoryProductCountsAction()
         {
             try
             {
                 using (var categoryDb = new CategoryContext())
                 {
-                    var categories = categoryDb.Categories
+                    var categories = categoryDb.ProductCategories
                         .ToList();
 
                     using (var productDb = new ProductContext())
@@ -893,7 +902,7 @@ namespace eUseControl.BusinessLogic.Core
                             .Where(p => p.ProductStatus == ProductStatus.Available)
                             .ToList();
 
-                        var result = new Dictionary<Category, int>();
+                        var result = new Dictionary<CategoryDbTable, int>();
 
                         foreach (var category in categories)
                         {
@@ -910,7 +919,7 @@ namespace eUseControl.BusinessLogic.Core
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new Dictionary<Category, int>();
+                return new Dictionary<CategoryDbTable, int>();
             }
         }
 
@@ -928,7 +937,7 @@ namespace eUseControl.BusinessLogic.Core
 
                     using (var categoryDb = new CategoryContext())
                     {
-                        var category = categoryDb.Categories
+                        var category = categoryDb.ProductCategories
                             .FirstOrDefault(c => c.Id == categoryId);
 
                         if (category != null)
@@ -996,7 +1005,7 @@ namespace eUseControl.BusinessLogic.Core
                         Rating = data.Rating
                     };
 
-                    db.Reviews.Add(review);
+                    db.ProductReviews.Add(review);
                     db.SaveChanges();
                 }
 
@@ -1023,7 +1032,7 @@ namespace eUseControl.BusinessLogic.Core
             {
                 using (var db = new ReviewContext())
                 {
-                    var allReviews = db.Reviews
+                    var allReviews = db.ProductReviews
                         .Where(r => r.ProductId == productId)
                         .ToList();
 
@@ -1051,7 +1060,7 @@ namespace eUseControl.BusinessLogic.Core
             {
                 using (var db = new ReviewContext())
                 {
-                    var review = db.Reviews
+                    var review = db.ProductReviews
                         .FirstOrDefault(r => r.Id == reviewId);
 
                     if (review == null)
@@ -1063,7 +1072,7 @@ namespace eUseControl.BusinessLogic.Core
                         };
                     }
 
-                    db.Reviews.Remove(review);
+                    db.ProductReviews.Remove(review);
                     db.SaveChanges();
 
                     return new ReviewResp
@@ -1090,7 +1099,7 @@ namespace eUseControl.BusinessLogic.Core
             {
                 using (var db = new ReviewContext())
                 {
-                    var reviewData = db.Reviews
+                    var reviewData = db.ProductReviews
                         .FirstOrDefault(r => r.Id == reviewId);
 
                     if (reviewData == null)
@@ -1140,7 +1149,7 @@ namespace eUseControl.BusinessLogic.Core
 
                 using (var db = new ReviewContext())
                 {
-                    var reviewData = db.Reviews
+                    var reviewData = db.ProductReviews
                         .FirstOrDefault(r => r.Id == data.Id);
 
                     if (reviewData == null)
@@ -1183,7 +1192,7 @@ namespace eUseControl.BusinessLogic.Core
             {
                 using (var db = new ReviewContext())
                 {
-                    var ratings = db.Reviews
+                    var ratings = db.ProductReviews
                         .Where(r => r.ProductId == productId)
                         .Select(r => r.Rating)
                         .ToList();
@@ -1199,6 +1208,7 @@ namespace eUseControl.BusinessLogic.Core
                         if (product != null)
                         {
                             product.ProductRating = rating;
+
                             productDb.Entry(product).State = EntityState.Modified;
                             productDb.SaveChanges();
 
@@ -1911,7 +1921,7 @@ namespace eUseControl.BusinessLogic.Core
                     };
                 }
 
-                Coupon coupon = null;
+                CouponDbTable coupon = null;
                 if (!string.IsNullOrWhiteSpace(orderData.CouponCode))
                 {
                     using (var couponsDb = new CouponContext())

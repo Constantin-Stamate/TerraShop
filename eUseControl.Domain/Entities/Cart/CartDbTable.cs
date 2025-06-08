@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using eUseControl.Domain.Entities.Product;
 
 namespace eUseControl.Domain.Entities.Cart
 {
@@ -15,9 +16,15 @@ namespace eUseControl.Domain.Entities.Cart
         [Display(Name = "UserId")]
         public int UserId { get; set; }
 
+        [ForeignKey("UserId")]
+        public virtual UDbTable User { get; set; }
+
         [Required]
         [Display(Name = "ProductId")]
         public int ProductId { get; set; }
+
+        [ForeignKey("ProductId")]
+        public virtual ProductDbTable Product { get; set; }
 
         [Required]
         [Range(1, int.MaxValue)]

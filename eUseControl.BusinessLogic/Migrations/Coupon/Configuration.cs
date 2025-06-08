@@ -2,6 +2,7 @@
 {
     using System;
     using System.Data.Entity.Migrations;
+    using eUseControl.Domain.Entities.Cart;
 
     internal sealed class Configuration : DbMigrationsConfiguration<eUseControl.BusinessLogic.DBModel.CouponContext>
     {
@@ -13,73 +14,90 @@
 
         protected override void Seed(eUseControl.BusinessLogic.DBModel.CouponContext context)
         {
-            context.DiscountCoupons.AddOrUpdate(
-                c => c.Code,
+            context.DiscountCoupons.AddOrUpdate(c => c.Code, 
 
-                new eUseControl.Domain.Entities.Cart.Coupon
+                new CouponDbTable
                 {
                     Code = "WELCOME10",
                     DiscountPercent = 10,
-                    ExpirationDate = new DateTime(2025, 12, 31),
+                    ExpirationDate = DateTime.Now.AddMonths(1),
                     IsActive = true
                 },
 
-                new eUseControl.Domain.Entities.Cart.Coupon
-                {
-                    Code = "SPRING25",
-                    DiscountPercent = 25,
-                    ExpirationDate = new DateTime(2025, 5, 30),
-                    IsActive = true
-                },
-
-                new eUseControl.Domain.Entities.Cart.Coupon
-                {
-                    Code = "BLACKFRIDAY50",
-                    DiscountPercent = 13,
-                    ExpirationDate = new DateTime(2025, 11, 30),
-                    IsActive = false
-                },
-
-                new eUseControl.Domain.Entities.Cart.Coupon
+                new CouponDbTable
                 {
                     Code = "SUMMER15",
                     DiscountPercent = 15,
-                    ExpirationDate = new DateTime(2025, 8, 1),
+                    ExpirationDate = DateTime.Now.AddMonths(2),
                     IsActive = true
                 },
 
-                new eUseControl.Domain.Entities.Cart.Coupon
+                new CouponDbTable
+                {
+                    Code = "BLACKFRIDAY20",
+                    DiscountPercent = 20,
+                    ExpirationDate = new DateTime(DateTime.Now.Year, 11, 30),
+                    IsActive = true
+                },
+
+                new CouponDbTable
+                {
+                    Code = "XMAS25",
+                    DiscountPercent = 25,
+                    ExpirationDate = new DateTime(DateTime.Now.Year, 12, 26),
+                    IsActive = true
+                },
+
+                new CouponDbTable
                 {
                     Code = "NEWYEAR30",
                     DiscountPercent = 30,
-                    ExpirationDate = new DateTime(2025, 1, 10),
-                    IsActive = false
-                },
-
-                new eUseControl.Domain.Entities.Cart.Coupon
-                {
-                    Code = "VIP20",
-                    DiscountPercent = 20,
-                    ExpirationDate = new DateTime(2026, 3, 31),
+                    ExpirationDate = new DateTime(DateTime.Now.Year + 1, 1, 15),
                     IsActive = true
                 },
 
-                new eUseControl.Domain.Entities.Cart.Coupon
+                new CouponDbTable
                 {
-                    Code = "FREESHIP5",
+                    Code = "STUDENT5",
                     DiscountPercent = 5,
-                    ExpirationDate = new DateTime(2026, 12, 31),
+                    ExpirationDate = DateTime.Now.AddMonths(6),
                     IsActive = true
                 },
 
-                new eUseControl.Domain.Entities.Cart.Coupon
+                new CouponDbTable
                 {
-                    Code = "EXTRA40",
-                    DiscountPercent = 35,
-                    ExpirationDate = new DateTime(2025, 10, 15),
-                    IsActive = false
+                    Code = "FLASH40",
+                    DiscountPercent = 40,
+                    ExpirationDate = DateTime.Now.AddDays(7),
+                    IsActive = true
+                },
+
+                new CouponDbTable
+                {
+                    Code = "FREEDELIVERY",
+                    DiscountPercent = 100,
+                    ExpirationDate = DateTime.Now.AddDays(3),
+                    IsActive = true
+                },
+
+                new CouponDbTable
+                {
+                    Code = "BULK50",
+                    DiscountPercent = 50,
+                    ExpirationDate = DateTime.Now.AddMonths(3),
+                    IsActive = true
+                },
+
+                new CouponDbTable
+                {
+                    Code = "LOYAL20",
+                    DiscountPercent = 20,
+                    ExpirationDate = DateTime.Now.AddMonths(12),
+                    IsActive = true
                 }
             );
+
+            context.SaveChanges();
         }
     }
 }

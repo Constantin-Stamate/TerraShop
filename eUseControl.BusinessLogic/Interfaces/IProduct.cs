@@ -17,7 +17,7 @@ namespace eUseControl.BusinessLogic.Interfaces
 
         ProductResp UpdateProductStatus(int productId);
 
-        Dictionary<Category, int> GetCategoryProductCounts();
+        Dictionary<CategoryDbTable, int> GetCategoryProductCounts();
 
         List<ProductSummary> GetAvailableProductsByCategoryId(int? categoryId);
 
