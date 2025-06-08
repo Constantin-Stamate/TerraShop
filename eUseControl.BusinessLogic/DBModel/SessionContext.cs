@@ -9,6 +9,6 @@ namespace eUseControl.BusinessLogic.DBModel
         {
         }
 
-        public virtual DbSet<Session> Sessions { get; set; }
+        public virtual DbSet<SessionDbTable> UserSessions { get; set; }
     }
 }
