@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using eUseControl.BusinessLogic.Core;
 using eUseControl.BusinessLogic.Interfaces;
+using eUseControl.Domain.Entities.Profile;
 using eUseControl.Domain.Entities.Review;
 
 namespace eUseControl.BusinessLogic.BusinessLayer
@@ -30,6 +31,11 @@ namespace eUseControl.BusinessLogic.BusinessLayer
         public ReviewResp UpdateReview(ReviewData data)
         {
             return UpdateReviewAction(data);
+        }
+
+        public Dictionary<ReviewData, ProfileData> RetrieveAllReviews()
+        {
+            return RetrieveAllReviewsAction();
         }
     }
 }

@@ -2276,5 +2276,56 @@ namespace eUseControl.BusinessLogic.Core
                 };
             }
         }
+
+        internal Dictionary<ReviewData, ProfileData> RetrieveAllReviewsAction()
+        {
+            try
+            {
+                using (var db = new ReviewContext())
+                {
+                    var allReviews = db.ProductReviews
+                        .ToList();
+
+                    Dictionary<ReviewData, ProfileData> reviews = new Dictionary<ReviewData, ProfileData>();
+
+                    var config = new MapperConfiguration(cfg =>
+                    {
+                        cfg.CreateMap<ProfileDbTable, ProfileData>();
+                    });
+
+                    var mapper = config.CreateMapper();
+
+                    foreach (var item in allReviews)
+                    {
+                        using (var profileDb = new ProfileContext())
+                        {
+                            var profileData = profileDb.UserProfiles
+                                .FirstOrDefault(p => p.UserId == item.UserId);
+
+                            if (profileData != null)
+                            {
+                                var profile = mapper.Map<ProfileData>(profileData);
+
+                                var review = new ReviewData
+                                {
+                                    Review = item.Review,
+                                    Rating = item.Rating,
+                                    ReviewPostDate = item.ReviewPostDate,
+                                };
+
+                                reviews.Add(review, profile);
+                            }
+                        }
+                    }
+
+                    return reviews;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new Dictionary<ReviewData, ProfileData>();
+            }
+        }
     }
 }
