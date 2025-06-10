@@ -3,6 +3,8 @@
     ViewBag.Title = "Contact";
 }
 
+@model eUseControl.Web.Models.Contact.ContactCompact
+
 <div class="container py-5">
     <div class="p-5 bg-light rounded">
         <div class="row g-4">
@@ -26,17 +28,25 @@
                 </div>
             </div>
             <div class="col-lg-7">
-                <form action="" class="">
-                    <input type="text" class="w-100 form-control border-0 py-3 mb-4" placeholder="Your Name">
-                    <input type="email" class="w-100 form-control border-0 py-3 mb-4"
-                           placeholder="Enter Your Email">
-                    <textarea class="w-100 form-control border-0 mb-4" rows="5" cols="10"
-                              placeholder="Your Message"></textarea>
-                    <button class="w-100 btn form-control border-secondary py-3 bg-white text-primary "
-                            type="submit">
+                @using (Html.BeginForm("SubmitContactRequest", "Contact", FormMethod.Post, new { @id = "ContactForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group mb-4">
+                        @Html.TextBoxFor(m => m.Username, new { @class = "w-100 form-control border-0 py-3", placeholder = "Your Name", required = "required" })
+                        @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group mb-4">
+                        @Html.TextBoxFor(m => m.Email, new { @type = "email", @class = "w-100 form-control border-0 py-3", placeholder = "Enter Your Email", required = "required" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group mb-4">
+                        @Html.TextAreaFor(m => m.Message, new { @class = "w-100 form-control border-0", rows = "6", placeholder = "Your Message", required = "required" })
+                        @Html.ValidationMessageFor(m => m.Message, "", new { @class = "text-danger" })
+                    </div>
+                    <button type="submit" class="w-100 btn form-control border-secondary py-3 bg-white text-primary">
                         Submit
                     </button>
-                </form>
+                }
             </div>
             <div class="col-lg-5">
                 <div class="d-flex p-4 rounded mb-4 bg-white">
