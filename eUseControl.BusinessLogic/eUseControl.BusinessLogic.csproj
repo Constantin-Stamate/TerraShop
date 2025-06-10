@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLayer\CartBL.cs" />
+    <Compile Include="BusinessLayer\ContactBL.cs" />
     <Compile Include="BusinessLayer\OrderBL.cs" />
     <Compile Include="BusinessLayer\ReviewBL.cs" />
     <Compile Include="BusinessLayer\TransactionBL.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Core\UserApi.cs" />
     <Compile Include="DBModel\CartContext.cs" />
     <Compile Include="DBModel\CategoryContext.cs" />
+    <Compile Include="DBModel\ContactContext.cs" />
     <Compile Include="DBModel\CouponContext.cs" />
     <Compile Include="DBModel\OrderContext.cs" />
     <Compile Include="DBModel\ProductContext.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="DBModel\WishlistContext.cs" />
     <Compile Include="Interfaces\ICart.cs" />
+    <Compile Include="Interfaces\IContact.cs" />
     <Compile Include="Interfaces\IOrder.cs" />
     <Compile Include="Interfaces\IProduct.cs" />
     <Compile Include="Interfaces\IProfile.cs" />
@@ -94,6 +97,11 @@
       <DependentUpon>202506051620141_CreateProductCategoriesTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Category\Configuration.cs" />
+    <Compile Include="Migrations\Contact\202506101834059_CreateContactRequestsTable.cs" />
+    <Compile Include="Migrations\Contact\202506101834059_CreateContactRequestsTable.Designer.cs">
+      <DependentUpon>202506101834059_CreateContactRequestsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Contact\Configuration.cs" />
     <Compile Include="Migrations\Coupon\202506051719102_CreateDiscountCouponsTable.cs" />
     <Compile Include="Migrations\Coupon\202506051719102_CreateDiscountCouponsTable.Designer.cs">
       <DependentUpon>202506051719102_CreateDiscountCouponsTable.cs</DependentUpon>
@@ -162,6 +170,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Category\202506051620141_CreateProductCategoriesTable.resx">
       <DependentUpon>202506051620141_CreateProductCategoriesTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Contact\202506101834059_CreateContactRequestsTable.resx">
+      <DependentUpon>202506101834059_CreateContactRequestsTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Coupon\202506051719102_CreateDiscountCouponsTable.resx">
       <DependentUpon>202506051719102_CreateDiscountCouponsTable.cs</DependentUpon>

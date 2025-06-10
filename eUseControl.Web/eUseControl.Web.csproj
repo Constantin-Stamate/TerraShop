@@ -227,6 +227,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Cart\CartCompact.cs" />
+    <Compile Include="Models\Contact\ContactCompact.cs" />
     <Compile Include="Models\Main\MainViewModel.cs" />
     <Compile Include="Models\Main\ReviewProfileData.cs" />
     <Compile Include="Models\Order\OrderViewModel.cs" />

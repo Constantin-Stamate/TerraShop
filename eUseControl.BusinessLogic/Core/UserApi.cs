@@ -18,6 +18,7 @@ using eUseControl.Domain.Entities.Wishlist;
 using eUseControl.Domain.Entities.Cart;
 using eUseControl.Domain.Entities.Order;
 using eUseControl.Domain.Entities.Payment;
+using eUseControl.Domain.Entities.Contact;
 
 namespace eUseControl.BusinessLogic.Core
 {
@@ -2325,6 +2326,54 @@ namespace eUseControl.BusinessLogic.Core
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return new Dictionary<ReviewData, ProfileData>();
+            }
+        }
+
+        internal ContactResp SubmitContactRequestAction(ContactData contactData, int userId)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(contactData.Username) || 
+                    string.IsNullOrWhiteSpace(contactData.Email) ||
+                    string.IsNullOrWhiteSpace(contactData.Message))
+                {
+                    return new ContactResp
+                    {
+                        Status = false,
+                        StatusMsg = "Please complete all required fields!"
+                    };
+                }
+
+                using (var db = new ContactContext())
+                {
+                    var contact = new ContactDbTable
+                    {
+                        UserId = userId,
+                        Username = contactData.Username,
+                        Email = contactData.Email,
+                        Message = contactData.Message,
+                        RequestStatus = RequestStatus.Pending,
+                        RequestPostDate = DateTime.Now
+                    };
+
+                    db.ContactRequests.Add(contact);
+                    db.SaveChanges();
+                }
+
+                return new ContactResp
+                {
+                    Status = true,
+                    StatusMsg = "Contact request submitted successfully!"
+                };
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ContactResp
+                {
+                    Status = false,
+                    StatusMsg = "An unexpected error occurred while submitting the contact request!"
+                };
             }
         }
     }

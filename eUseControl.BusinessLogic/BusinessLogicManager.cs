@@ -44,5 +44,10 @@ namespace eUseControl.BusinessLogic
         {
             return new TransactionBL();
         }
+
+        public IContact GetContactBL()
+        {
+            return new ContactBL();
+        }
     }
 }
