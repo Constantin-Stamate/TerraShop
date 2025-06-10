@@ -169,6 +169,9 @@
     <Compile Include="Entities\Cart\CartDbTable.cs" />
     <Compile Include="Entities\Cart\CartResp.cs" />
     <Compile Include="Entities\Cart\CouponDbTable.cs" />
+    <Compile Include="Entities\Contact\ContactData.cs" />
+    <Compile Include="Entities\Contact\ContactDbTable.cs" />
+    <Compile Include="Entities\Contact\ContactResp.cs" />
     <Compile Include="Entities\Order\OrderData.cs" />
     <Compile Include="Entities\Order\OrderDbTable.cs" />
     <Compile Include="Entities\Order\OrderMinimal.cs" />
@@ -202,6 +205,7 @@
     <Compile Include="Enums\OrderStatus.cs" />
     <Compile Include="Enums\RecommendationStatus.cs" />
     <Compile Include="Enums\ProductStatus.cs" />
+    <Compile Include="Enums\RequestStatus.cs" />
     <Compile Include="Enums\TransactionStatus.cs" />
     <Compile Include="Enums\URole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

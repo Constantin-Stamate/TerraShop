@@ -29,3 +29,4 @@ C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUs
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Cart.CreateCartItemsTable.resources
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Order.CreateCustomerOrdersTable.resources
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Transaction.CreateUserTransactionsTable.resources
+C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Contact.CreateContactRequestsTable.resources
