@@ -43,7 +43,8 @@
                         @Html.TextAreaFor(m => m.Message, new { @class = "w-100 form-control border-0", rows = "6", placeholder = "Your Message", required = "required" })
                         @Html.ValidationMessageFor(m => m.Message, "", new { @class = "text-danger" })
                     </div>
-                    <button type="submit" class="w-100 btn form-control border-secondary py-3 bg-white text-primary">
+                    <button type="submit" class="w-100 btn form-control border-secondary py-3 bg-white text-primary"
+                            style="color: #81c408;">
                         Submit
                     </button>
                 }
