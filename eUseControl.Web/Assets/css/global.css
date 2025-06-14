@@ -1,0 +1,83 @@
+﻿body {
+    background-color: white;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+    body.dark-mode {
+        background-color: #1e1e1e; 
+        color: white;
+    }
+
+        body.dark-mode #darkModeToggle {
+            background-color: #333333;
+            border-color: #555;
+        }
+
+        body.dark-mode #darkModeIcon {
+            color: #f5c518;
+        }
+
+        body.dark-mode .text-muted,
+        body.dark-mode .text-secondary,
+        body.dark-mode small,
+        body.dark-mode .text-light {
+            color: #cccccc !important; 
+        }
+
+        body.dark-mode .bg-light,
+        body.dark-mode .card,
+        body.dark-mode .border,
+        body.dark-mode .form-control {
+            background-color: #2a2a2a !important;
+            color: #f0f0f0 !important;
+            border-color: #444 !important;
+        }
+
+        body.dark-mode ::placeholder {
+            color: #aaaaaa;
+        }
+
+        body.dark-mode .btn {
+            color: white;
+        }
+
+        body.dark-mode .btn-outline-warning {
+            border-color: #FFB524 !important;
+            color: orange !important;
+        }
+
+            body.dark-mode .btn-outline-warning:hover {
+                background-color: #FFB524 !important;
+                color: black !important;
+            }
+
+        body.dark-mode .text-green,
+        body.dark-mode .keep-green,
+        body.dark-mode [style*="#81c408"],
+        body.dark-mode .btn-green {
+            color: #81c408 !important;
+            border-color: #81c408 !important;
+            background-color: transparent; 
+        }
+
+            body.dark-mode .btn-green.bg {
+                background-color: #81c408 !important;
+                color: black !important;
+            }
+
+        body.dark-mode input.form-control,
+        body.dark-mode textarea.form-control {
+            background-color: black !important;
+            color: black !important;
+            border-color: #ccc !important;
+        }
+
+        body.dark-mode .bg-white h4,
+        body.dark-mode .bg-white p {
+            color: #808080 !important;
+        }
+
+        body.dark-mode .border-secondary {
+            border-color: #FFB524 !important;
+        }
