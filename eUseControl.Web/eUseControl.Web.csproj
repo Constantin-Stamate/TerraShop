@@ -109,6 +109,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\css\global.css" />
     <Content Include="Assets\css\login.css" />
     <Content Include="Assets\css\payment.css" />
     <Content Include="Assets\css\style.css" />
@@ -148,6 +149,7 @@
     <Content Include="Assets\img\volunteer-products\volunteer-product-9.jpg" />
     <Content Include="Assets\js\main.js" />
     <Content Include="Assets\js\payment.js" />
+    <Content Include="Assets\js\base.js" />
     <Content Include="Assets\lib\easing\easing.js" />
     <Content Include="Assets\lib\easing\easing.min.js" />
     <Content Include="Assets\lib\lightbox\css\lightbox.min.css" />
