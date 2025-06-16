@@ -16,5 +16,9 @@ namespace eUseControl.Web.Models.Product
         public ReviewCompact ReviewCompact { get; set; }
 
         public Dictionary<ReviewCompact, ProfileMini> Reviews { get; set; }
+
+        public List<ProductMini> RecommendedProducts { get; set; }
+
+        public List<int> WishlistProductIds { get; set; }
     }
 }

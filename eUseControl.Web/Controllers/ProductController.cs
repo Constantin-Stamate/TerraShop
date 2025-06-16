@@ -25,6 +25,7 @@ namespace eUseControl.Web.Controllers
         private readonly ISession _session;
         private readonly IReview _review;
         private readonly IProfile _profile;
+        private readonly IWishlist _wishlist;
 
         public ProductController()
         {
@@ -33,6 +34,7 @@ namespace eUseControl.Web.Controllers
             _session = bl.GetSessionBL();
             _review = bl.GetReviewBL();
             _profile = bl.GetProfileBL();
+            _wishlist = bl.GetWishlistBL();
         }
 
         [HttpGet]
@@ -277,6 +279,8 @@ namespace eUseControl.Web.Controllers
 
             var allReviews = _review.GetReviewsByProductId(productId);
 
+            var allRecommendedProducts = _product.GetRecommendedProducts();
+
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<ReviewData, ReviewCompact>();
@@ -284,9 +288,12 @@ namespace eUseControl.Web.Controllers
                 cfg.CreateMap<ProductData, Product>();
                 cfg.CreateMap<UserSummary, UserCompact>();
                 cfg.CreateMap<UserMinimal, UserCompact>();
+                cfg.CreateMap<ProductSummary, ProductMini>();
             });
 
             var mapper = config.CreateMapper();
+
+            var recommendedProducts = mapper.Map<List<ProductMini>>(allRecommendedProducts);
 
             var reviewProfileDict = new Dictionary<ReviewCompact, ProfileMini>();
 
@@ -321,13 +328,17 @@ namespace eUseControl.Web.Controllers
                 };
             }
 
+            var productIds = _wishlist.GetWishlistProductIds(user.Id);
+
             var model = new ProductDetailsViewModel
             {
                 Product = product,
                 UserCompact = user,
                 ReviewCompact = reviewToEdit,
                 Reviews = reviewProfileDict,
-                SessionUser = activeUser
+                SessionUser = activeUser,
+                RecommendedProducts = recommendedProducts,
+                WishlistProductIds = productIds
             };
 
             return View(model);
