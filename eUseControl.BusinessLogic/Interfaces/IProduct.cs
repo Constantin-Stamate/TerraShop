@@ -33,5 +33,7 @@ namespace eUseControl.BusinessLogic.Interfaces
         List<ProductSummary> GetProductsByCountry(string country, List<ProductSummary> products);
 
         ProductResp UpdateProductQuantitiesAfterOrder(List<CartData> cartItems);
+
+        List<ProductSummary> GetRecommendedProducts();
     }
 }

@@ -77,5 +77,10 @@ namespace eUseControl.BusinessLogic.BusinessLayer
         {
             return UpdateProductQuantitiesAfterOrderAction(cartItems);
         }
+
+        public List<ProductSummary> GetRecommendedProducts()
+        {
+            return GetRecommendedProductsAction();
+        }
     }
 }

@@ -75,6 +75,8 @@ namespace eUseControl.Web.Controllers
 
             var categoryProductCounts = _product.GetCategoryProductCounts();
 
+            var allRecommendedProducts = _product.GetRecommendedProducts();
+
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<ProductSummary, ProductMini>();
@@ -85,6 +87,7 @@ namespace eUseControl.Web.Controllers
 
             var products = mapper.Map<List<ProductMini>>(productsList);
             var productCountsByCategory = mapper.Map<Dictionary<ProductCategory, int>>(categoryProductCounts);
+            var recommendedProducts = mapper.Map<List<ProductMini>>(allRecommendedProducts);
 
             int pageSize = 12;
             var totalProducts = productsList.Count();
@@ -108,7 +111,8 @@ namespace eUseControl.Web.Controllers
                 MaxPrice = value,
                 SearchQuery = searchQuery,
                 Country = country,
-                WishlistProductIds = productIds
+                WishlistProductIds = productIds,
+                RecommendedProducts = recommendedProducts
             };
 
             return View(model);

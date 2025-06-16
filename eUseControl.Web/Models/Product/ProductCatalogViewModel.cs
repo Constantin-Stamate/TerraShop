@@ -20,8 +20,10 @@ namespace eUseControl.Web.Models.Product
 
         public List<int> WishlistProductIds { get; set; } 
 
-        public IEnumerable<ProductMini> Products { get; set; }
+        public List<ProductMini> Products { get; set; }
 
         public Dictionary<ProductCategory, int> Categories { get; set; }
+
+        public List<ProductMini> RecommendedProducts { get; set; }
     }
 }

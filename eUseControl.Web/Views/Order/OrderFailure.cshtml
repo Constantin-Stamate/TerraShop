@@ -6,7 +6,7 @@
 @model eUseControl.Web.Models.Order.OrderMini
 
 <div class="confirmation-content">
-    <h1 style="margin-top: -25px;">Order failed!</h1>
+    <h1 style="margin-top: -25px; color: #B22222;">Order failed!</h1>
     <p class="thank-you-msg">
         <span class="icon">❌</span>
         <span class="main-msg">Sorry, we couldn't process your order.</span>
@@ -17,7 +17,7 @@
         <p><strong>Date:</strong> @Model.OrderDate</p>
         <p><strong>Total:</strong> $@Model.TotalPrice</p>
     </div>
-    <a href="@Url.Action("Index", "Main")" class="btn-home" style="margin-top: 31px; color: white !important;">
+    <a href="@Url.Action("Index", "Main")" class="btn-home-2" style="margin-top: 31px; color: white !important;">
         Back to home page
     </a>
 </div>

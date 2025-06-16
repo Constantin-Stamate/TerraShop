@@ -30,7 +30,7 @@
                         }
                         <input type="search" name="searchQuery" class="form-control p-3 border border-secondary" placeholder="Search" aria-describedby="search-icon-1" style="border-top-left-radius: 0.375rem; border-bottom-left-radius: 0.375rem;" />
                         <button type="submit" class="btn btn-primary p-3"
-                                style="background-color: #FFB524; border-color: #FFB524 !important;">
+                                style="background-color: #FFB524; border-color: #FFB524 !important; border: 2px solid #FFB524;">
                             <i class="fa fa-search"></i>
                         </button>
                     </form>
@@ -528,29 +528,69 @@
                 <h1 class="fw-bold mb-0" style="margin-top: 120px">Recommended products</h1>
                 <div class="vesitable">
                     <div class="owl-carousel vegetable-carousel justify-content-center">
-                        <div class="border border-primary rounded position-relative vesitable-item">
-                            <div class="vesitable-img">
-                                <img src="@Url.Content("~/Assets/img/volunteer-categories/volunteer-category-1.jpg")" class="img-fluid w-100 rounded-top" alt="">
-                            </div>
-                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                 style="top: 10px; right: 10px;">
-                                Vegetable
-                            </div>
-                            <div class="p-4 pb-0 rounded-bottom text-center">
-                                <h4>Parsely</h4>
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te
-                                    incididunt
-                                </p>
-                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                    <p class="text-dark fs-5 fw-bold">$4.99 / kg</p>
-                                    <a href="#"
-                                       class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary">
-                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
-                                    </a>
+                        @if (Model.RecommendedProducts != null && Model.RecommendedProducts.Any())
+                        {
+                            foreach (var product in Model.RecommendedProducts)
+                            {
+                                <div class="border border-primary rounded position-relative vesitable-item" style="margin-top: 40px; min-height: 430px;">
+                                    <div class="vesitable-img">
+                                        <a href="@Url.Action("ProductDetails", "Product", new { productId = product.Id })">
+                                            <img src="@Url.Content(product.ProductImageUrl)" class="img-fluid w-100 rounded-top custom-image" alt="Product Image">
+                                        </a>
+                                    </div>
+                                    @{
+                                        var isInWishlist = Model.WishlistProductIds.Contains(product.Id);
+                                        var action = isInWishlist ? "RemoveProductFromWishlist" : "AddProductToWishlist";
+                                    }
+                                    <form action="@Url.Action(action, "Wishlist")" method="post" style="position: absolute; top: 16px; left: 10px; z-index: 10;">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="productId" value="@product.Id" />
+                                        <button type="submit" style="background: none; border: none; cursor: pointer;">
+                                            <i class="@(isInWishlist ? "fas fa-heart" : "far fa-heart") fa-lg pulsing-heart"
+                                               style="color: #81c408; transition: transform 0.3s ease;"></i>
+                                        </button>
+                                    </form>
+                                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
+                                         style="top: 10px; right: 10px;">
+                                        @product.ProductCategory
+                                    </div>
+                                    <div class="p-4 pb-0 rounded-bottom">
+                                        <h4 class="text-center product-name">@product.ProductName</h4>
+                                        <p class="product-description">
+                                            @product.ProductDescription
+                                        </p>
+                                        <div class="d-flex justify-content-between flex-lg-wrap">
+                                            <p class="text-dark fs-5 fw-bold">$@product.ProductPrice</p>
+                                            @if (product.ProductQuantity > 0)
+                                            {
+                                                <form action="@Url.Action("AddProductToCart", "Cart")" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="productId" value="@product.Id" />
+                                                    <button type="submit"
+                                                            class="btn border border-secondary rounded-pill px-3 text-primary pulse-js">
+                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to Cart
+                                                    </button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn border border-secondary rounded-pill px-3 pulse-js"
+                                                        style="background-color: #fff; color: #ccc; cursor: not-allowed; box-shadow: none !important; padding-top: 3px; padding-bottom: 3px;"
+                                                        disabled>
+                                                    <i class="fa fa-shopping-bag me-2" style="color: #ccc;"></i> Add to Cart
+                                                </button>
+                                            }
+                                        </div>
+                                    </div>
                                 </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="info-message text-center mt-5">
+                                <p>Currently, there are no recommendations for you. Come back soon for fresh picks!</p>
                             </div>
-                        </div>
+                        }
                     </div>
                 </div>
             </div>
