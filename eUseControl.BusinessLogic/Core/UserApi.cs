@@ -2376,5 +2376,51 @@ namespace eUseControl.BusinessLogic.Core
                 };
             }
         }
+
+        internal List<ProductSummary> GetRecommendedProductsAction()
+        {
+            try
+            {
+                using (var db = new ProductContext())
+                {
+                    var allProducts = db.Products
+                        .Where(p => p.RecommendationStatus == RecommendationStatus.Preferred && p.ProductStatus == ProductStatus.Available)
+                        .ToList();
+
+                    var recommendedProducts = new List<ProductSummary>();
+
+                    using (var categoryDb = new CategoryContext())
+                    {
+                        foreach (var product in allProducts)
+                        {
+                            var category = categoryDb.ProductCategories
+                                .FirstOrDefault(c => c.Id == product.CategoryId);
+
+                            var recommendedProduct = new ProductSummary
+                            {
+                                Id = product.Id,
+                                ProductCategory = category.CategoryName,
+                                ProductDescription = product.ProductDescription,
+                                ProductImageUrl = product.ProductImageUrl,
+                                ProductName = product.ProductName,
+                                ProductPostDate = product.ProductPostDate,
+                                ProductPrice = product.ProductPrice,
+                                ProductQuantity = product.ProductQuantity,
+                                ProductRegion = product.ProductRegion
+                            };
+
+                            recommendedProducts.Add(recommendedProduct);
+                        }
+                    }
+
+                    return recommendedProducts;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<ProductSummary>();
+            }
+        }
     }
 }
