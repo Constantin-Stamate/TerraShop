@@ -82,5 +82,33 @@ namespace eUseControl.Web.Controllers
 
             return View(order);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CancelOrder(int orderId)
+        {
+            var cookie = Request.Cookies["X-KEY"]?.Value;
+            if (string.IsNullOrEmpty(cookie))
+            {
+                return RedirectToAction("Login", "Login", new { error = true });
+            }
+
+            var user = _session.GetUserByCookie(cookie);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Login", new { error = true });
+            }
+
+            var result = _order.CancelOrder(orderId);
+
+            if (result.Status)
+            {
+                return RedirectToAction("OrdersProfile", "Profile", new { success = true });
+            }
+            else
+            {
+                return RedirectToAction("OrdersProfile", "Profile", new { error = true });
+            }
+        }
     }
 }
