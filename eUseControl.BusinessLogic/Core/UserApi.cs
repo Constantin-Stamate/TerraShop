@@ -2422,5 +2422,127 @@ namespace eUseControl.BusinessLogic.Core
                 return new List<ProductSummary>();
             }
         }
+
+        internal List<OrderLite> GetValidOrdersAction(int userId)
+        {
+            try
+            {
+                using (var db = new OrderContext())
+                {
+                    var validOrders = db.CustomerOrders
+                        .Where(c => c.UserId == userId && (c.OrderStatus == OrderStatus.Pending || c.OrderStatus == OrderStatus.Delivering))
+                        .ToList();
+
+                    var config = new MapperConfiguration(cfg =>
+                    {
+                        cfg.CreateMap<OrderDbTable, OrderLite>();
+                    });
+
+                    var mapper = config.CreateMapper();
+                    var orders = mapper.Map<List<OrderLite>>(validOrders); 
+
+                    foreach (var order in orders)
+                    {
+                        if (order.PaymentMethod == "Card")
+                        {
+                            order.OrderImageUrl = "~/Assets/img/order/order-icon-1.jpg";
+                        }
+                        else
+                        {
+                            order.OrderImageUrl = "~/Assets/img/order/order-icon-2.jpg";
+                        }
+                    }
+
+                    return orders;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<OrderLite>();
+            }
+        }
+
+        internal OrderResp CancelOrderAction(int orderId)
+        {
+            try
+            {
+                using (var db = new OrderContext())
+                {
+                    var currentOrder = db.CustomerOrders
+                        .FirstOrDefault(c => c.Id == orderId);
+
+                    if (currentOrder != null)
+                    {
+                        currentOrder.OrderStatus = OrderStatus.Cancelled;
+                        db.SaveChanges();
+
+                        return new OrderResp
+                        {
+                            Status = true,
+                            StatusMsg = "Order cancelled successfully!"
+                        };
+                    }
+                    else
+                    {
+                        return new OrderResp
+                        {
+                            Status = false,
+                            StatusMsg = "Order not found!"
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new OrderResp
+                {
+                    Status = false,
+                    StatusMsg = "Oops, something went wrong while cancelling your order!"
+                };
+            }
+        }
+
+        internal ProductResp RemoveProductAction(int productId)
+        {
+            try
+            {
+                using (var db = new ProductContext())
+                {
+                    var currentProduct = db.Products
+                        .FirstOrDefault(p => p.Id == productId);
+
+                    if (currentProduct != null)
+                    {
+                        db.Products.Remove(currentProduct);
+                        db.SaveChanges();
+
+                        return new ProductResp
+                        {
+                            Status = true,
+                            StatusMsg = "Product successfully deleted!"
+                        };
+                    }
+                    else
+                    {
+                        return new ProductResp
+                        {
+                            Status = false,
+                            StatusMsg = "Product not found!"
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ProductResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while deleting the product!"
+                };
+            }
+        }
     }
 }

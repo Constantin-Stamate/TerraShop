@@ -82,5 +82,10 @@ namespace eUseControl.BusinessLogic.BusinessLayer
         {
             return GetRecommendedProductsAction();
         }
+
+        public ProductResp RemoveProduct(int productId)
+        {
+            return RemoveProductAction(productId);
+        }
     }
 }

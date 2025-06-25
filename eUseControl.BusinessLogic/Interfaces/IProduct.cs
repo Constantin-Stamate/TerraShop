@@ -35,5 +35,7 @@ namespace eUseControl.BusinessLogic.Interfaces
         ProductResp UpdateProductQuantitiesAfterOrder(List<CartData> cartItems);
 
         List<ProductSummary> GetRecommendedProducts();
+
+        ProductResp RemoveProduct(int productId);
     }
 }
