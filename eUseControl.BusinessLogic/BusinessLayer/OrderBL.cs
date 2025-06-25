@@ -1,4 +1,5 @@
-﻿using eUseControl.BusinessLogic.Core;
+﻿using System.Collections.Generic;
+using eUseControl.BusinessLogic.Core;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities.Order;
 
@@ -19,6 +20,16 @@ namespace eUseControl.BusinessLogic.BusinessLayer
         public OrderResp CancelUnpaidOrders(int userId)
         {
             return CancelUnpaidOrdersAction(userId);
+        }
+
+        public List<OrderLite> GetValidOrders(int userId)
+        {
+            return GetValidOrdersAction(userId);
+        }
+
+        public OrderResp CancelOrder(int orderId)
+        {
+            return CancelOrderAction(orderId);
         }
     }
 }
