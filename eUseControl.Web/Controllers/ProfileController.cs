@@ -7,8 +7,10 @@ using System.Web.Mvc;
 using AutoMapper;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
+using eUseControl.Domain.Entities.Order;
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Profile;
+using eUseControl.Web.Models.Order;
 using eUseControl.Web.Models.Product;
 using eUseControl.Web.Models.Profile;
 
@@ -19,6 +21,7 @@ namespace eUseControl.Web.Controllers
         private readonly IProduct _product;
         private readonly ISession _session;
         private readonly IProfile _profile;
+        private readonly IOrder _order;
 
         public ProfileController()
         {
@@ -26,6 +29,7 @@ namespace eUseControl.Web.Controllers
             _product = bl.GetProductBL();
             _session = bl.GetSessionBL();
             _profile = bl.GetProfileBL();
+            _order = bl.GetOrderBL();
         }
 
         [HttpGet]
@@ -134,15 +138,32 @@ namespace eUseControl.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult PurchaseHistoryProfile()
+        public ActionResult OrdersProfile()
         {
-            return View();
-        }
+            var cookie = Request.Cookies["X-KEY"]?.Value;
+            if (string.IsNullOrEmpty(cookie))
+            {
+                return RedirectToAction("Login", "Login", new { error = true });
+            }
 
-        [HttpGet]
-        public ActionResult SalesProfile()
-        {
-            return View();
+            var user = _session.GetUserByCookie(cookie);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Login", new { error = true });
+            }
+
+            var validOrders = _order.GetValidOrders(user.Id);
+
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<OrderLite, OrderInfo>();
+            });
+
+            var mapper = config.CreateMapper();
+            var orders = mapper.Map<List<OrderInfo>>(validOrders);
+
+            return View(orders);
         }
 
         [HttpGet]

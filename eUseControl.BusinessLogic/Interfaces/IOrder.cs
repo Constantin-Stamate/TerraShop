@@ -1,4 +1,5 @@
-﻿using eUseControl.Domain.Entities.Order;
+﻿using System.Collections.Generic;
+using eUseControl.Domain.Entities.Order;
 
 namespace eUseControl.BusinessLogic.Interfaces
 {
@@ -9,5 +10,9 @@ namespace eUseControl.BusinessLogic.Interfaces
         OrderMinimal GetOrderById(int orderId);
 
         OrderResp CancelUnpaidOrders(int userId);
+
+        List<OrderLite> GetValidOrders(int userId);
+
+        OrderResp CancelOrder(int orderId);
     }
 }
