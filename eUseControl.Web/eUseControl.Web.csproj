@@ -119,6 +119,8 @@
     <Content Include="Assets\img\backgrounds\background.jpg" />
     <Content Include="Assets\img\banner.jpg" />
     <Content Include="Assets\img\favicon.ico" />
+    <Content Include="Assets\img\order\order-icon-1.jpg" />
+    <Content Include="Assets\img\order\order-icon-2.jpg" />
     <Content Include="Assets\img\popular-products\popular-product-1.jpg" />
     <Content Include="Assets\img\popular-products\popular-product-2.jpg" />
     <Content Include="Assets\img\popular-products\popular-product-3.jpg" />
@@ -232,6 +234,7 @@
     <Compile Include="Models\Contact\ContactCompact.cs" />
     <Compile Include="Models\Main\MainViewModel.cs" />
     <Compile Include="Models\Main\ReviewProfileData.cs" />
+    <Compile Include="Models\Order\OrderInfo.cs" />
     <Compile Include="Models\Order\OrderViewModel.cs" />
     <Compile Include="Models\Order\OrderCompact.cs" />
     <Compile Include="Models\Order\OrderMini.cs" />
@@ -371,16 +374,13 @@
     <Content Include="Views\Shared\_LayoutArticlesProfile.cshtml" />
     <Content Include="Views\Profile\ChangePasswordProfile.cshtml" />
     <Content Include="Views\Shared\_LayoutChangePasswordProfile.cshtml" />
-    <Content Include="Views\Profile\PurchaseHistoryProfile.cshtml" />
-    <Content Include="Views\Shared\_LayoutPurchaseHistoryProfile.cshtml" />
-    <Content Include="Views\Profile\SalesProfile.cshtml" />
-    <Content Include="Views\Shared\_LayoutSalesProfile.cshtml" />
+    <Content Include="Views\Profile\OrdersProfile.cshtml" />
+    <Content Include="Views\Shared\_LayoutOrdersProfile.cshtml" />
     <Content Include="Views\Profile\SettingsProfile.cshtml" />
     <Content Include="Views\Shared\_LayoutSettingsProfile.cshtml" />
     <Content Include="Views\Register\Register.cshtml" />
     <Content Include="Views\Shared\_LayoutRegister.cshtml" />
     <Content Include="Views\Legal\SalesAndRefunds.cshtml" />
-    <Content Include="Views\Shared\_LayoutSalesAndRefunds.cshtml" />
     <Content Include="Views\Legal\TermsOfUse.cshtml" />
     <Content Include="Views\Shared\_LayoutTermsOfUse.cshtml" />
     <Content Include="Views\Main\ThankYou.cshtml" />
@@ -395,6 +395,7 @@
     <Content Include="Views\Shared\_LayoutPayment.cshtml" />
     <Content Include="Views\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Shared\_LayoutWishlist.cshtml" />
+    <Content Include="Views\Shared\_LayoutSalesAndRefunds.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
