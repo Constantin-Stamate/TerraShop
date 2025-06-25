@@ -365,5 +365,33 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Articlesprofile", "Profile", new { error = true });
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteProduct(int productId)
+        {
+            var cookie = Request.Cookies["X-KEY"]?.Value;
+            if (string.IsNullOrEmpty(cookie))
+            {
+                return RedirectToAction("Login", "Login", new { error = true });
+            }
+
+            var userMinimal = _session.GetUserByCookie(cookie);
+            if (userMinimal == null)
+            {
+                return RedirectToAction("Login", "Login", new { error = true });
+            }
+
+            var result = _product.RemoveProduct(productId);
+
+            if (result.Status)
+            {
+                return RedirectToAction("Articlesprofile", "Profile", new { success = true });
+            }
+            else
+            {
+                return RedirectToAction("Articlesprofile", "Profile", new { error = true });
+            }
+        }
     }
 }
