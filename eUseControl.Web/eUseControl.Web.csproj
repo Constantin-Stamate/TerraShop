@@ -218,6 +218,7 @@
     <Compile Include="Controllers\LegalController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\ManagementController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
@@ -396,6 +397,20 @@
     <Content Include="Views\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Shared\_LayoutWishlist.cshtml" />
     <Content Include="Views\Shared\_LayoutSalesAndRefunds.cshtml" />
+    <Content Include="Views\Shared\_LayoutUsersManagement.cshtml" />
+    <Content Include="Views\Management\UsersManagement.cshtml" />
+    <Content Include="Views\Shared\_LayoutProductsManagement.cshtml" />
+    <Content Include="Views\Management\ProductsManagement.cshtml" />
+    <Content Include="Views\Shared\_LayoutReviewsManagement.cshtml" />
+    <Content Include="Views\Management\ReviewsManagement.cshtml" />
+    <Content Include="Views\Shared\_LayoutCouponsManagement.cshtml" />
+    <Content Include="Views\Management\CouponsManagement.cshtml" />
+    <Content Include="Views\Management\AddCoupon.cshtml" />
+    <Content Include="Views\Shared\_LayoutAddCoupon.cshtml" />
+    <Content Include="Views\Management\OrdersManagement.cshtml" />
+    <Content Include="Views\Shared\_LayoutOrdersManagement.cshtml" />
+    <Content Include="Views\Management\CategoriesManagement.cshtml" />
+    <Content Include="Views\Shared\_LayoutCategoriesManagement.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

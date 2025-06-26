@@ -1,0 +1,37 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutCategoriesManagement.cshtml";
+    ViewBag.Title = "CategoriesManagement";
+}
+
+<div class="container py-5">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Category Name</th>
+                    <th scope="col">Category Number</th>
+                    <th scope="col">Handle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <p class="mb-0 mt-4">Fashion & Accessories</p>
+                    </td>
+                    <td>
+                        <p class="mb-0 mt-4">10</p>
+                    </td>
+                    <td>
+                        <button class="btn btn-md rounded-circle bg-light border mt-4">
+                            <i class="fa fa-times text-danger"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="mt-5">
+        <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4 ps-4" placeholder="Category Name">
+        <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Create Category</button>
+    </div>
+</div>
