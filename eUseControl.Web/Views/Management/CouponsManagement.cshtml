@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutCouponsManagement.cshtml";
+    ViewBag.Title = "CouponsManagement";
+}
+
+<div class="container py-5">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Discount Percent</th>
+                    <th scope="col">Expiration Date</th>
+                    <th scope="col">Is Active</th>
+                    <th scope="col">Handle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <p class="mb-0 mt-4 truncate-text">WELCOME10</p>
+                    </td>
+                    <td>
+                        <p class="mb-0 mt-4">15%</p>
+                    </td>
+                    <td>
+                        <p class="mb-0 mt-4">08.06.2025 17:14:57</p>
+                    </td>
+                    <td>
+                        <div class="mt-4 px-2 py-1 text-success border border-success rounded"
+                             style="display: inline-block; background-color: #d4edda;">
+                            True
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-md rounded-circle bg-light border mt-4">
+                            <i class="fa fa-times text-danger"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
