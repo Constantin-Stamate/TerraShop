@@ -3,8 +3,10 @@
     ViewBag.Title = "AddCoupon";
 }
 
+@model eUseControl.Web.Models.Cart.CouponCompact
+
 <div class="mask d-flex align-items-center gradient-custom-3" style="min-height: 100vh;">
-    <div class="container" style="padding-top: 70px;">
+    <div class="container" style="padding-top: 110px;">
         <div class="row d-flex justify-content-center align-items-center">
             <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                 <div class="card" style="border-radius: 15px; max-width: 1000px; margin: 0 auto;">
@@ -13,48 +15,48 @@
                             style="font-size: 28px; font-weight: 600; margin-top: 20px; color: #81c408;">
                             Create a new Coupon
                         </h2>
-                        <form action="#">
+                        @using (Html.BeginForm("CreateCoupon", "Management", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
                             <div class="row g-4">
                                 <div class="col-lg-6 mb-3" style="margin-top: 10mm;">
                                     <div class="border-bottom rounded">
-                                        <input type="text" class="form-control border-0 me-4"
-                                               placeholder="Code *">
+                                        @Html.TextBoxFor(m => m.Code, new { @class = "form-control border-0 me-4", placeholder = "Code *" })
+                                        @Html.ValidationMessageFor(m => m.Code, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-lg-6 mb-3" style="margin-top: 10mm;">
                                     <div class="border-bottom rounded">
-                                        <input type="text" class="form-control border-0 me-4"
-                                               placeholder="Discount Percent *">
+                                        @Html.TextBoxFor(m => m.DiscountPercent, new { @class = "form-control border-0 me-4", placeholder = "Discount Percent *", type = "number", min = "1" })
+                                        @Html.ValidationMessageFor(m => m.DiscountPercent, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-lg-6 mb-3">
                                     <div class="border-bottom rounded">
-                                        <input id="expDate" type="text" class="form-control border-0 me-4" placeholder="Expiration Date *" />
+                                        @Html.TextBoxFor(m => m.ExpirationDate, "{0:yyyy-MM-dd}", new { @class = "form-control border-0 me-4", type = "date" })
+                                        @Html.ValidationMessageFor(m => m.ExpirationDate, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-lg-6 mb-3">
                                     <div class="border-bottom rounded">
-                                        <select class="form-control border-0 me-4" style="background-color: white;">
-                                            <option value="" disabled selected>Is Active *</option>
-                                            <option value="Personal Care">True</option>
-                                            <option value="Household">False</option>
-                                        </select>
+                                        @Html.DropDownListFor(m => m.IsActive, new SelectList(new[] {
+                                            new { Value = "true", Text = "True" },
+                                            new { Value = "false", Text = "False" }
+                                        }, "Value", "Text"), "Is Active *", new { @class = "form-control border-0 me-4" })
+                                        @Html.ValidationMessageFor(m => m.IsActive, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <div class="d-flex justify-content-between py-2 mb-0"
-                                         style="margin-top: -10px;">
-                                        <a href="#"
-                                           class="btn border border-secondary text-primary rounded-pill px-4 py-3">
+                                    <div class="d-flex justify-content-between py-2 mb-0" style="margin-top: -10px;">
+                                        <button type="submit" class="btn border border-secondary text-primary rounded-pill px-4 py-3">
                                             Create Coupon
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        }
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
