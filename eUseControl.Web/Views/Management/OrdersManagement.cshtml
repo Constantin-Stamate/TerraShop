@@ -3,57 +3,101 @@
     ViewBag.Title = "OrdersManagement";
 }
 
+@model IEnumerable<eUseControl.Web.Models.Order.OrderInfo>
+
 <div class="container py-5">
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Image</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Payment Method</th>
-                    <th scope="col">Order Date</th>
-                    <th scope="col">Order Status</th>
-                    <th scope="col">Delivery Address</th>
-                    <th scope="col">Phone Number</th>
-                    <th scope="col">Handle</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">
-                        <div class="d-flex align-items-center">
-                            <img src="volunteer-product-1.jpg" class="img-fluid me-5 rounded-circle"
-                                 style="width: 80px; height: 80px;" alt="">
-                        </div>
-                    </th>
-                    <td>
-                        <p class="mb-0 mt-4">$18.45</p>
-                    </td>
-                    <td>
-                        <p class="mb-0 mt-4">Cash</p>
-                    </td>
-                    <td>
-                        <p class="mb-0 mt-4">21.11.12 12:23:45</p>
-                    </td>
-                    <td>
-                        <div class="mt-4 px-2 py-1 text-success border border-success rounded"
-                             style="display: inline-block; background-color: #d4edda;">
-                            Pending
-                        </div>
-                    </td>
-                    <td>
-                        <p class="title-truncate mb-0 mt-4">Bucharest Street, Chișinău</p>
-                    </td>
-                    <td>
-                        <p class="mb-0 mt-4">067896451</p>
-                    </td>
-                    <td>
-                        <button class="btn btn-md rounded-circle bg-light border mt-4">
-                            <i class="fa fa-times text-danger"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    @if (!Model.Any())
+    {
+        <div class="info-message text-center mt-5">
+            <p style="font-size: 16px;">
+                There are currently no orders in the system!
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Image</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Payment Method</th>
+                        <th scope="col">Order Date</th>
+                        <th scope="col">Order Status</th>
+                        <th scope="col">Delivery Address</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Handle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <th scope="row">
+                                <div class="d-flex align-items-center">
+                                    <img src="@Url.Content(order.OrderImageUrl)" class="img-fluid me-5 rounded-circle"
+                                         style="width: 80px; height: 80px; object-fit: cover;" alt="">
+                                </div>
+                            </th>
+                            <td>
+                                <p class="mb-0 mt-4">$@order.TotalPrice</p>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4">@order.PaymentMethod</p>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4">@order.OrderDate.ToString("dd MMM yyyy, HH:mm", System.Globalization.CultureInfo.InvariantCulture)</p>
+                            </td>
+                            <td>
+                                @using (Html.BeginForm("ChangeOrderStatus", "Management", FormMethod.Post, new { @class = "d-inline" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("orderId", order.Id)
+                                    if (order.OrderStatus == eUseControl.Domain.Enums.OrderStatus.Pending)
+                                    {
+                                        <button type="submit" class="mt-4 px-2 py-1 text-warning border border-warning rounded"
+                                                style="background-color: #fff3cd; border: 1px solid #ffc107;">
+                                            Pending
+                                        </button>
+                                    }
+                                    else if (order.OrderStatus == eUseControl.Domain.Enums.OrderStatus.Delivering)
+                                    {
+                                        <button type="submit" class="mt-4 px-2 py-1 rounded"
+                                                style="background-color: #d1ecf1; color: #0c5460; border: 1px solid #0c5460;">
+                                            Delivering
+                                        </button>
+                                    }
+                                    else if (order.OrderStatus == eUseControl.Domain.Enums.OrderStatus.Cancelled)
+                                    {
+                                        <span class="mt-4 px-2 py-1 text-danger border border-danger rounded"
+                                              style="display: inline-block; background-color: #f8d7da;">
+                                            Cancelled
+                                        </span>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                <p class="title-truncate mb-0 mt-4">@order.DeliveryAddress</p>
+                            </td>
+                            <td>
+                                <p class="title-truncate mb-0 mt-4">@order.PhoneNumber</p>
+                            </td>
+                            <td>
+                                @using (Html.BeginForm("DeleteOrder", "Management", FormMethod.Post, new { @class = "d-inline" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("orderId", order.Id)
+                                    <button type="submit" class="btn btn-md rounded-circle bg-light border mt-4"
+                                           onclick="return confirm('Are you sure you want to delete this order?');">
+                                        <i class="fa fa-times text-danger"></i>
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>

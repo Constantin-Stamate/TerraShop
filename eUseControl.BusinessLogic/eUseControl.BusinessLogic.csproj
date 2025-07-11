@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="BusinessLayer\CartBL.cs" />
     <Compile Include="BusinessLayer\ContactBL.cs" />
+    <Compile Include="BusinessLayer\ManagementBL.cs" />
     <Compile Include="BusinessLayer\OrderBL.cs" />
     <Compile Include="BusinessLayer\ReviewBL.cs" />
     <Compile Include="BusinessLayer\TransactionBL.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="DBModel\WishlistContext.cs" />
     <Compile Include="Interfaces\ICart.cs" />
     <Compile Include="Interfaces\IContact.cs" />
+    <Compile Include="Interfaces\IManagement.cs" />
     <Compile Include="Interfaces\IOrder.cs" />
     <Compile Include="Interfaces\IProduct.cs" />
     <Compile Include="Interfaces\IProfile.cs" />

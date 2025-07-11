@@ -49,5 +49,10 @@ namespace eUseControl.BusinessLogic
         {
             return new ContactBL();
         }
+
+        public IManagement GetManagementBL()
+        {
+            return new ManagementBL();
+        }
     }
 }

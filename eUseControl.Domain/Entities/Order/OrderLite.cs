@@ -16,5 +16,9 @@ namespace eUseControl.Domain.Entities.Order
         public OrderStatus OrderStatus { get; set; }
 
         public string OrderImageUrl { get; set; }
+
+        public string DeliveryAddress { get; set; }
+
+        public string PhoneNumber { get; set; }
     }
 }

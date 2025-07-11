@@ -168,7 +168,9 @@
     <Compile Include="Entities\Cart\CartData.cs" />
     <Compile Include="Entities\Cart\CartDbTable.cs" />
     <Compile Include="Entities\Cart\CartResp.cs" />
+    <Compile Include="Entities\Cart\CouponData.cs" />
     <Compile Include="Entities\Cart\CouponDbTable.cs" />
+    <Compile Include="Entities\Cart\CouponResp.cs" />
     <Compile Include="Entities\Contact\ContactData.cs" />
     <Compile Include="Entities\Contact\ContactDbTable.cs" />
     <Compile Include="Entities\Contact\ContactResp.cs" />
@@ -180,7 +182,9 @@
     <Compile Include="Entities\Payment\TransactionData.cs" />
     <Compile Include="Entities\Payment\TransactionDbTable.cs" />
     <Compile Include="Entities\Payment\TransactionResp.cs" />
+    <Compile Include="Entities\Product\CategoryData.cs" />
     <Compile Include="Entities\Product\CategoryDbTable.cs" />
+    <Compile Include="Entities\Product\CategoryResp.cs" />
     <Compile Include="Entities\Product\ProductData.cs" />
     <Compile Include="Entities\Product\ProductDbTable.cs" />
     <Compile Include="Entities\Product\ProductLite.cs" />
@@ -193,13 +197,16 @@
     <Compile Include="Entities\Review\ReviewData.cs" />
     <Compile Include="Entities\Review\ReviewDbTable.cs" />
     <Compile Include="Entities\Review\ReviewResp.cs" />
+    <Compile Include="Entities\Review\ReviewSummary.cs" />
     <Compile Include="Entities\User\SessionDbTable.cs" />
     <Compile Include="Entities\User\UDbTable.cs" />
     <Compile Include="Entities\User\ULoginData.cs" />
     <Compile Include="Entities\User\ULoginResp.cs" />
     <Compile Include="Entities\User\URegisterData.cs" />
     <Compile Include="Entities\User\URegisterResp.cs" />
+    <Compile Include="Entities\User\UserLite.cs" />
     <Compile Include="Entities\User\UserMinimal.cs" />
+    <Compile Include="Entities\User\UserResp.cs" />
     <Compile Include="Entities\User\UserSummary.cs" />
     <Compile Include="Entities\Wishlist\WishlistDbTable.cs" />
     <Compile Include="Entities\Wishlist\WishlistResp.cs" />

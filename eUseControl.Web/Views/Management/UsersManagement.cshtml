@@ -3,50 +3,64 @@
     ViewBag.Title = "UsersManagement";
 }
 
+@model IEnumerable<eUseControl.Web.Models.User.UserInfo>
+
 <div class="container py-5">
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Avatar</th>
-                    <th scope="col">Customer</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Orders</th>
-                    <th scope="col">Total Spent</th>
-                    <th scope="col">Phone Number</th>
-                    <th scope="col">Handle</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">
-                        <div class="d-flex align-items-center">
-                            <img src="volunteer-product-1.jpg" class="img-fluid me-5 rounded-circle"
-                                 style="width: 80px; height: 80px;" alt="">
-                        </div>
-                    </th>
-                    <td>
-                        <p class="title-truncate mb-0 mt-4">Stamate Constantin</p>
-                    </td>
-                    <td>
-                        <p class="title-truncate mb-0 mt-4">constantin.stamate@gmail.com</p>
-                    </td>
-                    <td>
-                        <p class="mb-0 mt-4">89</p>
-                    </td>
-                    <td>
-                        <p class="mb-0 mt-4">$1045.23</p>
-                    </td>
-                    <td>
-                        <p class="mb-0 mt-4">060686127</p>
-                    </td>
-                    <td>
-                        <button class="btn btn-md rounded-circle bg-light border mt-4">
-                            <i class="fa fa-times text-danger"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    @if (!Model.Any())
+    {
+        <div class="info-message text-center mt-5">
+            <p style="font-size: 16px;">
+                There are currently no users in the system!
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Avatar</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Orders</th>
+                        <th scope="col">Total Spent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <th scope="row">
+                                <div class="d-flex align-items-center">
+                                    <img src="@Url.Content(user.ProfileImageUrl)" class="img-fluid me-5 rounded-circle"
+                                         style="width: 80px; height: 80px; object-fit: cover;" alt="">
+                                </div>
+                            </th>
+                            <td>
+                                <p class="title-truncate mb-0 mt-4">@user.Username</p>
+                            </td>
+                            <td>
+                                <p class="title-truncate mb-0 mt-4">@user.Email</p>
+                            </td>
+                            <td>
+                                <p class="title-truncate mb-0 mt-4">@user.Address</p>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4">@user.PhoneNumber</p>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4">@user.OrderCount</p>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4">$@user.TotalSpent</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>
