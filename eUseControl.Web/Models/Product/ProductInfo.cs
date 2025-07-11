@@ -1,4 +1,6 @@
-﻿namespace eUseControl.Web.Models.Product
+﻿using eUseControl.Domain.Enums;
+
+namespace eUseControl.Web.Models.Product
 {
     public class ProductInfo
     {
@@ -13,5 +15,9 @@
         public int ProductQuantity { get; set; }
 
         public string ProductQuality { get; set; }
+
+        public RecommendationStatus RecommendationStatus { get; set; }
+
+        public string ProductCategory { get; set; }
     }
 }
