@@ -228,10 +228,12 @@
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="Extension\HttpContextExtensions.cs" />
+    <Compile Include="Filtres\AdminAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Cart\CartCompact.cs" />
+    <Compile Include="Models\Cart\CouponCompact.cs" />
     <Compile Include="Models\Contact\ContactCompact.cs" />
     <Compile Include="Models\Main\MainViewModel.cs" />
     <Compile Include="Models\Main\ReviewProfileData.cs" />
@@ -251,8 +253,10 @@
     <Compile Include="Models\Profile\ProfileMini.cs" />
     <Compile Include="Models\Review\ReviewCompact.cs" />
     <Compile Include="Models\Product\ProductCatalogViewModel.cs" />
+    <Compile Include="Models\Review\ReviewInfo.cs" />
     <Compile Include="Models\Review\ReviewMini.cs" />
     <Compile Include="Models\User\UserCompact.cs" />
+    <Compile Include="Models\User\UserInfo.cs" />
     <Compile Include="Models\User\UserLogin.cs" />
     <Compile Include="Models\User\UserRegister.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
