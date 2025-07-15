@@ -109,6 +109,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\css\chat.css" />
     <Content Include="Assets\css\global.css" />
     <Content Include="Assets\css\login.css" />
     <Content Include="Assets\css\payment.css" />
@@ -118,6 +119,8 @@
     <Content Include="Assets\img\backgrounds\home-bg.jpg" />
     <Content Include="Assets\img\backgrounds\background.jpg" />
     <Content Include="Assets\img\banner.jpg" />
+    <Content Include="Assets\img\chat-icons\terra.svg" />
+    <Content Include="Assets\img\chat-icons\user.png" />
     <Content Include="Assets\img\favicon.ico" />
     <Content Include="Assets\img\order\order-icon-1.jpg" />
     <Content Include="Assets\img\order\order-icon-2.jpg" />
@@ -149,6 +152,7 @@
     <Content Include="Assets\img\volunteer-products\volunteer-product-7.jpg" />
     <Content Include="Assets\img\volunteer-products\volunteer-product-8.jpg" />
     <Content Include="Assets\img\volunteer-products\volunteer-product-9.jpg" />
+    <Content Include="Assets\js\chat.js" />
     <Content Include="Assets\js\main.js" />
     <Content Include="Assets\js\payment.js" />
     <Content Include="Assets\js\base.js" />
@@ -213,6 +217,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
+    <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\LegalController.cs" />
@@ -415,6 +420,7 @@
     <Content Include="Views\Shared\_LayoutOrdersManagement.cshtml" />
     <Content Include="Views\Management\CategoriesManagement.cshtml" />
     <Content Include="Views\Shared\_LayoutCategoriesManagement.cshtml" />
+    <Content Include="Views\Chat\Chat.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
