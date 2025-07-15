@@ -43,6 +43,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -56,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLayer\CartBL.cs" />
+    <Compile Include="BusinessLayer\ChatBL.cs" />
     <Compile Include="BusinessLayer\ContactBL.cs" />
     <Compile Include="BusinessLayer\ManagementBL.cs" />
     <Compile Include="BusinessLayer\OrderBL.cs" />
@@ -78,6 +82,7 @@
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="DBModel\WishlistContext.cs" />
     <Compile Include="Interfaces\ICart.cs" />
+    <Compile Include="Interfaces\IChat.cs" />
     <Compile Include="Interfaces\IContact.cs" />
     <Compile Include="Interfaces\IManagement.cs" />
     <Compile Include="Interfaces\IOrder.cs" />

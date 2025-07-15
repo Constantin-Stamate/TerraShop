@@ -3,27 +3,33 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using AutoMapper;
 using eUseControl.BusinessLogic.DBModel;
 using eUseControl.Domain.Entities;
-using eUseControl.Domain.Entities.User;
-using eUseControl.Domain.Enums;
-using eUseControl.Helpers;
-using eUseControl.Domain.Entities.Product;
-using eUseControl.Domain.Entities.Profile;
-using System.Text.RegularExpressions;
-using eUseControl.Domain.Entities.Review;
-using eUseControl.Domain.Entities.Wishlist;
 using eUseControl.Domain.Entities.Cart;
+using eUseControl.Domain.Entities.Contact;
 using eUseControl.Domain.Entities.Order;
 using eUseControl.Domain.Entities.Payment;
-using eUseControl.Domain.Entities.Contact;
+using eUseControl.Domain.Entities.Product;
+using eUseControl.Domain.Entities.Profile;
+using eUseControl.Domain.Entities.Review;
+using eUseControl.Domain.Entities.User;
+using eUseControl.Domain.Entities.Wishlist;
+using eUseControl.Domain.Enums;
+using eUseControl.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace eUseControl.BusinessLogic.Core
 {
     public class UserApi
     {
+        private readonly string _ollamaApiUrl = "http://localhost:11434/api/chat";
+
         internal URegisterResp UserRegisterAction(URegisterData data)
         {
             try
@@ -2542,6 +2548,74 @@ namespace eUseControl.BusinessLogic.Core
                     Status = false,
                     StatusMsg = "An error occurred while deleting the product!"
                 };
+            }
+        }
+
+        internal string GetResponseAction(string message)
+        {
+            const int maxWords = 300;
+
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                return "Message cannot be empty!";
+            }
+
+            var wordCount = message.Split(new char[] { ' ', '\t', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length;
+            if (wordCount > maxWords)
+            {
+                return $"Message too long. Please limit your question to {maxWords} words!";
+            }
+
+            using (var httpClient = new HttpClient())
+            {
+                string domainContext = "You are an intelligent assistant developed strictly to support users of the Eco Market Place application." +
+                                       "You must only respond to questions that are directly related to this application's functionality, environmental goals, sustainability impact, user usage, or technical issues within the Eco Market Place." +
+                                       "If a user asks a question outside of this domain — such as sports, celebrities, history, or unrelated technology — you must not answer." +
+                                       "Instead, respond with: 'I'm sorry, but I can only assist with topics related to the Eco Market Place platform.'" +
+                                       "Do not attempt to provide unrelated information under any circumstance. Always remain concise and strictly within the scope of the application.";
+
+                var fullPrompt = domainContext + "\nUser question: " + message;
+
+                var requestObj = new
+                {
+                    model = "llama3.2",
+                    messages = new[]
+                    {
+                        new { 
+                            role = "system", 
+                            content = domainContext 
+                        },
+
+                        new { 
+                            role = "user", 
+                            content = message 
+                        }
+                    },
+                    stream = false
+                };
+
+                var jsonRequest = JsonConvert.SerializeObject(requestObj);
+                var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+                try
+                {
+                    var response = httpClient.PostAsync(_ollamaApiUrl, content).Result;
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return $"Error from AI model: {response.StatusCode}";
+                    }
+
+                    var responseString = response.Content.ReadAsStringAsync().Result;
+                    var json = JObject.Parse(responseString);
+                    var responseText = json["message"]?["content"]?.ToString();
+
+                    return string.IsNullOrWhiteSpace(responseText) ? "Unexpected JSON structure:\n" + responseString : responseText.Trim();
+                }
+                catch (Exception ex)
+                {
+                    return $"Error calling AI model: {ex.Message}";
+                }
             }
         }
     }

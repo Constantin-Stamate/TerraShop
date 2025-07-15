@@ -1,0 +1,113 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Chat";
+}
+
+@using System.Web.Optimization
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TerraShop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon Image -->
+    <link rel="shortcut icon" type="image/x-icon" href="@Url.Content("~/Assets/img/favicon.ico")">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Libraries Stylesheet -->
+    @Styles.Render("~/bundles/chat/css")
+</head>
+
+<body>
+    <!-- Navbar Start -->
+    <nav class="navbar">
+        <h3 class="navbar__logo">TerraAI — Your Eco Marketplace Assistant</h3>
+        <div style="display: flex; gap: 0.5rem;">
+            <a href="@Url.Action("Index", "Main")" class="navbar__button" title="Home">
+                <i class='bx bx-home'></i>
+            </a>
+            <button class="navbar__button" id="themeToggler">
+                <i class='bx bx-sun'></i>
+            </button>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+    <!-- Header Start -->
+    <header class="header">
+        <div class="header__title">
+            <h1>Hello, There!</h1>
+            <h2>How can I help you today?</h2>
+        </div>
+        <div class="suggests">
+            <div class="suggests__item">
+                <p class="suggests__item-text">
+                    What are the benefits of buying eco-friendly products ?
+                </p>
+                <div class="suggests__item-icon">
+                    <i class='bx bx-leaf'></i>
+                </div>
+            </div>
+            <div class="suggests__item">
+                <p class="suggests__item-text">
+                    How can I start selling my handmade items online ?
+                </p>
+                <div class="suggests__item-icon">
+                    <i class='bx bx-upload'></i>
+                </div>
+            </div>
+            <div class="suggests__item">
+                <p class="suggests__item-text">
+                    What is sustainable packaging and why does it matter ?
+                </p>
+                <div class="suggests__item-icon">
+                    <i class='bx bx-box'></i>
+                </div>
+            </div>
+            <div class="suggests__item">
+                <p class="suggests__item-text">
+                    How do marketplaces support small eco businesses ?
+                </p>
+                <div class="suggests__item-icon">
+                    <i class='bx bx-store-alt'></i>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Header End -->
+
+    <!-- Chat Section -->
+    <section class="chats"></section>
+
+    <!-- Input Prompt Start -->
+    <section class="prompt">
+        <form action="#" class="prompt__form" novalidate>
+            <div class="prompt__input-wrapper">
+                <input type="text" placeholder="Enter a prompt here" class="prompt__form-input" required>
+                <button class="prompt__form-button" id="sendButton">
+                    <i class='bx bx-send'></i>
+                </button>
+                <button class="prompt__form-button" id="deleteButton">
+                    <i class='bx bx-trash'></i>
+                </button>
+            </div>
+        </form>
+        <p class="prompt__disclaim">
+            TerraAI’s answers may not always be fully accurate or up to date — please double-check important info.
+        </p>
+    </section>
+    <!-- Input Prompt End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="/Assets/js/chat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</body>
+
+</html>

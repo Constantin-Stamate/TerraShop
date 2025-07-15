@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100" height="100" fill="none">
+    <defs>
+        <linearGradient id="gradLeaf6" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#82c408"/>
+            <stop offset="100%" stop-color="#a4d70c"/>
+        </linearGradient>
+    </defs>
+    <circle cx="32" cy="32" r="30" stroke="url(#gradLeaf6)" stroke-width="3" fill="none"/>
+    <path d="M32 12 C42 20 42 44 32 52 C22 44 22 20 32 12Z" fill="url(#gradLeaf6)" />
+    <path d="M12 32 C20 42 44 42 52 32 C44 22 20 22 12 32Z" fill="url(#gradLeaf6)" />
+</svg>
