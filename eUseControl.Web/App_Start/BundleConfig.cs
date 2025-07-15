@@ -42,6 +42,9 @@ namespace eUseControl.Web.App_Start
             bundles.Add(new StyleBundle("~/bundles/payment/css").Include(
                "~/Assets/css/payment.css", new CssRewriteUrlTransform()));
 
+            bundles.Add(new StyleBundle("~/bundles/chat/css").Include(
+              "~/Assets/css/chat.css", new CssRewriteUrlTransform()));
+
             bundles.Add(new ScriptBundle("~/bundles/base/js").Include(
                 "~/Assets/js/base.js"));
 
