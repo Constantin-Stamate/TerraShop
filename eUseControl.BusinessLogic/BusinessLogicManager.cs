@@ -54,5 +54,10 @@ namespace eUseControl.BusinessLogic
         {
             return new ManagementBL();
         }
+
+        public IChat GetChatBL()
+        {
+            return new ChatBL();
+        }
     }
 }
