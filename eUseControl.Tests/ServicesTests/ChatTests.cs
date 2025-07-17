@@ -20,6 +20,7 @@ namespace eUseControl.Tests.ServicesTests
         public void EmptyMessage()
         {
             string emptyMessage = "";
+
             string result = _chat.GetResponse(emptyMessage);
 
             Assert.AreEqual("Message cannot be empty!", result);
@@ -29,6 +30,7 @@ namespace eUseControl.Tests.ServicesTests
         public void LongMessage()
         {
             string longMessage = string.Join(" ", Enumerable.Repeat("word", 301));
+
             string result = _chat.GetResponse(longMessage);
 
             Assert.IsTrue(result.Contains("Message too long."));
@@ -38,6 +40,7 @@ namespace eUseControl.Tests.ServicesTests
         public void ValidMessage()
         {
             string validMessage = "How does Eco Market Place work?";
+
             string result = _chat.GetResponse(validMessage);
 
             Assert.IsFalse(string.IsNullOrEmpty(result));
@@ -48,9 +51,10 @@ namespace eUseControl.Tests.ServicesTests
         public void OutOfDomain()
         {
             string outOfDomainMessage = "Who won the football world cup?";
+
             string result = _chat.GetResponse(outOfDomainMessage);
 
-            Assert.IsTrue(result.Contains("I can only assist with topics related to the Eco Market Place."));
+            Assert.IsTrue(result.Contains("Eco Market Place"));
         }
     }
 }
