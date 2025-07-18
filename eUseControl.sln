@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eUseControl.Domain", "eUseC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eUseControl.Helpers", "eUseControl.Helpers\eUseControl.Helpers.csproj", "{38439036-8911-49EB-A5CC-097526A8B10A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eUseControl.Tests", "eUseControl.Tests\eUseControl.Tests.csproj", "{E12F5B03-FB72-48AA-AD1E-6D03C573A903}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,8 +35,15 @@ Global
 		{38439036-8911-49EB-A5CC-097526A8B10A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38439036-8911-49EB-A5CC-097526A8B10A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38439036-8911-49EB-A5CC-097526A8B10A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E12F5B03-FB72-48AA-AD1E-6D03C573A903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E12F5B03-FB72-48AA-AD1E-6D03C573A903}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E12F5B03-FB72-48AA-AD1E-6D03C573A903}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E12F5B03-FB72-48AA-AD1E-6D03C573A903}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {990D4474-6101-4CE6-BC5E-96E50A2A761C}
 	EndGlobalSection
 EndGlobal
