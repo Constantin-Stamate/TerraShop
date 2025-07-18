@@ -21,10 +21,10 @@ namespace eUseControl.Tests.ServicesTests
             int productId = 3;
             int userId = 1;
 
-            var result = _cart.AddItemToCart(productId, userId); 
+            var result = _cart.AddItemToCart(productId, userId);
 
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Status); 
+            Assert.IsNotNull(result, "Expected a response object when adding a new product!");
+            Assert.IsTrue(result.Status, "Expected product to be added successfully!");
         }
 
         [TestMethod]
@@ -33,9 +33,9 @@ namespace eUseControl.Tests.ServicesTests
             int productId = 1;
             int userId = 1;
 
-            var result = _cart.AddItemToCart(productId, userId); 
+            var result = _cart.AddItemToCart(productId, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when adding existing product!");
             Assert.AreEqual("Product is already in the cart!", result.StatusMsg);
         }
 
@@ -47,7 +47,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _cart.AddItemToCart(productId, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when adding a nonexistent product!");
             Assert.AreEqual("The requested product was not found!", result.StatusMsg);
         }
 
@@ -58,8 +58,8 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _cart.GetCartItemsByUserId(userIdWithoutItems);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(0, result.Count);
+            Assert.IsNotNull(result, "Expected an empty list instead of null!");
+            Assert.AreEqual(0, result.Count, "Expected zero items for invalid user!");
         }
 
         [TestMethod]
@@ -69,8 +69,8 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _cart.GetCartItemsByUserId(userIdWithItems);
 
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Count > 0);
+            Assert.IsNotNull(result, "Expected cart items, got null!");
+            Assert.IsTrue(result.Count > 0, "Expected cart to contain items!");
         }
 
         [TestMethod]
@@ -81,8 +81,8 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _cart.RemoveItemFromCart(productId, userId);
 
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Status);
+            Assert.IsNotNull(result, "Expected a response object when removing item!");
+            Assert.IsTrue(result.Status, "Expected item to be removed successfully!");
         }
 
         [TestMethod]
@@ -93,20 +93,20 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _cart.RemoveItemFromCart(productId, userId);
 
-            Assert.IsNotNull(result);
-            Assert.IsFalse(result.Status);
+            Assert.IsNotNull(result, "Expected a response even for missing item!");
+            Assert.IsFalse(result.Status, "Expected failure when removing nonexistent item!");
         }
 
         [TestMethod]
         public void RemoveInvalidUser()
         {
-            int userId = -1; 
+            int userId = -1;
             int productId = 2;
 
             var result = _cart.RemoveItemFromCart(productId, userId);
 
-            Assert.IsNotNull(result);
-            Assert.IsFalse(result.Status);
+            Assert.IsNotNull(result, "Expected a result even with invalid user!");
+            Assert.IsFalse(result.Status, "Expected failure with invalid user ID!");
         }
 
         [TestMethod]
@@ -116,7 +116,7 @@ namespace eUseControl.Tests.ServicesTests
 
             int result = _cart.GetCartCountByUserId(userId);
 
-            Assert.IsTrue(result >= 0);
+            Assert.IsTrue(result >= 0, "Expected cart count to be non-negative!");
         }
 
         [TestMethod]
@@ -126,7 +126,7 @@ namespace eUseControl.Tests.ServicesTests
 
             int result = _cart.GetCartCountByUserId(userId);
 
-            Assert.AreEqual(0, result);
+            Assert.AreEqual(0, result, "Expected zero items in cart!");
         }
 
         [TestMethod]
@@ -136,7 +136,7 @@ namespace eUseControl.Tests.ServicesTests
 
             int result = _cart.GetCartCountByUserId(userId);
 
-            Assert.AreEqual(0, result);
+            Assert.AreEqual(0, result, "Expected zero for invalid user ID!");
         }
 
         [TestMethod]
@@ -148,7 +148,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _cart.ChangeProductQuantity(productId, userId, newQuantity);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure for invalid product ID!");
             Assert.AreEqual("The requested product was not found!", result.StatusMsg);
         }
 
@@ -156,12 +156,12 @@ namespace eUseControl.Tests.ServicesTests
         public void ChangeQuantityNotInCart()
         {
             int userId = 1;
-            int productId = 5; 
+            int productId = 5;
             int newQuantity = 2;
 
             var result = _cart.ChangeProductQuantity(productId, userId, newQuantity);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when product not in cart!");
             Assert.AreEqual("The requested item is not in your cart!", result.StatusMsg);
         }
 
@@ -174,7 +174,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _cart.ChangeProductQuantity(productId, userId, newQuantity);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected successful quantity update!");
             Assert.AreEqual("The quantity has been successfully updated!", result.StatusMsg);
         }
 
@@ -186,8 +186,8 @@ namespace eUseControl.Tests.ServicesTests
 
             var discountedPrice = _cart.ApplyCouponDiscount(totalPrice, validCoupon);
 
-            Assert.IsTrue(discountedPrice < totalPrice);
-            Assert.AreEqual(90m, discountedPrice);
+            Assert.IsTrue(discountedPrice < totalPrice, "Expected discounted price to be less than total!");
+            Assert.AreEqual(90m, discountedPrice, "Expected 10% discount!");
         }
 
         [TestMethod]
@@ -198,7 +198,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var discountedPrice = _cart.ApplyCouponDiscount(totalPrice, invalidCoupon);
 
-            Assert.AreEqual(totalPrice, discountedPrice);
+            Assert.AreEqual(totalPrice, discountedPrice, "Expected no discount for invalid coupon!");
         }
 
         [TestMethod]
@@ -209,17 +209,17 @@ namespace eUseControl.Tests.ServicesTests
 
             var discountedPrice = _cart.ApplyCouponDiscount(totalPrice, expiredCoupon);
 
-            Assert.AreEqual(totalPrice, discountedPrice);
+            Assert.AreEqual(totalPrice, discountedPrice, "Expected no discount for expired coupon!");
         }
 
         [TestMethod]
         public void ClearCartItemsSuccess()
         {
-            int userId = 2; 
+            int userId = 2;
 
             var response = _cart.ClearCartItemsAfterOrder(userId);
 
-            Assert.IsTrue(response.Status);
+            Assert.IsTrue(response.Status, "Expected cart to be cleared!");
             Assert.AreEqual("Cart items cleared successfully!", response.StatusMsg);
         }
 
@@ -231,7 +231,7 @@ namespace eUseControl.Tests.ServicesTests
 
             decimal result = _cart.ComputeOrderTotal(finalPrice, shippingCost);
 
-            Assert.AreEqual(115m, result);
+            Assert.AreEqual(115m, result, "Expected total to be sum of final price and shipping!");
         }
 
         [TestMethod]
@@ -242,7 +242,7 @@ namespace eUseControl.Tests.ServicesTests
 
             decimal discount = _cart.ComputeDiscountAmount(initialPrice, finalPrice);
 
-            Assert.AreEqual(30m, discount);
+            Assert.AreEqual(30m, discount, "Expected correct discount amount!");
         }
 
         [TestMethod]
@@ -253,9 +253,9 @@ namespace eUseControl.Tests.ServicesTests
             var cartItems = _cart.GetCartItemsByUserId(userId);
             var (totalPrice, shippingCost) = _cart.CalculateCartTotal(cartItems);
 
-            Assert.IsNotNull(cartItems);
-            Assert.IsTrue(totalPrice >= 0);
-            Assert.IsTrue(shippingCost >= 0);
+            Assert.IsNotNull(cartItems, "Expected non-null cart items!");
+            Assert.IsTrue(totalPrice >= 0, "Expected total price to be non-negative!");
+            Assert.IsTrue(shippingCost >= 0, "Expected shipping cost to be non-negative!");
         }
     }
 }

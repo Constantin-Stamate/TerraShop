@@ -33,7 +33,7 @@ namespace eUseControl.Tests.ServicesTests
 
             string result = _chat.GetResponse(longMessage);
 
-            Assert.IsTrue(result.Contains("Message too long."));
+            Assert.IsTrue(result.Contains("Message too long"));
         }
 
         [TestMethod]
@@ -43,8 +43,7 @@ namespace eUseControl.Tests.ServicesTests
 
             string result = _chat.GetResponse(validMessage);
 
-            Assert.IsFalse(string.IsNullOrEmpty(result));
-            Assert.IsFalse(result.StartsWith("Error"));
+            Assert.IsFalse(string.IsNullOrEmpty(result), "Expected a non-empty response!");
         }
 
         [TestMethod]

@@ -33,7 +33,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _order.PlaceOrder(orderData, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure due to missing required fields!");
             Assert.AreEqual("Please complete all required fields!", result.StatusMsg);
         }
 
@@ -54,7 +54,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _order.PlaceOrder(orderData, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure due to invalid email format!");
             Assert.AreEqual("Please enter a valid email address!", result.StatusMsg);
         }
 
@@ -75,7 +75,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _order.PlaceOrder(orderData, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure due to invalid phone number format!");
             Assert.AreEqual("Please enter a valid phone number!", result.StatusMsg);
         }
 
@@ -97,7 +97,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _order.PlaceOrder(orderData, userId);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected order placement to succeed without a coupon!");
             Assert.AreEqual("Your order has been placed successfully!", result.StatusMsg);
         }
 
@@ -119,7 +119,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _order.PlaceOrder(orderData, userId);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected order placement to succeed with a valid coupon!");
             Assert.AreEqual("Your order has been placed successfully!", result.StatusMsg);
         }
 
@@ -130,7 +130,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _order.GetOrderById(orderId);
 
-            Assert.IsNull(result);
+            Assert.IsNull(result, "Expected null result when order ID is invalid!");
         }
 
         [TestMethod]
@@ -140,7 +140,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _order.GetOrderById(orderId);
 
-            Assert.IsNotNull(result);
+            Assert.IsNotNull(result, "Expected to find an order with the given valid ID!");
         }
 
         [TestMethod]
@@ -150,7 +150,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var response = _order.CancelUnpaidOrders(userId);
 
-            Assert.IsTrue(response.Status);
+            Assert.IsTrue(response.Status, "Expected unpaid orders to be cancelled successfully!");
             Assert.AreEqual("Unpaid orders have been cancelled successfully!", response.StatusMsg);
         }
 
@@ -161,8 +161,8 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _order.GetValidOrders(userId);
 
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Count > 0);
+            Assert.IsNotNull(result, "Expected non-null list of valid orders for the user!");
+            Assert.IsTrue(result.Count > 0, "Expected at least one valid order for the user!");
         }
 
         [TestMethod]
@@ -172,8 +172,8 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _order.GetValidOrders(invalidUserId);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(0, result.Count);
+            Assert.IsNotNull(result, "Expected a non-null list even for an invalid user!");
+            Assert.AreEqual(0, result.Count, "Expected the result list to be empty for an invalid user ID!");
         }
 
         [TestMethod]
@@ -183,7 +183,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _order.CancelOrder(orderId);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected successful cancellation of the order!");
             Assert.AreEqual("Order cancelled successfully!", result.StatusMsg);
         }
 
@@ -194,7 +194,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _order.CancelOrder(invalidOrderId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when trying to cancel a non-existent order!");
             Assert.AreEqual("Order not found!", result.StatusMsg);
         }
     }

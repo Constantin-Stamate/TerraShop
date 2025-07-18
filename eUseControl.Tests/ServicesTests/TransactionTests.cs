@@ -31,7 +31,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var resp = _transaction.ProcessPayment(transactionData, userId);
 
-            Assert.IsFalse(resp.Status);
+            Assert.IsFalse(resp.Status, "Expected payment to fail due to invalid card number!");
             Assert.AreEqual("The card information you entered appears to be invalid!", resp.StatusMsg);
         }
 
@@ -50,7 +50,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var resp = _transaction.ProcessPayment(transactionData, userId);
 
-            Assert.IsFalse(resp.Status);
+            Assert.IsFalse(resp.Status, "Expected payment to fail due to invalid expiration date!");
             Assert.AreEqual("The expiration date you entered is invalid!", resp.StatusMsg);
         }
 
@@ -69,7 +69,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var resp = _transaction.ProcessPayment(transactionData, userId);
 
-            Assert.IsFalse(resp.Status);
+            Assert.IsFalse(resp.Status, "Expected payment to fail due to invalid CVV code!");
             Assert.AreEqual("The CVV code entered is invalid!", resp.StatusMsg);
         }
 
@@ -88,7 +88,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var resp = _transaction.ProcessPayment(transactionData, userId);
 
-            Assert.IsFalse(resp.Status);
+            Assert.IsFalse(resp.Status, "Expected payment to fail due to invalid full name!");
             Assert.AreEqual("The full name you entered is invalid!", resp.StatusMsg);
         }
 
@@ -107,7 +107,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var resp = _transaction.ProcessPayment(transactionData, userId);
 
-            Assert.IsFalse(resp.Status);
+            Assert.IsFalse(resp.Status, "Expected payment to fail because the order amount is invalid or cannot be processed!");
             Assert.AreEqual("Your payment could not be processed!", resp.StatusMsg);
         }
 
@@ -126,7 +126,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var resp = _transaction.ProcessPayment(transactionData, userId);
 
-            Assert.IsTrue(resp.Status);
+            Assert.IsTrue(resp.Status, "Expected payment to be processed successfully!");
             Assert.AreEqual("Payment was successfully completed!", resp.StatusMsg);
         }
     }

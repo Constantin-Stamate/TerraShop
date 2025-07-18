@@ -38,7 +38,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.CreateProduct(productData, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected Status to be false for missing fields!");
             Assert.AreEqual("All fields are required!", result.StatusMsg);
         }
 
@@ -61,7 +61,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.CreateProduct(productData, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected Status to be false for negative quantity!");
             Assert.AreEqual("Quantity must be a positive number!", result.StatusMsg);
         }
 
@@ -84,7 +84,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.CreateProduct(productData, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected Status to be false for zero price!");
             Assert.AreEqual("Price must be greater than zero!", result.StatusMsg);
         }
 
@@ -102,12 +102,12 @@ namespace eUseControl.Tests.ServicesTests
                 ProductRegion = "Region",
                 ProductImageUrl = "url.jpg",
                 ProductDescription = "Description",
-                ProductCategory = "InvalidCategoryName"  
+                ProductCategory = "InvalidCategoryName"
             };
 
             var result = _product.CreateProduct(productData, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected Status to be false for invalid category!");
             Assert.AreEqual("Invalid category!", result.StatusMsg);
         }
 
@@ -130,7 +130,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.CreateProduct(productData, userId);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected Status to be true for valid product!");
             Assert.AreEqual("The product has been successfully created!", result.StatusMsg);
         }
 
@@ -141,7 +141,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.GetProductsByUserId(userId);
 
-            Assert.AreEqual(0, result.Count);
+            Assert.AreEqual(0, result.Count, "Expected no products for non-existent user ID!");
         }
 
         [TestMethod]
@@ -149,9 +149,9 @@ namespace eUseControl.Tests.ServicesTests
         {
             int userId = 5;
 
-            var result = _product.GetProductsByUserId(userId); 
+            var result = _product.GetProductsByUserId(userId);
 
-            Assert.AreEqual(0, result.Count);
+            Assert.AreEqual(0, result.Count, "Expected no products for user without listings!");
         }
 
         [TestMethod]
@@ -161,7 +161,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.GetProductsByUserId(userId);
 
-            Assert.IsTrue(result.Count > 0);
+            Assert.IsTrue(result.Count > 0, "Expected user to have at least one product!");
         }
 
         [TestMethod]
@@ -181,7 +181,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.UpdateProduct(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected status to be false for missing required fields!");
             Assert.AreEqual("All fields are required!", result.StatusMsg);
         }
 
@@ -202,7 +202,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.UpdateProduct(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when quantity is negative!");
             Assert.AreEqual("Quantity must be a positive number!", result.StatusMsg);
         }
 
@@ -223,7 +223,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.UpdateProduct(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when price is zero!");
             Assert.AreEqual("Price must be greater than zero!", result.StatusMsg);
         }
 
@@ -244,7 +244,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.UpdateProduct(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected Status to be false for invalid category!");
             Assert.AreEqual("Invalid category!", result.StatusMsg);
         }
 
@@ -266,7 +266,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.UpdateProduct(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected Status to be false for non-existent product!");
             Assert.AreEqual("Product not found!", result.StatusMsg);
         }
 
@@ -275,7 +275,7 @@ namespace eUseControl.Tests.ServicesTests
         {
             var data = new ProductData
             {
-                Id = 4, 
+                Id = 4,
                 ProductName = "ProdNew",
                 ProductAddress = "AddrNew",
                 ProductQuality = "Low",
@@ -289,7 +289,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.UpdateProduct(data);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected Status to be true for successful update!");
             Assert.AreEqual("Product updated successfully!", result.StatusMsg);
         }
 
@@ -300,8 +300,8 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.GetProductById(productId);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Id);
+            Assert.IsNotNull(result, "Expected product to be found with ID 1!");
+            Assert.AreEqual(1, result.Id, "Expected ID to be 1!");
         }
 
         [TestMethod]
@@ -311,7 +311,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.GetProductById(productId);
 
-            Assert.IsNull(result);
+            Assert.IsNull(result, "Expected result to be null for invalid product ID!");
         }
 
         [TestMethod]
@@ -319,8 +319,8 @@ namespace eUseControl.Tests.ServicesTests
         {
             var result = _product.GetAvailableProducts();
 
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Count > 0);
+            Assert.IsNotNull(result, "Expected non-null list of available products!");
+            Assert.IsTrue(result.Count > 0, "Expected at least one available product!");
         }
 
         [TestMethod]
@@ -330,7 +330,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.UpdateProductStatus(productId);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected Status to be true after status update!");
             Assert.AreEqual("Product status updated successfully!", result.StatusMsg);
         }
 
@@ -341,7 +341,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.UpdateProductStatus(productId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected Status to be false when updating status for non-existent product!");
             Assert.AreEqual("Product not found!", result.StatusMsg);
         }
 
@@ -350,8 +350,8 @@ namespace eUseControl.Tests.ServicesTests
         {
             var result = _product.GetCategoryProductCounts();
 
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Count > 0);
+            Assert.IsNotNull(result, "Expected category product count result to be not null!");
+            Assert.IsTrue(result.Count > 0, "Expected category product count to be greater than 0!");
         }
 
         [TestMethod]
@@ -361,8 +361,8 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.GetAvailableProductsByCategoryId(validCategoryId);
 
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Count > 0);
+            Assert.IsNotNull(result, "Expected result to be not null for valid category ID!");
+            Assert.IsTrue(result.Count > 0, "Expected at least one product for valid category ID!");
         }
 
         [TestMethod]
@@ -372,7 +372,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.GetAvailableProductsByCategoryId(invalidCategoryId);
 
-            Assert.AreEqual(0, result.Count); 
+            Assert.AreEqual(0, result.Count, "Expected no products for invalid category ID!");
         }
 
         [TestMethod]
@@ -382,7 +382,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.UpdateProductRating(testProductId);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected Status to be true for valid product ID!");
             Assert.AreEqual("Product rating updated successfully!", result.StatusMsg);
         }
 
@@ -393,7 +393,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.UpdateProductRating(invalidProductId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected Status to be false for invalid product ID!");
             Assert.AreEqual("Product not found!", result.StatusMsg);
         }
 
@@ -405,9 +405,9 @@ namespace eUseControl.Tests.ServicesTests
 
             var sorted = _product.SortProducts(sortOption, products);
 
-            Assert.IsNotNull(sorted);
-            Assert.IsTrue(sorted.Count > 0);
-            Assert.IsTrue(sorted.First().ProductPrice <= sorted.Last().ProductPrice);
+            Assert.IsNotNull(sorted, "Expected sorted list to be not null!");
+            Assert.IsTrue(sorted.Count > 0, "Expected sorted list to have at least one element!");
+            Assert.IsTrue(sorted.First().ProductPrice <= sorted.Last().ProductPrice, "Expected products to be sorted in ascending order by price!");
         }
 
         [TestMethod]
@@ -418,9 +418,9 @@ namespace eUseControl.Tests.ServicesTests
 
             var sorted = _product.SortProducts(sortOption, products);
 
-            Assert.IsNotNull(sorted);
-            Assert.IsTrue(sorted.Count > 0);
-            Assert.IsTrue(sorted.First().ProductPrice >= sorted.Last().ProductPrice);
+            Assert.IsNotNull(sorted, "Expected sorted list to be not null!");
+            Assert.IsTrue(sorted.Count > 0, "Expected sorted list to have at least one element!");
+            Assert.IsTrue(sorted.First().ProductPrice >= sorted.Last().ProductPrice, "Expected products to be sorted in descending order by price!");
         }
 
         [TestMethod]
@@ -431,9 +431,9 @@ namespace eUseControl.Tests.ServicesTests
 
             var sorted = _product.SortProducts(sortOption, products);
 
-            Assert.IsNotNull(sorted);
-            Assert.IsTrue(sorted.Count > 0);
-            Assert.IsTrue(sorted.First().ProductPostDate >= sorted.Last().ProductPostDate);
+            Assert.IsNotNull(sorted, "Expected sorted list to be not null!");
+            Assert.IsTrue(sorted.Count > 0, "Expected at least one product in sorted list!");
+            Assert.IsTrue(sorted.First().ProductPostDate >= sorted.Last().ProductPostDate, "Expected products to be sorted from newest to oldest!");
         }
 
         [TestMethod]
@@ -444,9 +444,9 @@ namespace eUseControl.Tests.ServicesTests
 
             var sorted = _product.SortProducts(sortOption, products);
 
-            Assert.IsNotNull(sorted);
-            Assert.IsTrue(sorted.Count > 0);
-            Assert.IsTrue(sorted.First().ProductPostDate <= sorted.Last().ProductPostDate);
+            Assert.IsNotNull(sorted, "Expected sorted list to be not null!");
+            Assert.IsTrue(sorted.Count > 0, "Expected at least one product in sorted list!");
+            Assert.IsTrue(sorted.First().ProductPostDate <= sorted.Last().ProductPostDate, "Expected products to be sorted from oldest to newest!");
         }
 
         [TestMethod]
@@ -457,21 +457,21 @@ namespace eUseControl.Tests.ServicesTests
 
             var filtered = _product.GetProductsByMaxPrice(maxPrice, products);
 
-            Assert.IsNotNull(filtered);
-            Assert.IsTrue(filtered.Count > 0);
-            Assert.IsTrue(filtered.All(p => p.ProductPrice <= maxPrice));
+            Assert.IsNotNull(filtered, "Expected filtered list to be not null!");
+            Assert.IsTrue(filtered.Count > 0, "Expected at least one product with price <= maxPrice!");
+            Assert.IsTrue(filtered.All(p => p.ProductPrice <= maxPrice), "All products should have price <= maxPrice!");
         }
 
         [TestMethod]
         public void FilterProductsBySearchQuery()
         {
             string searchQuery = "Pants";
-            var products = _product.GetAvailableProducts(); 
+            var products = _product.GetAvailableProducts();
 
             var result = _product.GetProductsBySearchQuery(searchQuery, products);
 
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Count > 0);
+            Assert.IsNotNull(result, "Expected search result list to be not null!");
+            Assert.IsTrue(result.Count > 0, "Expected at least one product matching the search query!");
         }
 
         [TestMethod]
@@ -482,20 +482,20 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.GetProductsByCountry(country, products);
 
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Count > 0);
+            Assert.IsNotNull(result, "Expected result to be not null for country filter!");
+            Assert.IsTrue(result.Count > 0, "Expected at least one product matching the country filter!");
         }
 
         [TestMethod]
         public void UpdateProductQuantitySuccess()
         {
-            int userId = 2;
-            var cartItems = _cart.GetCartItemsByUserId(userId); 
+            int userId = 3;
+            var cartItems = _cart.GetCartItemsByUserId(userId);
 
-            var result = _product.UpdateProductQuantitiesAfterOrder(cartItems); 
+            var result = _product.UpdateProductQuantitiesAfterOrder(cartItems);
 
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Status);
+            Assert.IsNotNull(result, "Expected result object to be not null!");
+            Assert.IsTrue(result.Status, "Expected Status to be true after updating quantities!");
             Assert.AreEqual("Product quantities updated successfully!", result.StatusMsg);
         }
 
@@ -504,8 +504,8 @@ namespace eUseControl.Tests.ServicesTests
         {
             var result = _product.GetRecommendedProducts();
 
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Count > 0);
+            Assert.IsNotNull(result, "Expected recommended products list to be not null!");
+            Assert.IsTrue(result.Count > 0, "Expected at least one recommended product!");
         }
 
         [TestMethod]
@@ -515,8 +515,8 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _product.RemoveProduct(invalidProductId);
 
-            Assert.IsFalse(result.Status);
-            Assert.AreEqual("Product not found!", result.StatusMsg);
+            Assert.IsFalse(result.Status, "Expected Status to be false for invalid product ID!");
+            Assert.AreEqual("Product not found!", result.StatusMsg, "Expected message for non-existent product!");
         }
     }
 }

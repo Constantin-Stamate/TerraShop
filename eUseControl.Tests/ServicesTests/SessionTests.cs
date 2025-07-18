@@ -34,7 +34,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _session.UserRegister(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected registration to fail due to password being too short!");
             Assert.AreEqual("Minimum 8 characters required!", result.StatusMsg);
         }
 
@@ -53,7 +53,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _session.UserRegister(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected registration to fail due to weak password!");
             Assert.AreEqual("Password must meet complexity requirements!", result.StatusMsg);
         }
 
@@ -63,7 +63,7 @@ namespace eUseControl.Tests.ServicesTests
             var data = new URegisterData
             {
                 Username = "anyuser123",
-                Email = "maria@email.com", 
+                Email = "maria@email.com",
                 Password = "StrongPass123!",
                 RegistrationDateTime = DateTime.Now,
                 RegistrationIp = "127.0.0.1",
@@ -72,7 +72,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _session.UserRegister(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected registration to fail because the email is already used!");
             Assert.AreEqual("Email has already been used!", result.StatusMsg);
         }
 
@@ -81,7 +81,7 @@ namespace eUseControl.Tests.ServicesTests
         {
             var data = new URegisterData
             {
-                Username = "andrei22", 
+                Username = "andrei22",
                 Email = "newemail1234@domain.com",
                 Password = "StrongPass123!",
                 RegistrationDateTime = DateTime.Now,
@@ -91,7 +91,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _session.UserRegister(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected registration to fail because the username is already used!");
             Assert.AreEqual("Username has already been used!", result.StatusMsg);
         }
 
@@ -110,7 +110,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _session.UserRegister(data);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected registration to succeed with valid data!");
             Assert.AreEqual("You have successfully registered!", result.StatusMsg);
         }
 
@@ -127,9 +127,9 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _session.UserLogin(user);
 
-            Assert.IsTrue(result.Status);
-            Assert.IsNotNull(result.UserMinimal);
-            Assert.AreEqual(user.Username, result.UserMinimal.Username);
+            Assert.IsTrue(result.Status, "Expected login to succeed with correct credentials!");
+            Assert.IsNotNull(result.UserMinimal, "Expected user data to be returned after successful login!");
+            Assert.AreEqual(user.Username, result.UserMinimal.Username, "Expected the returned username to match the input username!");
         }
 
         [TestMethod]
@@ -145,7 +145,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _session.UserLogin(user);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected login to fail due to wrong password!");
             Assert.AreEqual("The username or password is incorrect!", result.StatusMsg);
         }
 
@@ -162,7 +162,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _session.UserLogin(user);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected login to fail because the user does not exist!");
             Assert.AreEqual("The username or password is incorrect!", result.StatusMsg);
         }
 
@@ -179,7 +179,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _session.UserLogin(user);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected login to fail due to empty username and password!");
             Assert.AreEqual("The username or password is incorrect!", result.StatusMsg);
         }
 
@@ -190,8 +190,8 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _session.GetUserById(userId);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(userId, result.Id);
+            Assert.IsNotNull(result, "Expected to find a user with the given ID!");
+            Assert.AreEqual(userId, result.Id, "Expected the returned user ID to match the requested ID!");
         }
 
         [TestMethod]
@@ -201,7 +201,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _session.GetUserById(userId);
 
-            Assert.IsNull(result);
+            Assert.IsNull(result, "Expected no user to be found with invalid ID!");
         }
     }
 }

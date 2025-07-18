@@ -23,7 +23,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var profile = _profile.GetProfileByUserId(userId);
 
-            Assert.IsNull(profile);
+            Assert.IsNull(profile, "Expected null profile for invalid user ID.");
         }
 
         [TestMethod]
@@ -33,11 +33,11 @@ namespace eUseControl.Tests.ServicesTests
 
             var profile = _profile.GetProfileByUserId(userId);
 
-            Assert.IsNotNull(profile);
-            Assert.AreEqual("User", profile.FirstName);
-            Assert.AreEqual("User", profile.LastName);
-            Assert.AreEqual("000-000-0000", profile.PhoneNumber);
-            Assert.AreEqual("/Assets/img/user.jpg", profile.ProfileImageUrl);
+            Assert.IsNotNull(profile, "Expected a profile object for user ID 4!");
+            Assert.AreEqual("User", profile.FirstName, "Expected default first name 'User'!");
+            Assert.AreEqual("User", profile.LastName, "Expected default last name 'User'!");
+            Assert.AreEqual("000-000-0000", profile.PhoneNumber, "Expected default phone number!");
+            Assert.AreEqual("/Assets/img/user.jpg", profile.ProfileImageUrl, "Expected default profile image URL!");
         }
 
         [TestMethod]
@@ -47,10 +47,10 @@ namespace eUseControl.Tests.ServicesTests
 
             var profile = _profile.GetProfileByUserId(userId);
 
-            Assert.IsNotNull(profile);
-            Assert.AreEqual(1, profile.UserId);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(profile.FirstName));
-            Assert.IsFalse(string.IsNullOrWhiteSpace(profile.LastName));
+            Assert.IsNotNull(profile, "Expected a profile object for existing user ID!");
+            Assert.AreEqual(userId, profile.UserId, "UserId should match!");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(profile.FirstName), "First name should not be empty or whitespace!");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(profile.LastName), "Last name should not be empty or whitespace!");
         }
 
         [TestMethod]
@@ -68,7 +68,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _profile.UpdateProfile(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when first name is shorter than 5 characters!");
             Assert.AreEqual("First name must be at least 5 characters!", result.StatusMsg);
         }
 
@@ -87,7 +87,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _profile.UpdateProfile(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when last name is shorter than 5 characters!");
             Assert.AreEqual("Last name must be at least 5 characters!", result.StatusMsg);
         }
 
@@ -106,7 +106,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _profile.UpdateProfile(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure with invalid email format!");
             Assert.AreEqual("Please enter a valid email address!", result.StatusMsg);
         }
 
@@ -125,7 +125,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _profile.UpdateProfile(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure with invalid phone number!");
             Assert.AreEqual("Please enter a valid phone number!", result.StatusMsg);
         }
 
@@ -144,7 +144,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _profile.UpdateProfile(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when address is shorter than 5 characters!");
             Assert.AreEqual("Address must be at least 5 characters!", result.StatusMsg);
         }
 
@@ -163,7 +163,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _profile.UpdateProfile(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when email is already used by another user!");
             Assert.AreEqual("This email is already in use by another user!", result.StatusMsg);
         }
 
@@ -182,7 +182,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _profile.UpdateProfile(data);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when profile not found!");
             Assert.AreEqual("We couldn't find your profile!", result.StatusMsg);
         }
 
@@ -202,7 +202,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _profile.UpdateProfile(data);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected success on valid profile update!");
             Assert.AreEqual("Your profile has been updated!", result.StatusMsg);
         }
 
@@ -215,7 +215,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _profile.ChangePassword(currentPassword, newPassword, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when passwords are empty!");
             Assert.AreEqual("Passwords cannot be empty!", result.StatusMsg);
         }
 
@@ -228,7 +228,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _profile.ChangePassword(currentPassword, newPassword, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when new password is too short!");
             Assert.AreEqual("New password must be at least 8 characters long!", result.StatusMsg);
         }
 
@@ -241,7 +241,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _profile.ChangePassword(currentPassword, newPassword, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when new password matches current password!");
             Assert.AreEqual("New password must be different from the current one!", result.StatusMsg);
         }
 
@@ -254,7 +254,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _profile.ChangePassword(currentPassword, newPassword, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when new password does not meet complexity requirements!");
             Assert.AreEqual("Password must meet complexity requirements!", result.StatusMsg);
         }
 
@@ -267,7 +267,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _profile.ChangePassword(currentPassword, newPassword, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when current password is incorrect!");
             Assert.AreEqual("Incorrect current password!", result.StatusMsg);
         }
 
@@ -280,7 +280,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _profile.ChangePassword(currentPassword, newPassword, userId);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected success when password is changed correctly!");
             Assert.AreEqual("Password changed successfully!", result.StatusMsg);
         }
     }

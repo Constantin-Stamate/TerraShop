@@ -29,7 +29,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _contact.SubmitContactRequest(data, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected Status to be false when username is missing!");
             Assert.AreEqual("Please complete all required fields!", result.StatusMsg);
         }
 
@@ -46,7 +46,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _contact.SubmitContactRequest(data, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected Status to be false when email is missing!");
             Assert.AreEqual("Please complete all required fields!", result.StatusMsg);
         }
 
@@ -63,7 +63,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _contact.SubmitContactRequest(data, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected Status to be false when message is missing!");
             Assert.AreEqual("Please complete all required fields!", result.StatusMsg);
         }
 
@@ -80,7 +80,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _contact.SubmitContactRequest(data, userId);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected Status to be true for valid request!");
             Assert.AreEqual("Contact request submitted successfully!", result.StatusMsg);
         }
     }

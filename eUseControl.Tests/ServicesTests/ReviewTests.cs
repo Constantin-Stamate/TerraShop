@@ -29,7 +29,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _review.CreateReview(data, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when review text is empty!");
             Assert.AreEqual("Please enter a review before submitting!", result.StatusMsg);
         }
 
@@ -46,7 +46,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _review.CreateReview(data, userId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when rating is invalid!");
             Assert.AreEqual("Please select a rating for the product before submitting your review!", result.StatusMsg);
         }
 
@@ -63,7 +63,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _review.CreateReview(data, userId);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected success when valid review and rating are submitted!");
             Assert.AreEqual("Your review has been successfully created!", result.StatusMsg);
         }
 
@@ -74,8 +74,8 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _review.GetReviewsByProductId(productId);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(0, result.Count);
+            Assert.IsNotNull(result, "Expected non-null list even if no reviews found!");
+            Assert.AreEqual(0, result.Count, "Expected zero reviews for invalid product ID!");
         }
 
         [TestMethod]
@@ -85,7 +85,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _review.GetReviewsByProductId(productId);
 
-            Assert.IsNotNull(result);
+            Assert.IsNotNull(result, "Expected non-null list of reviews!");
             Assert.IsTrue(result.Count > 0, "Expected at least one review for this product!");
         }
 
@@ -94,9 +94,9 @@ namespace eUseControl.Tests.ServicesTests
         {
             int reviewId = -1;
 
-            var result = _review.DeleteReview(reviewId); 
+            var result = _review.DeleteReview(reviewId);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when deleting with invalid review ID!");
             Assert.AreEqual("Hmm... we couldn't find the review you were trying to delete!", result.StatusMsg);
         }
 
@@ -107,7 +107,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _review.DeleteReview(reviewId);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected success when deleting existing review!");
             Assert.AreEqual("Your review has been successfully deleted!", result.StatusMsg);
         }
 
@@ -118,7 +118,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _review.GetReviewById(reviewId);
 
-            Assert.IsNull(result);
+            Assert.IsNull(result, "Expected null result for invalid review ID!");
         }
 
         [TestMethod]
@@ -128,9 +128,9 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _review.GetReviewById(reviewId);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(reviewId, result.Id);
-            Assert.IsFalse(string.IsNullOrEmpty(result.Review));
+            Assert.IsNotNull(result, "Expected to find review with valid ID!");
+            Assert.AreEqual(reviewId, result.Id, "Expected the returned review ID to match the requested ID!");
+            Assert.IsFalse(string.IsNullOrEmpty(result.Review), "Expected review text to be present!");
         }
 
         [TestMethod]
@@ -139,13 +139,13 @@ namespace eUseControl.Tests.ServicesTests
             var review = new ReviewData
             {
                 Id = 1,
-                Review = "", 
+                Review = "",
                 Rating = 4
             };
 
             var result = _review.UpdateReview(review);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when updating with empty review text!");
             Assert.AreEqual("Please enter a review before submitting!", result.StatusMsg);
         }
 
@@ -156,12 +156,12 @@ namespace eUseControl.Tests.ServicesTests
             {
                 Id = 1,
                 Review = "Good product!",
-                Rating = 0 
+                Rating = 0
             };
 
             var result = _review.UpdateReview(review);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when updating with invalid rating!");
             Assert.AreEqual("Please select a rating for the product before submitting your review!", result.StatusMsg);
         }
 
@@ -177,7 +177,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _review.UpdateReview(review);
 
-            Assert.IsFalse(result.Status);
+            Assert.IsFalse(result.Status, "Expected failure when updating a non-existent review!");
             Assert.AreEqual("Hmm... we couldn't find the review you were trying to update!", result.StatusMsg);
         }
 
@@ -193,7 +193,7 @@ namespace eUseControl.Tests.ServicesTests
 
             var result = _review.UpdateReview(review);
 
-            Assert.IsTrue(result.Status);
+            Assert.IsTrue(result.Status, "Expected success when updating a valid review!");
             Assert.AreEqual("Your review has been successfully updated!", result.StatusMsg);
         }
 
@@ -202,7 +202,7 @@ namespace eUseControl.Tests.ServicesTests
         {
             var result = _review.RetrieveAllReviews();
 
-            Assert.IsNotNull(result);
+            Assert.IsNotNull(result, "Expected non-null list of all reviews!");
             Assert.IsTrue(result.Count > 0, "Expected at least one review with profile!");
         }
     }
