@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using AutoMapper;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
@@ -13,14 +14,16 @@ namespace eUseControl.Web.Controllers
         private readonly ITransaction _transaction;
         private readonly ICart _cart;
         private readonly IProduct _product;
+        private readonly IMapper _mapper;
 
-        public PaymentController()
+        public PaymentController(IMapper mapper)
         {
             var bl = new BusinessLogicManager();
             _session = bl.GetSessionBL();
             _transaction = bl.GetTransactionBL();
             _cart = bl.GetCartBL();
             _product = bl.GetProductBL();
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -36,7 +39,7 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ProcessTransaction(TransactionCompact transactionCompact)
+        public async Task<ActionResult> ProcessTransaction(TransactionCompact transactionCompact)
         {
             if (ModelState.IsValid)
             {
@@ -52,27 +55,21 @@ namespace eUseControl.Web.Controllers
                     return RedirectToAction("Login", "Login", new { error = true });
                 }
 
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<TransactionCompact, TransactionData>();
-                });
+                var transaction = _mapper.Map<TransactionData>(transactionCompact);
 
-                var mapper = config.CreateMapper();
-                var transaction = mapper.Map<TransactionData>(transactionCompact);
-
-                var result = _transaction.ProcessPayment(transaction, user.Id);
+                var result = await _transaction.ProcessPayment(transaction, user.Id);
 
                 if (result.Status)
                 {
-                    var allCartItems = _cart.GetCartItemsByUserId(user.Id);
+                    var allCartItems = await _cart.GetCartItemsByUserId(user.Id);
 
-                    var updateResult = _product.UpdateProductQuantitiesAfterOrder(allCartItems);
+                    var updateResult = await _product.UpdateProductQuantitiesAfterOrder(allCartItems);
                     if (!updateResult.Status)
                     {
                         return RedirectToAction("Payment", "Payment", new { error = true, orderId = transactionCompact.OrderId });
                     }
 
-                    var clearResult = _cart.ClearCartItemsAfterOrder(user.Id);
+                    var clearResult = await _cart.ClearCartItemsAfterOrder(user.Id);
                     if (!clearResult.Status)
                     {
                         return RedirectToAction("Payment", "Payment", new { error = true, orderId = transactionCompact.OrderId });
@@ -85,7 +82,7 @@ namespace eUseControl.Web.Controllers
                     return RedirectToAction("OrderFailure", "Order", new { error = true, orderId = transactionCompact.OrderId });
                 }
             }
-            else 
+            else
             {
                 return RedirectToAction("Payment", "Payment", new { error = true, orderId = transactionCompact.OrderId });
             }

@@ -28,7 +28,7 @@
         }
     });
 
-    // Back to top button
+    // Back to Top Button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 300) {
             $('.back-to-top').fadeIn('slow');
@@ -41,7 +41,7 @@
         return false;
     });
 
-    // Testimonial carousel
+    // Testimonial Carousel
     $(".testimonial-carousel").owlCarousel({
         autoplay: true,
         smartSpeed: 2000,
@@ -67,7 +67,7 @@
         }
     });
 
-    // vegetable carousel
+    // Vegetable Carousel
     $(".vegetable-carousel").owlCarousel({
         autoplay: true,
         smartSpeed: 1500,

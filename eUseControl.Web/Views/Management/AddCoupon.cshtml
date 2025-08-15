@@ -11,8 +11,7 @@
             <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                 <div class="card" style="border-radius: 15px; max-width: 1000px; margin: 0 auto;">
                     <div class="card-body p-4" style="width: 100%;">
-                        <h2 class="text-nowrap text-center mb-4"
-                            style="font-size: 28px; font-weight: 600; margin-top: 20px; color: #81c408;">
+                        <h2 class="text-nowrap text-center mb-4" style="font-size: 28px; font-weight: 600; margin-top: 20px; color: #81c408;">
                             Create a new Coupon
                         </h2>
                         @using (Html.BeginForm("CreateCoupon", "Management", FormMethod.Post))
@@ -21,29 +20,22 @@
                             <div class="row g-4">
                                 <div class="col-lg-6 mb-3" style="margin-top: 10mm;">
                                     <div class="border-bottom rounded">
-                                        @Html.TextBoxFor(m => m.Code, new { @class = "form-control border-0 me-4", placeholder = "Code *" })
-                                        @Html.ValidationMessageFor(m => m.Code, "", new { @class = "text-danger" })
+                                        @Html.TextBoxFor(m => m.Code, new { @class = "form-control border-0 me-4", placeholder = "Code *", required = "required" })
                                     </div>
                                 </div>
                                 <div class="col-lg-6 mb-3" style="margin-top: 10mm;">
                                     <div class="border-bottom rounded">
-                                        @Html.TextBoxFor(m => m.DiscountPercent, new { @class = "form-control border-0 me-4", placeholder = "Discount Percent *", type = "number", min = "1" })
-                                        @Html.ValidationMessageFor(m => m.DiscountPercent, "", new { @class = "text-danger" })
+                                        @Html.TextBoxFor(m => m.DiscountPercent, new { @class = "form-control border-0 me-4", placeholder = "Discount Percent *", type = "number", min = "1", required = "required" })
                                     </div>
                                 </div>
                                 <div class="col-lg-6 mb-3">
                                     <div class="border-bottom rounded">
-                                        @Html.TextBoxFor(m => m.ExpirationDate, "{0:yyyy-MM-dd}", new { @class = "form-control border-0 me-4", type = "date" })
-                                        @Html.ValidationMessageFor(m => m.ExpirationDate, "", new { @class = "text-danger" })
+                                        @Html.TextBoxFor(m => m.ExpirationDate, "{0:yyyy-MM-dd}", new { @class = "form-control border-0 me-4", type = "date", required = "required" })
                                     </div>
                                 </div>
                                 <div class="col-lg-6 mb-3">
                                     <div class="border-bottom rounded">
-                                        @Html.DropDownListFor(m => m.IsActive, new SelectList(new[] {
-                                            new { Value = "true", Text = "True" },
-                                            new { Value = "false", Text = "False" }
-                                        }, "Value", "Text"), "Is Active *", new { @class = "form-control border-0 me-4" })
-                                        @Html.ValidationMessageFor(m => m.IsActive, "", new { @class = "text-danger" })
+                                        @Html.DropDownListFor(m => m.IsActive, new SelectList(new[] { new { Value = "true", Text = "True" }, new { Value = "false", Text = "False" } }, "Value", "Text"), "Is Active *", new { @class = "form-control border-0 me-4", required = "required" })
                                     </div>
                                 </div>
                                 <div class="col-lg-12">

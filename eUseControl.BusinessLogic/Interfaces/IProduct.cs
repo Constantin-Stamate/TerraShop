@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using eUseControl.Domain.Entities.Cart;
 using eUseControl.Domain.Entities.Product;
 
@@ -6,36 +7,40 @@ namespace eUseControl.BusinessLogic.Interfaces
 {
     public interface IProduct
     {
-        ProductResp CreateProduct(ProductData productData, int userId);
+        Task<ProductResp> CreateProduct(ProductData productData, int userId);
 
-        List<ProductMinimal> GetProductsByUserId(int userId);
+        Task<List<ProductMinimal>> GetProductsByUserId(int userId);
 
-        ProductResp UpdateProduct(ProductData productData);
+        Task<ProductResp> UpdateProduct(ProductData productData);
 
-        ProductData GetProductById(int productId);
+        Task<ProductData> GetProductById(int productId);
 
-        List<ProductSummary> GetAvailableProducts();
+        Task<List<ProductSummary>> GetAvailableProducts();
 
-        ProductResp UpdateProductStatus(int productId);
+        Task<ProductResp> UpdateProductStatus(int productId);
 
-        Dictionary<CategoryDbTable, int> GetCategoryProductCounts();
+        Dictionary<CategoryData, int> GetCategoryProductCounts();
 
-        List<ProductSummary> GetAvailableProductsByCategoryId(int? categoryId);
+        Task<List<ProductSummary>> GetAvailableProductsByCategoryId(int? categoryId);
 
-        ProductResp UpdateProductRating(int productId);
+        Task<ProductResp> UpdateProductRating(int productId);
 
-        List<ProductSummary> SortProducts(string sortOption, List<ProductSummary> products);
+        Task<List<ProductSummary>> SortProducts(string sortOption, List<ProductSummary> products);
 
-        List<ProductSummary> GetProductsByMaxPrice(int maxPrice, List<ProductSummary> products);
+        Task<List<ProductSummary>> GetProductsByMaxPrice(int maxPrice, List<ProductSummary> products);
 
-        List<ProductSummary> GetProductsBySearchQuery(string searchQuery, List<ProductSummary> products);
+        Task<List<ProductSummary>> GetProductsBySearchQuery(string searchQuery, List<ProductSummary> products);
 
-        List<ProductSummary> GetProductsByCountry(string country, List<ProductSummary> products);
+        Task<List<ProductSummary>> GetProductsByCountry(string country, List<ProductSummary> products);
 
-        ProductResp UpdateProductQuantitiesAfterOrder(List<CartData> cartItems);
+        Task<ProductResp> UpdateProductQuantitiesAfterOrder(List<CartData> cartItems);
 
-        List<ProductSummary> GetRecommendedProducts();
+        Task<List<ProductSummary>> GetRecommendedProducts();
 
-        ProductResp RemoveProduct(int productId);
+        Task<ProductResp> RemoveProduct(int productId);
+
+        Task<Dictionary<string, List<ProductSummary>>> GetProductsFromTopCategories();
+
+        Task<List<string>> ExtractCategories();
     }
 }

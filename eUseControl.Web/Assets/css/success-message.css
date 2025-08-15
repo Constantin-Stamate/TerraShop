@@ -1,0 +1,39 @@
+﻿body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+
+.confirmation-container {
+    background-color: #ffffff;
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: fadeIn 1s ease-in;
+}
+
+h1 {
+    font-size: 29px;
+    color: #82c408;
+    margin-bottom: 15px;
+}
+
+.thank-you-msg .icon {
+    color: #82c408;
+    margin-right: 8px;
+    font-size: 25px;
+}
+
+.order-details p {
+    font-size: 17px;
+    color: #333;
+    margin: 8px 0;
+}
+
+.order-details strong {
+    color: #000;
+}

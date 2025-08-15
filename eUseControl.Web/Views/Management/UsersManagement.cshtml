@@ -9,9 +9,7 @@
     @if (!Model.Any())
     {
         <div class="info-message text-center mt-5">
-            <p style="font-size: 16px;">
-                There are currently no users in the system!
-            </p>
+            <p style="font-size: 16px;">There are currently no users in the system!</p>
         </div>
     }
     else
@@ -35,27 +33,26 @@
                         <tr>
                             <th scope="row">
                                 <div class="d-flex align-items-center">
-                                    <img src="@Url.Content(user.ProfileImageUrl)" class="img-fluid me-5 rounded-circle"
-                                         style="width: 80px; height: 80px; object-fit: cover;" alt="">
+                                    <img src="@Url.Content(user.ProfileImageUrl)" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" alt="">
                                 </div>
                             </th>
                             <td>
-                                <p class="title-truncate mb-0 mt-4">@user.Username</p>
+                                <p class="mb-0 mt-4 truncate-text">@Html.DisplayFor(model => user.Username)</p>
                             </td>
                             <td>
-                                <p class="title-truncate mb-0 mt-4">@user.Email</p>
+                                <p class="mb-0 mt-4 truncate-text">@Html.DisplayFor(model => user.Email)</p>
                             </td>
                             <td>
-                                <p class="title-truncate mb-0 mt-4">@user.Address</p>
+                                <p class="mb-0 mt-4 truncate-text">@Html.DisplayFor(model => user.Address)</p>
                             </td>
                             <td>
-                                <p class="mb-0 mt-4">@user.PhoneNumber</p>
+                                <p class="mb-0 mt-4 truncate-text">@Html.DisplayFor(model => user.PhoneNumber)</p>
                             </td>
                             <td>
-                                <p class="mb-0 mt-4">@user.OrderCount</p>
+                                <p class="mb-0 mt-4">@Html.DisplayFor(model => user.OrderCount)</p>
                             </td>
                             <td>
-                                <p class="mb-0 mt-4">$@user.TotalSpent</p>
+                                <p class="mb-0 mt-4">$@Html.DisplayFor(model => user.TotalSpent)</p>
                             </td>
                         </tr>
                     }

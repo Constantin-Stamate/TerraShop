@@ -20,8 +20,7 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
@@ -30,61 +29,18 @@
     <!-- Libraries Stylesheet -->
     @Styles.Render("~/bundles/lightbox/css")
     @Styles.Render("~/bundles/owl/carousel/min/css")
+    @Styles.Render("~/bundles/success-message/css")
 
     <!-- Customized Bootstrap Stylesheet -->
     @Styles.Render("~/bundles/main/css")
-    @Styles.Render("~/bundles/global/css")
 
     <!-- Template Stylesheet -->
     @Styles.Render("~/bundles/style/css")
-
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f7f7f7;
-            margin: 0;
-            padding: 0;
-        }
-
-        .confirmation-container {
-            background-color: #ffffff;
-            max-width: 600px;
-            margin: 80px auto;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            animation: fadeIn 1s ease-in;
-        }
-
-        h1 {
-            font-size: 29px;
-            color: #82c408;
-            margin-bottom: 15px;
-        }
-
-        .thank-you-msg .icon {
-            color: #82c408;
-            margin-right: 8px;
-            font-size: 25px;
-        }
-
-        .order-details p {
-            font-size: 17px;
-            color: #333;
-            margin: 8px 0;
-        }
-
-        .order-details strong {
-            color: #000;
-        }
-    </style>
 </head>
 
 <body>
     <!-- Spinner Start -->
-    <div id="spinner"
-         class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+    <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
     <!-- Spinner End -->
@@ -141,7 +97,6 @@
     @Scripts.Render("~/bundles/waypoints/js")
     @Scripts.Render("~/bundles/lightbox/js")
     @Scripts.Render("~/bundles/owl/carousel/min/js")
-    @Scripts.Render("~/bundles/base/js")
 
     <!-- Template Javascript -->
     @Scripts.Render("~/bundles/main/js")

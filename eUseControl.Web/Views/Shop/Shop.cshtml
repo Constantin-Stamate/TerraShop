@@ -11,64 +11,66 @@
         <div class="col-lg-12">
             <div class="row g-4">
                 <div class="col-xl-3">
-                    <form method="get" action="@Url.Action("Shop", "Shop")" class="input-group w-100 mx-auto d-flex">
-                        @if (Model.CategoryId != null && Model.CategoryId != 0)
+                    @using (Html.BeginForm("Shop", "Shop", FormMethod.Get, new { @class = "input-group w-100 mx-auto d-flex" }))
+                    {
+                        if (Model.CategoryId != null && Model.CategoryId != 0)
                         {
-                            <input type="hidden" name="categoryId" value="@Model.CategoryId" />
+                            @Html.Hidden("categoryId", Model.CategoryId)
                         }
-                        @if (!string.IsNullOrEmpty(Model.SortOption))
+                        if (!string.IsNullOrEmpty(Model.SortOption))
                         {
-                            <input type="hidden" name="sortOption" value="@Model.SortOption" />
+                            @Html.Hidden("sortOption", Model.SortOption)
                         }
-                        @if (Model.MaxPrice > 0)
+                        if (Model.MaxPrice > 0)
                         {
-                            <input type="hidden" name="maxPrice" value="@Model.MaxPrice" />
+                            @Html.Hidden("maxPrice", Model.MaxPrice)
                         }
-                        @if (!string.IsNullOrEmpty(Model.Country))
+                        if (!string.IsNullOrEmpty(Model.Country))
                         {
-                            <input type="hidden" name="country" value="@Model.Country" />
+                            @Html.Hidden("country", Model.Country)
                         }
-                        <input type="search" name="searchQuery" class="form-control p-3 border border-secondary" placeholder="Search" aria-describedby="search-icon-1" style="border-top-left-radius: 0.375rem; border-bottom-left-radius: 0.375rem;" />
-                        <button type="submit" class="btn btn-primary p-3"
-                                style="background-color: #FFB524; border-color: #FFB524 !important; border: 2px solid #FFB524;">
+                        @Html.TextBox("searchQuery", null, new { @class = "form-control p-3 border border-secondary", placeholder = "Search", aria_describedby = "search-icon-1", style = "border-top-left-radius: 0.375rem; border-bottom-left-radius: 0.375rem;" })
+                        <button type="submit" class="btn btn-primary p-3" style="background-color: #FFB524; border-color: #FFB524 !important; border: 2px solid #FFB524;">
                             <i class="fa fa-search"></i>
                         </button>
-                    </form>
+                    }
                 </div>
                 <div class="col-6"></div>
                 <div class="col-xl-3">
-                    <div class="bg-light ps-3 py-3 rounded d-flex align-items-center mb-4"
-                         style="gap: 10px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);">
+                    <div class="bg-light ps-3 py-3 rounded d-flex align-items-center mb-4" style="gap: 10px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);">
                         <label for="fruits" class="mb-0" style="font-size: 14px; margin-right: 50px;">
-                            Default
-                            Sorting:
+                            Default Sorting:
                         </label>
-                        <form method="get" action="@Url.Action("Shop", "Shop")">
-                            @if (Model.CategoryId != null && Model.CategoryId != 0)
+                        @using (Html.BeginForm("Shop", "Shop", FormMethod.Get))
+                        {
+                            if (Model.CategoryId != null && Model.CategoryId != 0)
                             {
-                                <input type="hidden" name="categoryId" value="@Model.CategoryId" />
+                                @Html.Hidden("categoryId", Model.CategoryId)
                             }
-                            @if (Model.MaxPrice > 0)
+                            if (Model.MaxPrice > 0)
                             {
-                                <input type="hidden" name="maxPrice" value="@Model.MaxPrice" />
+                                @Html.Hidden("maxPrice", Model.MaxPrice)
                             }
-                            @if (!string.IsNullOrEmpty(Model.SearchQuery))
+                            if (!string.IsNullOrEmpty(Model.SearchQuery))
                             {
-                                <input type="hidden" name="searchQuery" value="@Model.SearchQuery" />
+                                @Html.Hidden("searchQuery", Model.SearchQuery)
                             }
-                            @if (!string.IsNullOrEmpty(Model.Country))
+                            if (!string.IsNullOrEmpty(Model.Country))
                             {
-                                <input type="hidden" name="country" value="@Model.Country" />
+                                @Html.Hidden("country", Model.Country)
                             }
-                            <select id="sortOption" name="sortOption" class="border-0 form-select-sm bg-light"
-                                    style="padding: 3px 5px; width: 110px;" onchange="this.form.submit()">
-                                <option value="" disabled @(string.IsNullOrEmpty(Model.SortOption) ? "selected" : "")>Option</option>
-                                <option value="lowToHigh" @(Model.SortOption == "lowToHigh" ? "selected" : "")>Price ↑</option>
-                                <option value="highToLow" @(Model.SortOption == "highToLow" ? "selected" : "")>Price ↓</option>
-                                <option value="oldest" @(Model.SortOption == "oldest" ? "selected" : "")>Old →</option>
-                                <option value="newest" @(Model.SortOption == "newest" ? "selected" : "")>New →</option>
-                            </select>
-                        </form>
+                            @Html.DropDownList("sortOption",
+                                new List<SelectListItem>
+                                {
+                                    new SelectListItem { Text = "Option", Value = "", Disabled = true, Selected = string.IsNullOrEmpty(Model.SortOption) },
+                                    new SelectListItem { Text = "Price ↑", Value = "lowToHigh", Selected = Model.SortOption == "lowToHigh" },
+                                    new SelectListItem { Text = "Price ↓", Value = "highToLow", Selected = Model.SortOption == "highToLow" },
+                                    new SelectListItem { Text = "Old →", Value = "oldest", Selected = Model.SortOption == "oldest" },
+                                    new SelectListItem { Text = "New →", Value = "newest", Selected = Model.SortOption == "newest" }
+                                },
+                                new { @class = "border-0 form-select-sm bg-light", style = "padding: 3px 5px; width: 110px;", onchange = "this.form.submit()" }
+                            )
+                        }
                     </div>
                 </div>
             </div>
@@ -99,65 +101,59 @@
                                 </ul>
                             </div>
                         </div>
-                        <form method="get" action="@Url.Action("Shop", "Shop")">
-                            @if (Model.CategoryId != null && Model.CategoryId != 0)
+                        @using (Html.BeginForm("Shop", "Shop", FormMethod.Get))
+                        {
+                            if (Model.CategoryId != null && Model.CategoryId != 0)
                             {
-                                <input type="hidden" name="categoryId" value="@Model.CategoryId" />
+                                @Html.Hidden("categoryId", Model.CategoryId)
                             }
-                            @if (!string.IsNullOrEmpty(Model.SortOption))
+                            if (!string.IsNullOrEmpty(Model.SortOption))
                             {
-                                <input type="hidden" name="sortOption" value="@Model.SortOption" />
+                                @Html.Hidden("sortOption", Model.SortOption)
                             }
-                            @if (!string.IsNullOrEmpty(Model.SearchQuery))
+                            if (!string.IsNullOrEmpty(Model.SearchQuery))
                             {
-                                <input type="hidden" name="searchQuery" value="@Model.SearchQuery" />
+                                @Html.Hidden("searchQuery", Model.SearchQuery)
                             }
-                            @if (!string.IsNullOrEmpty(Model.Country))
+                            if (!string.IsNullOrEmpty(Model.Country))
                             {
-                                <input type="hidden" name="country" value="@Model.Country" />
+                                @Html.Hidden("country", Model.Country)
                             }
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <h4 class="mb-2">Price</h4>
-                                    <input type="range" class="form-range w-100" id="maxPrice" name="maxPrice"
-                                           min="0" max="3000" value="1" oninput="amount.value=this.value">
+                                    @Html.TextBox("maxPrice", "1", new { type = "range", min = "0", max = "3000", oninput = "amount.value=this.value", @class = "form-range w-100", id = "maxPrice" })
                                     <output id="amount" for="maxPrice">1</output>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center my-4">
-                                <button type="submit"
-                                        class="btn border border-secondary px-4 py-3 rounded-pill w-100"
-                                        style="margin-top: -20px; margin-left: -15px; color: #81c408;">
+                                <button type="submit" class="btn border border-secondary px-4 py-3 rounded-pill w-100" style="margin-top: -20px; margin-left: -15px; color: #81c408;">
                                     Filter
                                 </button>
                             </div>
-                        </form>
-                        <form action="@Url.Action("Shop", "Shop")" method="get">
-                            @if (Model.CategoryId != null && Model.CategoryId != 0)
+                        }
+                        @using (Html.BeginForm("Shop", "Shop", FormMethod.Get))
+                        {
+                            if (Model.CategoryId != null && Model.CategoryId != 0)
                             {
-                                <input type="hidden" name="categoryId" value="@Model.CategoryId" />
+                                @Html.Hidden("categoryId", Model.CategoryId)
                             }
-                            @if (!string.IsNullOrEmpty(Model.SortOption))
+                            if (!string.IsNullOrEmpty(Model.SortOption))
                             {
-                                <input type="hidden" name="sortOption" value="@Model.SortOption" />
+                                @Html.Hidden("sortOption", Model.SortOption)
                             }
-                            @if (!string.IsNullOrEmpty(Model.SearchQuery))
+                            if (!string.IsNullOrEmpty(Model.SearchQuery))
                             {
-                                <input type="hidden" name="searchQuery" value="@Model.SearchQuery" />
+                                @Html.Hidden("searchQuery", Model.SearchQuery)
                             }
-                            @if (Model.MaxPrice > 0)
+                            if (Model.MaxPrice > 0)
                             {
-                                <input type="hidden" name="maxPrice" value="@Model.MaxPrice" />
+                                @Html.Hidden("maxPrice", Model.MaxPrice)
                             }
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <h4 class="mb-2">Country</h4>
-                                    <input list="countries"
-                                           name="country"
-                                           class="form-control p-3 border border-secondary"
-                                           placeholder="Enter country"
-                                           style="width: 297px; margin-left: -10px; border-color: #FFB524 !important;"
-                                           onchange="this.form.submit()">
+                                    @Html.TextBox("country", null, new { list = "countries", @class = "form-control p-3 border border-secondary", placeholder = "Enter country", style = "width: 297px; margin-left: -10px; border-color: #FFB524 !important;", onchange = "this.form.submit()" })
                                     <datalist id="countries">
                                         <option value="Afghanistan">
                                         <option value="Albania">
@@ -355,13 +351,12 @@
                                     </datalist>
                                 </div>
                             </div>
-                        </form>
+                        }
                         <div class="col-lg-12">
                             <h4 class="mb-3">Popular products</h4>
                             <div class="d-flex align-items-center justify-content-start">
                                 <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                    <img src="@Url.Content("~/Assets/img/popular-products/popular-product-2.jpg")" class="img-fluid rounded" alt=""
-                                         style="margin-top: 9px; width: 1100px; height: 70px;">
+                                    <img src="@Url.Content("~/Assets/img/popular-products/popular-product-2.jpg")" class="img-fluid rounded" alt="" style="margin-top: 9px; width: 1100px; height: 70px;">
                                 </div>
                                 <div>
                                     <h6 class="mb-2">Bamboo brush</h6>
@@ -380,8 +375,7 @@
                             </div>
                             <div class="d-flex align-items-center justify-content-start">
                                 <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                    <img src="@Url.Content("~/Assets/img/popular-products/popular-product-3.jpg")" class="img-fluid rounded" alt=""
-                                         style="margin-top: 9px; width: 1100px; height: 70px;">
+                                    <img src="@Url.Content("~/Assets/img/popular-products/popular-product-3.jpg")" class="img-fluid rounded" alt="" style="margin-top: 9px; width: 1100px; height: 70px;">
                                 </div>
                                 <div>
                                     <h6 class="mb-2">Bio detergents</h6>
@@ -400,8 +394,7 @@
                             </div>
                             <div class="d-flex align-items-center justify-content-start">
                                 <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                    <img src="@Url.Content("~/Assets/img/popular-products/popular-product-4.jpg")" class="img-fluid rounded" alt=""
-                                         style="margin-top: 9px; width: 1100px; height: 70px;">
+                                    <img src="@Url.Content("~/Assets/img/popular-products/popular-product-4.jpg")" class="img-fluid rounded" alt="" style="margin-top: 9px; width: 1100px; height: 70px;">
                                 </div>
                                 <div>
                                     <h6 class="mb-2">Natural soaps</h6>
@@ -419,17 +412,14 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center my-4">
-                                <a href="@Url.Action("Shop", "Shop")"
-                                   class="btn border border-secondary px-4 py-3 rounded-pill w-100"
-                                   style="margin-left: -40px; color: #81c408; border-color: #81c408;">
+                                <a href="@Url.Action("Shop", "Shop")" class="btn border border-secondary px-4 py-3 rounded-pill w-100" style="margin-left: -40px; color: #81c408; border-color: #81c408;">
                                     View More
                                 </a>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="position-relative">
-                                <img src="@Url.Content("~/Assets/img/banner.jpg")" class="img-fluid w-100 rounded" style="margin-left: -20px;"
-                                     alt="">
+                                <img src="@Url.Content("~/Assets/img/banner.jpg")" class="img-fluid w-100 rounded" style="margin-left: -20px;" alt="">
                             </div>
                         </div>
                     </div>
@@ -444,50 +434,39 @@
                                     <div class="rounded position-relative fruite-item">
                                         <div class="fruite-img">
                                             <a href="@Url.Action("ProductDetails", "Product", new { productId = product.Id })">
-                                                <img src="@Url.Content(product.ProductImageUrl)"
-                                                     class="img-fluid w-100 rounded-top custom-image"
-                                                     alt="Product Image">
+                                                <img src="@Url.Content(product.ProductImageUrl)" class="img-fluid w-100 rounded-top custom-image" alt="Product Image">
                                             </a>
                                         </div>
-                                        @{
-                                            var isInWishlist = Model.WishlistProductIds.Contains(product.Id);
-                                            var action = isInWishlist ? "RemoveProductFromWishlist" : "AddProductToWishlist";
-                                        }
-                                        <form action="@Url.Action(action, "Wishlist")" method="post" style="position: absolute; top: 16px; right: 10px; z-index: 10;">
+                                        @using (Html.BeginForm(Model.WishlistProductIds.Contains(product.Id) ? "RemoveProductFromWishlist" : "AddProductToWishlist", "Wishlist", FormMethod.Post, new { style = "position: absolute; top: 16px; right: 10px; z-index: 10;" }))
+                                        {
                                             @Html.AntiForgeryToken()
-                                            <input type="hidden" name="productId" value="@product.Id" />
+                                            @Html.Hidden("productId", product.Id)
                                             <button type="submit" style="background: none; border: none; cursor: pointer;">
-                                                <i class="@(isInWishlist ? "fas fa-heart" : "far fa-heart") fa-lg pulsing-heart"
-                                                   style="color: #FFB524; transition: transform 0.3s ease;"></i>
+                                                <i class="@(Model.WishlistProductIds.Contains(product.Id) ? "fas fa-heart" : "far fa-heart") fa-lg pulsing-heart" style="color: #FFB524; transition: transform 0.3s ease;"></i>
                                             </button>
-                                        </form>
-                                        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                             style="top: 10px; left: 10px;">
-                                            @product.ProductCategory
+                                        }
+                                        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
+                                            @Html.DisplayFor(m => product.ProductCategory)
                                         </div>
                                         <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                            <h4 class="text-center product-name">@product.ProductName</h4>
-                                            <p class="product-description">
-                                                @product.ProductDescription
-                                            </p>
+                                            <h4 class="text-center product-name">@Html.DisplayFor(m => product.ProductName)</h4>
+                                            <p class="product-description">@Html.DisplayFor(m => product.ProductDescription)</p>
                                             <div class="d-flex justify-content-between flex-lg-wrap">
-                                                <p class="text-dark fs-5 fw-bold mb-0">$@product.ProductPrice</p>
+                                                <p class="text-dark fs-5 fw-bold mb-0">$@Html.DisplayFor(m => product.ProductPrice)</p>
                                                 @if (product.ProductQuantity > 0)
                                                 {
-                                                    <form action="@Url.Action("AddProductToCart", "Cart")" method="post" class="d-inline">
+                                                    using (Html.BeginForm("AddProductToCart", "Cart", FormMethod.Post, new { @class = "d-inline" }))
+                                                    {
                                                         @Html.AntiForgeryToken()
-                                                        <input type="hidden" name="productId" value="@product.Id" />
-                                                        <button type="submit"
-                                                                class="btn border border-secondary rounded-pill px-3 text-primary pulse-js">
+                                                        @Html.Hidden("productId", product.Id)
+                                                        <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary pulse-js">
                                                             <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to Cart
                                                         </button>
-                                                    </form>
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    <a href="#"
-                                                       class="btn border border-secondary rounded-pill px-3 pulse-js"
-                                                       style="background-color: #fff; color: #ccc; cursor: not-allowed; pointer-events: none;">
+                                                    <a href="#" class="btn border border-secondary rounded-pill px-3 pulse-js" style="background-color: #fff; color: #ccc; cursor: not-allowed; pointer-events: none;">
                                                         <i class="fa fa-shopping-bag me-2" style="color: #ccc;"></i> Add to Cart
                                                     </a>
                                                 }
@@ -510,12 +489,10 @@
                                     {
                                         <a href="@Url.Action("Shop", "Shop", new { page = Model.CurrentPage - 1, categoryId = Model.CategoryId != null ? Model.CategoryId : (int?)null, sortOption = !string.IsNullOrEmpty(Model.SortOption) ? Model.SortOption : null, maxPrice = Model.MaxPrice != 0 ? Model.MaxPrice : (int?)null, searchQuery = !string.IsNullOrEmpty(Model.SearchQuery) ? Model.SearchQuery : null, country = !string.IsNullOrEmpty(Model.Country) ? Model.Country : null })" class="rounded">&laquo;</a>
                                     }
-
                                     @for (var i = 1; i <= Model.TotalPages; i++)
                                     {
                                         <a href="@Url.Action("Shop", "Shop", new { page = i, categoryId = Model.CategoryId != null ? Model.CategoryId : (int?)null, sortOption = !string.IsNullOrEmpty(Model.SortOption) ? Model.SortOption : null, maxPrice = Model.MaxPrice != 0 ? Model.MaxPrice : (int?)null, searchQuery = !string.IsNullOrEmpty(Model.SearchQuery) ? Model.SearchQuery : null, country = !string.IsNullOrEmpty(Model.Country) ? Model.Country : null })" class="rounded @(i == Model.CurrentPage ? "active" : "")">@i</a>
                                     }
-
                                     @if (Model.CurrentPage < Model.TotalPages)
                                     {
                                         <a href="@Url.Action("Shop", "Shop", new { page = Model.CurrentPage + 1, categoryId = Model.CategoryId != null ? Model.CategoryId : (int?)null, sortOption = !string.IsNullOrEmpty(Model.SortOption) ? Model.SortOption : null, maxPrice = Model.MaxPrice != 0 ? Model.MaxPrice : (int?)null, searchQuery = !string.IsNullOrEmpty(Model.SearchQuery) ? Model.SearchQuery : null, country = !string.IsNullOrEmpty(Model.Country) ? Model.Country : null })" class="rounded">&raquo;</a>
@@ -532,53 +509,44 @@
                         {
                             foreach (var product in Model.RecommendedProducts)
                             {
-                                <div class="border border-primary rounded position-relative vesitable-item" style="margin-top: 40px; min-height: 430px;">
+                                <div class="rounded position-relative vesitable-item" style="margin-top: 40px;">
                                     <div class="vesitable-img">
                                         <a href="@Url.Action("ProductDetails", "Product", new { productId = product.Id })">
                                             <img src="@Url.Content(product.ProductImageUrl)" class="img-fluid w-100 rounded-top custom-image" alt="Product Image">
                                         </a>
                                     </div>
-                                    @{
-                                        var isInWishlist = Model.WishlistProductIds.Contains(product.Id);
-                                        var action = isInWishlist ? "RemoveProductFromWishlist" : "AddProductToWishlist";
-                                    }
-                                    <form action="@Url.Action(action, "Wishlist")" method="post" style="position: absolute; top: 16px; left: 10px; z-index: 10;">
+                                    @using (Html.BeginForm(Model.WishlistProductIds.Contains(product.Id) ? "RemoveProductFromWishlist" : "AddProductToWishlist", "Wishlist", FormMethod.Post, new { style = "position: absolute; top: 16px; left: 10px; z-index: 10;" }))
+                                    {
                                         @Html.AntiForgeryToken()
-                                        <input type="hidden" name="productId" value="@product.Id" />
+                                        @Html.Hidden("productId", product.Id)
                                         <button type="submit" style="background: none; border: none; cursor: pointer;">
-                                            <i class="@(isInWishlist ? "fas fa-heart" : "far fa-heart") fa-lg pulsing-heart"
-                                               style="color: #81c408; transition: transform 0.3s ease;"></i>
+                                            <i class="@(Model.WishlistProductIds.Contains(product.Id) ? "fas fa-heart" : "far fa-heart") fa-lg pulsing-heart" style="color: #81c408; transition: transform 0.3s ease;"></i>
                                         </button>
-                                    </form>
-                                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                         style="top: 10px; right: 10px;">
-                                        @product.ProductCategory
+                                    }
+                                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">
+                                        @Html.DisplayFor(m => product.ProductCategory)
                                     </div>
-                                    <div class="p-4 pb-0 rounded-bottom">
-                                        <h4 class="text-center product-name">@product.ProductName</h4>
-                                        <p class="product-description">
-                                            @product.ProductDescription
-                                        </p>
+                                    <div class="p-4 border border-primary border-top-0 rounded-bottom">
+                                        <h4 class="text-center product-name">@Html.DisplayFor(m => product.ProductName)</h4>
+                                        <p class="product-description">@Html.DisplayFor(m => product.ProductDescription)</p>
                                         <div class="d-flex justify-content-between flex-lg-wrap">
-                                            <p class="text-dark fs-5 fw-bold">$@product.ProductPrice</p>
+                                            <p class="text-dark fs-5 fw-bold mb-0">$@Html.DisplayFor(m => product.ProductPrice)</p>
                                             @if (product.ProductQuantity > 0)
                                             {
-                                                <form action="@Url.Action("AddProductToCart", "Cart")" method="post" class="d-inline">
+                                                using (Html.BeginForm("AddProductToCart", "Cart", FormMethod.Post, new { @class = "d-inline" }))
+                                                {
                                                     @Html.AntiForgeryToken()
-                                                    <input type="hidden" name="productId" value="@product.Id" />
-                                                    <button type="submit"
-                                                            class="btn border border-secondary rounded-pill px-3 text-primary pulse-js">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to Cart
+                                                    @Html.Hidden("productId", product.Id)
+                                                    <button type="submit" class="btn border border-primary rounded-pill px-3 text-secondary pulse-js" style="transition: background-color 0.3s ease, color 0.3s ease;" onmouseover="this.style.backgroundColor='#81C408'; this.style.setProperty('color', 'white', 'important');" onmouseout="this.style.backgroundColor=''; this.style.removeProperty('color');">
+                                                        <i class="fa fa-shopping-bag me-2 text-secondary"></i> Add to Cart
                                                     </button>
-                                                </form>
+                                                }
                                             }
                                             else
                                             {
-                                                <button class="btn border border-secondary rounded-pill px-3 pulse-js"
-                                                        style="background-color: #fff; color: #ccc; cursor: not-allowed; box-shadow: none !important; padding-top: 3px; padding-bottom: 3px;"
-                                                        disabled>
+                                                <a href="#" class="btn border border-primary rounded-pill px-3 pulse-js" style="background-color: #fff; color: #ccc; cursor: not-allowed; pointer-events: none;">
                                                     <i class="fa fa-shopping-bag me-2" style="color: #ccc;"></i> Add to Cart
-                                                </button>
+                                                </a>
                                             }
                                         </div>
                                     </div>
@@ -597,63 +565,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .product-description {
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1.5em;
-        height: 4.5em;
-        white-space: normal;
-        word-wrap: break-word;
-    }
-
-    .product-name {
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        height: 1.5em;
-        line-height: 1.5em;
-        word-wrap: break-word;
-    }
-
-    .custom-image {
-        height: 210px;
-        width: 100%;
-        object-fit: cover;
-    }
-
-    .info-message {
-        font-size: 16px;
-    }
-</style>
-
-<script>
-    const hearts = document.querySelectorAll('.pulsing-heart');
-
-    hearts.forEach((heart) => {
-        let scaleUp = true;
-        setInterval(() => {
-            heart.style.transform = scaleUp ? 'scale(1.3)' : 'scale(1)';
-            scaleUp = !scaleUp;
-        }, 500);
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const buttons = document.querySelectorAll(".pulse-js");
-
-        buttons.forEach(button => {
-            setInterval(() => {
-                button.style.transform = "scale(1.05)";
-                setTimeout(() => {
-                    button.style.transform = "scale(1)";
-                }, 300);
-            }, 1000);
-        });
-    });
-</script>

@@ -11,10 +11,10 @@ namespace eUseControl.Web
     {
         void Application_Start(object sender, EventArgs e)
         {
-           AreaRegistration.RegisterAllAreas();
-           RouteConfig.RegisterRoutes(RouteTable.Routes);
+            AreaRegistration.RegisterAllAreas();
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-           BundleConfig.RegisterBundles(BundleTable.Bundles);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
 
         protected void Application_Error()

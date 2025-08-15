@@ -3,4 +3,6 @@
 *.html linguist-detectable=true
 *.css linguist-detectable=true
 *.js linguist-detectable=true
-*.scss linguist-detectable=false
+*.scss linguist-detectable=true
+*.aspx linguist-detectable=true
+*.cshtml linguist-detectable=true

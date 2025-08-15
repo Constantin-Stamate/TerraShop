@@ -1,0 +1,78 @@
+﻿body {
+    font-family: 'Poppins', sans-serif;
+    background: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+
+.confirmation-container {
+    background-color: #ffffff;
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: fadeIn 1s ease-in;
+}
+
+h1 {
+    font-size: 29px;
+    color: #82c408;
+    margin-bottom: 15px;
+}
+
+.thank-you-msg {
+    font-size: 21px;
+    color: #444;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+}
+
+    .thank-you-msg .icon {
+        color: #82c408;
+        margin-right: 8px;
+        font-size: 25px;
+    }
+
+.main-msg {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.sub-msg {
+    font-size: 17px;
+    color: #777;
+    margin-top: 5px;
+}
+
+.order-details p {
+    font-size: 17px;
+    color: #333;
+    margin: 8px 0;
+}
+
+.order-details strong {
+    color: #000;
+}
+
+.btn-home {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 24px;
+    background-color: #82c408;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+    .btn-home:hover {
+        background-color: #82c408;
+        color: white;
+        transform: scale(1.05);
+    }

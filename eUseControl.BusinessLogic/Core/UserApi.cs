@@ -6,11 +6,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
-using AutoMapper;
 using eUseControl.BusinessLogic.DBModel;
 using eUseControl.Domain.Entities;
 using eUseControl.Domain.Entities.Cart;
+using eUseControl.Domain.Entities.Chat;
 using eUseControl.Domain.Entities.Contact;
 using eUseControl.Domain.Entities.Order;
 using eUseControl.Domain.Entities.Payment;
@@ -28,18 +29,16 @@ namespace eUseControl.BusinessLogic.Core
 {
     public class UserApi
     {
-        private readonly string _ollamaApiUrl = "http://localhost:11434/api/chat";
-
-        internal URegisterResp UserRegisterAction(URegisterData data)
+        internal async Task<URegisterResp> UserRegisterAction(URegisterData data)
         {
             try
             {
                 if (data.Password.Length < 8)
                 {
-                    return new URegisterResp 
-                    { 
-                        Status = false, 
-                        StatusMsg = "Minimum 8 characters required!" 
+                    return new URegisterResp
+                    {
+                        Status = false,
+                        StatusMsg = "Minimum 8 characters required!"
                     };
                 }
 
@@ -54,21 +53,23 @@ namespace eUseControl.BusinessLogic.Core
 
                 using (var db = new UserContext())
                 {
-                    if (db.Users.Any(u => u.Email == data.Email))
+                    if (await db.Users
+                        .AnyAsync(u => u.Email == data.Email))
                     {
-                        return new URegisterResp 
-                        { 
-                            Status = false, 
-                            StatusMsg = "Email has already been used!" 
+                        return new URegisterResp
+                        {
+                            Status = false,
+                            StatusMsg = "Email has already been used!"
                         };
                     }
 
-                    if (db.Users.Any(u => u.Username == data.Username))
+                    if (await db.Users
+                        .AnyAsync(u => u.Username == data.Username))
                     {
-                        return new URegisterResp 
-                        { 
-                            Status = false, 
-                            StatusMsg = "Username has already been used!" 
+                        return new URegisterResp
+                        {
+                            Status = false,
+                            StatusMsg = "Username has already been used!"
                         };
                     }
 
@@ -85,48 +86,39 @@ namespace eUseControl.BusinessLogic.Core
                     };
 
                     db.Users.Add(newUser);
-                    db.SaveChanges();
-                }
+                    await db.SaveChangesAsync();
 
-                return new URegisterResp 
-                { 
-                    Status = true,
-                    StatusMsg = "You have successfully registered!"
-                };
+                    return new URegisterResp
+                    {
+                        Status = true,
+                        StatusMsg = "You have successfully registered!"
+                    };
+                }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new URegisterResp 
-                { 
-                    Status = false, 
-                    StatusMsg = "Hmm, something went wrong!" 
+                return new URegisterResp
+                {
+                    Status = false,
+                    StatusMsg = "Hmm, something went wrong!"
                 };
             }
         }
 
-        internal ULoginResp UserLoginAction(ULoginData data)
+        internal async Task<ULoginResp> UserLoginAction(ULoginData data)
         {
             try
             {
-                UDbTable result;
-                var validate = new EmailAddressAttribute();
-                var pass = LoginHelper.HashGen(data.Password);
+                var isEmail = new EmailAddressAttribute().IsValid(data.Username);
+                var hashedPass = LoginHelper.HashGen(data.Password);
 
                 using (var db = new UserContext())
                 {
-                    if (validate.IsValid(data.Username))
-                    {
-                        result = db.Users
-                            .FirstOrDefault(u => u.Email == data.Username && u.Password == pass);
-                    }
-                    else
-                    {
-                        result = db.Users
-                            .FirstOrDefault(u => u.Username == data.Username && u.Password == pass);
-                    }
+                    var user = await db.Users
+                        .FirstOrDefaultAsync(u => (isEmail ? u.Email == data.Username : u.Username == data.Username) && u.Password == hashedPass);
 
-                    if (result == null)
+                    if (user == null)
                     {
                         return new ULoginResp
                         {
@@ -135,23 +127,23 @@ namespace eUseControl.BusinessLogic.Core
                         };
                     }
 
-                    result.LastIp = data.LastIp;
-                    result.LastLogin = data.LastLogin;
+                    user.LastIp = data.LastIp;
+                    user.LastLogin = data.LastLogin;
 
-                    db.Entry(result).State = EntityState.Modified;
-                    db.SaveChanges();
+                    db.Entry(user).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
 
                     return new ULoginResp
                     {
                         Status = true,
                         UserMinimal = new UserMinimal
                         {
-                            Id = result.Id,
-                            Username = result.Username,
-                            Email = result.Email,
-                            LastLogin = result.LastLogin ?? DateTime.Now,
-                            LastIp = result.LastIp,
-                            Level = result.Level ?? URole.User
+                            Id = user.Id,
+                            Username = user.Username,
+                            Email = user.Email,
+                            LastLogin = user.LastLogin ?? DateTime.Now,
+                            LastIp = user.LastIp,
+                            Level = user.Level ?? URole.User
                         }
                     };
                 }
@@ -167,23 +159,20 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal HttpCookie Cookie(string loginCredential)
+        internal async Task<HttpCookie> Cookie(string loginCredential)
         {
             try
             {
+                var cookieValue = CookieGenerator.Create(loginCredential);
                 var apiCookie = new HttpCookie("X-KEY")
                 {
-                    Value = CookieGenerator.Create(loginCredential)
+                    Value = cookieValue
                 };
 
-                using (var db = new SessionContext())
+                using (var usersDb = new UserContext())
                 {
-                    UDbTable user;
-                    using (var usersDb = new UserContext())
-                    {
-                        user = usersDb.Users
-                            .FirstOrDefault(u => u.Username == loginCredential);
-                    }
+                    var user = await usersDb.Users
+                        .FirstOrDefaultAsync(u => u.Username == loginCredential);
 
                     if (user == null)
                     {
@@ -191,30 +180,30 @@ namespace eUseControl.BusinessLogic.Core
                         return null;
                     }
 
-                    SessionDbTable curent;
-                    var validate = new EmailAddressAttribute();
-
-                    curent = db.UserSessions
-                        .FirstOrDefault(e => e.UserId == user.Id);
-
-                    if (curent != null)
+                    using (var sessionDb = new SessionContext())
                     {
-                        curent.CookieString = apiCookie.Value;
-                        curent.ExpireTime = DateTime.Now.AddMinutes(60);
+                        var current = await sessionDb.UserSessions
+                            .FirstOrDefaultAsync(e => e.UserId == user.Id);
 
-                        db.Entry(curent).State = EntityState.Modified;
-                        db.SaveChanges();
-                    }
-                    else
-                    {
-                        db.UserSessions.Add(new SessionDbTable
+                        if (current != null)
                         {
-                            UserId = user.Id,
-                            CookieString = apiCookie.Value,
-                            ExpireTime = DateTime.Now.AddMinutes(60)
-                        });
+                            current.CookieString = apiCookie.Value;
+                            current.ExpireTime = DateTime.Now.AddMinutes(60);
 
-                        db.SaveChanges();
+                            sessionDb.Entry(current).State = EntityState.Modified;
+                            await sessionDb.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            sessionDb.UserSessions.Add(new SessionDbTable
+                            {
+                                UserId = user.Id,
+                                CookieString = apiCookie.Value,
+                                ExpireTime = DateTime.Now.AddMinutes(60)
+                            });
+
+                            await sessionDb.SaveChangesAsync();
+                        }
                     }
                 }
 
@@ -231,40 +220,39 @@ namespace eUseControl.BusinessLogic.Core
         {
             try
             {
-                SessionDbTable session;
-                UDbTable curentUser;
-
-                using (var db = new SessionContext())
+                using (var sessionDb = new SessionContext())
                 {
-                    session = db.UserSessions
+                    var session = sessionDb.UserSessions
                         .FirstOrDefault(s => s.CookieString == cookie && s.ExpireTime > DateTime.Now);
+
+                    if (session == null)
+                    {
+                        return null;
+                    }
+
+                    using (var userDb = new UserContext())
+                    {
+                        var curentUser = userDb.Users
+                            .FirstOrDefault(u => u.Id == session.UserId);
+
+                        if (curentUser == null)
+                        {
+                            return null;
+                        }
+
+                        var user = new UserMinimal
+                        {
+                            Id = curentUser.Id,
+                            Username = curentUser.Username,
+                            Email = curentUser.Email,
+                            LastIp = curentUser.LastIp,
+                            LastLogin = curentUser.LastLogin ?? DateTime.Now,
+                            Level = curentUser.Level ?? URole.User
+                        };
+
+                        return user;
+                    }
                 }
-
-                if (session == null)
-                {
-                    return null;
-                }
-
-                using (var db = new UserContext())
-                {
-                    curentUser = db.Users
-                        .FirstOrDefault(u => u.Id == session.UserId);
-                }
-
-                if (curentUser == null)
-                {
-                    return null;
-                }
-
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<UDbTable, UserMinimal>();
-                });
-
-                var mapper = config.CreateMapper();
-                UserMinimal userMinimal = mapper.Map<UserMinimal>(curentUser);
-
-                return userMinimal;
             }
             catch (Exception ex)
             {
@@ -273,7 +261,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ProductResp CreateProductAction(ProductData productData, int userId)
+        internal async Task<ProductResp> CreateProductAction(ProductData productData, int userId)
         {
             try
             {
@@ -285,107 +273,105 @@ namespace eUseControl.BusinessLogic.Core
                     string.IsNullOrWhiteSpace(productData.ProductDescription) ||
                     string.IsNullOrWhiteSpace(productData.ProductCategory))
                 {
-                    return new ProductResp 
-                    { 
-                        Status = false, 
-                        StatusMsg = "All fields are required!" 
+                    return new ProductResp
+                    {
+                        Status = false,
+                        StatusMsg = "All fields are required!"
                     };
                 }
 
                 if (productData.ProductQuantity < 0)
                 {
-                    return new ProductResp 
-                    { 
-                        Status = false, 
-                        StatusMsg = "Quantity must be a positive number!" 
+                    return new ProductResp
+                    {
+                        Status = false,
+                        StatusMsg = "Quantity must be a positive number!"
                     };
                 }
 
                 if (productData.ProductPrice <= 0)
                 {
-                    return new ProductResp 
-                    { 
-                        Status = false, 
-                        StatusMsg = "Price must be greater than zero!" 
+                    return new ProductResp
+                    {
+                        Status = false,
+                        StatusMsg = "Price must be greater than zero!"
                     };
                 }
 
-                CategoryDbTable category;
                 using (var db = new CategoryContext())
                 {
-                    category = db.ProductCategories
-                        .FirstOrDefault(c => c.CategoryName == productData.ProductCategory);
+                    var category = await db.ProductCategories
+                        .FirstOrDefaultAsync(c => c.CategoryName == productData.ProductCategory);
 
                     if (category == null)
                     {
-                        return new ProductResp 
-                        { 
-                            Status = false, 
-                            StatusMsg = "Invalid category!" 
+                        return new ProductResp
+                        {
+                            Status = false,
+                            StatusMsg = "Invalid category!"
+                        };
+                    }
+
+                    using (var productDb = new ProductContext())
+                    {
+                        var product = new ProductDbTable
+                        {
+                            ProductName = productData.ProductName,
+                            ProductAddress = productData.ProductAddress,
+                            ProductQuantity = productData.ProductQuantity,
+                            ProductQuality = productData.ProductQuality,
+                            ProductPrice = productData.ProductPrice,
+                            ProductRegion = productData.ProductRegion,
+                            ProductImageUrl = productData.ProductImageUrl,
+                            ProductDescription = productData.ProductDescription,
+                            ProductPostDate = DateTime.Now,
+                            UserId = userId,
+                            CategoryId = category.Id,
+                            ProductStatus = ProductStatus.Available,
+                            RecommendationStatus = RecommendationStatus.Preferred,
+                            ProductRating = 5
+                        };
+
+                        productDb.Products.Add(product);
+                        await productDb.SaveChangesAsync();
+
+                        return new ProductResp
+                        {
+                            Status = true,
+                            StatusMsg = "The product has been successfully created!"
                         };
                     }
                 }
-
-                using (var db = new ProductContext())
-                {
-                    var product = new ProductDbTable
-                    {
-                        ProductName = productData.ProductName,
-                        ProductAddress = productData.ProductAddress,
-                        ProductQuantity = productData.ProductQuantity,
-                        ProductQuality = productData.ProductQuality,
-                        ProductPrice = productData.ProductPrice,
-                        ProductRegion = productData.ProductRegion,
-                        ProductImageUrl = productData.ProductImageUrl,
-                        ProductDescription = productData.ProductDescription,
-                        ProductPostDate = DateTime.Now,
-                        UserId = userId,
-                        CategoryId = category.Id,
-                        ProductStatus = ProductStatus.Available,
-                        RecommendationStatus = RecommendationStatus.Preferred,
-                        ProductRating = 5
-                    };
-
-                    db.Products.Add(product);
-                    db.SaveChanges();
-                }
-
-                return new ProductResp 
-                { 
-                    Status = true, 
-                    StatusMsg = "The product has been successfully created!"
-                };
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new ProductResp 
-                { 
-                    Status = false, 
-                    StatusMsg = "An error occurred while saving the product!" 
+                return new ProductResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while saving the product!"
                 };
             }
         }
 
-        internal List<ProductMinimal> GetProductsByUserIdAction(int userId)
+        internal async Task<List<ProductMinimal>> GetProductsByUserIdAction(int userId)
         {
             try
             {
                 using (var db = new ProductContext())
                 {
-                    var products = db.Products
+                    return await db.Products
                         .Where(p => p.UserId == userId)
-                        .ToList();
-
-                    var config = new MapperConfiguration(cfg =>
-                    {
-                        cfg.CreateMap<ProductDbTable, ProductMinimal>();
-                    });
-
-                    var mapper = config.CreateMapper();
-                    var productMinimals = mapper.Map<List<ProductMinimal>>(products);
-
-                    return productMinimals;
+                        .Select(p => new ProductMinimal
+                        {
+                            Id = p.Id,
+                            ProductName = p.ProductName,
+                            ProductDescription = p.ProductDescription,
+                            ProductPrice = p.ProductPrice,
+                            ProductImageUrl = p.ProductImageUrl,
+                            ProductStatus = p.ProductStatus
+                        })
+                        .ToListAsync();
                 }
             }
             catch (Exception ex)
@@ -395,27 +381,27 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ProductData GetProductByIdAction(int productId)
+        internal async Task<ProductData> GetProductByIdAction(int productId)
         {
             try
             {
-                using (var db = new ProductContext()) 
+                using (var db = new ProductContext())
                 {
-                    var product = db.Products
-                                    .Where(p => p.Id == productId)
-                                    .FirstOrDefault();
+                    var product = await db.Products
+                        .Where(p => p.Id == productId)
+                        .FirstOrDefaultAsync();
 
                     if (product == null)
                     {
-                        return null; 
+                        return null;
                     }
 
                     using (var categoryDb = new CategoryContext())
                     {
-                        var categoryName = categoryDb.ProductCategories
-                                                     .Where(c => c.Id == product.CategoryId)
-                                                     .Select(c => c.CategoryName)
-                                                     .FirstOrDefault();
+                        var categoryName = await categoryDb.ProductCategories
+                            .Where(c => c.Id == product.CategoryId)
+                            .Select(c => c.CategoryName)
+                            .FirstOrDefaultAsync();
 
                         var productData = new ProductData
                         {
@@ -441,11 +427,11 @@ namespace eUseControl.BusinessLogic.Core
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return null; 
+                return null;
             }
         }
 
-        internal ProductResp UpdateProductAction(ProductData productData)
+        internal async Task<ProductResp> UpdateProductAction(ProductData productData)
         {
             try
             {
@@ -456,162 +442,164 @@ namespace eUseControl.BusinessLogic.Core
                     string.IsNullOrWhiteSpace(productData.ProductDescription) ||
                     string.IsNullOrWhiteSpace(productData.ProductCategory))
                 {
-                    return new ProductResp 
-                    { 
-                        Status = false, 
-                        StatusMsg = "All fields are required!" 
+                    return new ProductResp
+                    {
+                        Status = false,
+                        StatusMsg = "All fields are required!"
                     };
                 }
 
                 if (productData.ProductQuantity < 0)
                 {
-                    return new ProductResp 
-                    { 
-                        Status = false, 
-                        StatusMsg = "Quantity must be a positive number!" 
+                    return new ProductResp
+                    {
+                        Status = false,
+                        StatusMsg = "Quantity must be a positive number!"
                     };
                 }
 
                 if (productData.ProductPrice <= 0)
                 {
-                    return new ProductResp 
-                    { 
-                        Status = false, 
-                        StatusMsg = "Price must be greater than zero!" 
+                    return new ProductResp
+                    {
+                        Status = false,
+                        StatusMsg = "Price must be greater than zero!"
                     };
                 }
 
-                CategoryDbTable category;
                 using (var db = new CategoryContext())
                 {
-                    category = db.ProductCategories
-                        .FirstOrDefault(c => c.CategoryName == productData.ProductCategory);
+                    var category = await db.ProductCategories
+                        .FirstOrDefaultAsync(c => c.CategoryName == productData.ProductCategory);
 
                     if (category == null)
                     {
-                        return new ProductResp 
-                        { 
-                            Status = false, 
-                            StatusMsg = "Invalid category!" 
+                        return new ProductResp
+                        {
+                            Status = false,
+                            StatusMsg = "Invalid category!"
                         };
                     }
-                }
 
-                ProductDbTable product;
-                using (var db = new ProductContext())
-                {
-                    product = db.Products
-                        .FirstOrDefault(p => p.Id == productData.Id);
-
-                    if (product == null)
+                    using (var productDb = new ProductContext())
                     {
-                        return new ProductResp 
-                        { 
-                            Status = false, 
-                            StatusMsg = "Product not found!" 
+                        var product = await productDb.Products
+                            .FirstOrDefaultAsync(p => p.Id == productData.Id);
+
+                        if (product == null)
+                        {
+                            return new ProductResp
+                            {
+                                Status = false,
+                                StatusMsg = "Product not found!"
+                            };
+                        }
+
+                        product.ProductName = productData.ProductName;
+                        product.ProductAddress = productData.ProductAddress;
+                        product.ProductQuantity = productData.ProductQuantity;
+                        product.ProductQuality = productData.ProductQuality;
+                        product.ProductPrice = productData.ProductPrice;
+                        product.ProductRegion = productData.ProductRegion;
+                        product.ProductDescription = productData.ProductDescription;
+                        product.CategoryId = category.Id;
+                        if (!string.IsNullOrEmpty(productData.ProductImageUrl))
+                        {
+                            product.ProductImageUrl = productData.ProductImageUrl;
+                        }
+
+                        productDb.Entry(product).State = EntityState.Modified;
+                        await productDb.SaveChangesAsync();
+
+                        return new ProductResp
+                        {
+                            Status = true,
+                            StatusMsg = "Product updated successfully!"
                         };
                     }
-
-                    product.ProductName = productData.ProductName;
-                    product.ProductAddress = productData.ProductAddress;
-                    product.ProductQuantity = productData.ProductQuantity;
-                    product.ProductQuality = productData.ProductQuality;
-                    product.ProductPrice = productData.ProductPrice;
-                    product.ProductRegion = productData.ProductRegion;
-                    if (!string.IsNullOrEmpty(productData.ProductImageUrl))
-                        product.ProductImageUrl = productData.ProductImageUrl;
-                    product.ProductDescription = productData.ProductDescription;
-                    product.CategoryId = category.Id;
-
-                    db.Entry(product).State = EntityState.Modified;
-                    db.SaveChanges();
                 }
-
-                return new ProductResp 
-                { 
-                    Status = true, 
-                    StatusMsg = "Product updated successfully!" 
-                };
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new ProductResp 
-                { 
-                    Status = false, 
-                    StatusMsg = "An error occurred while updating the product!" 
+                return new ProductResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while updating the product!"
                 };
             }
         }
 
-        internal ProfileData GetProfileByUserIdAction(int userId)
+        internal async Task<ProfileData> GetProfileByUserIdAction(int userId)
         {
             try
             {
-                UDbTable user;
                 using (var userDb = new UserContext())
                 {
-                    user = userDb.Users
-                        .FirstOrDefault(u => u.Id == userId);
+                    var user = await userDb.Users
+                        .FirstOrDefaultAsync(u => u.Id == userId);
 
                     if (user == null)
                     {
                         return null;
                     }
-                }
 
-                ProfileData profile = null;
-                using (var profileDb = new ProfileContext())
-                {
-                    var userProfile = profileDb.UserProfiles
-                        .FirstOrDefault(p => p.UserId == userId);
-
-                    if (userProfile == null)
+                    using (var profileDb = new ProfileContext())
                     {
-                        userProfile = new ProfileDbTable
+                        var userProfile = await profileDb.UserProfiles
+                            .FirstOrDefaultAsync(p => p.UserId == userId);
+
+                        if (userProfile == null)
                         {
-                            UserId = userId,
-                            FirstName = "User", 
-                            LastName = "User", 
-                            Email = user.Email,
-                            Address = "N/A",
-                            PhoneNumber = "000-000-0000",
-                            LastProfileUpdate = DateTime.Now,
-                            ProfileImageUrl = "/Assets/img/user.jpg"
+                            userProfile = new ProfileDbTable
+                            {
+                                UserId = userId,
+                                FirstName = "User",
+                                LastName = "User",
+                                Email = user.Email,
+                                Address = "N/A",
+                                PhoneNumber = "000-000-0000",
+                                LastProfileUpdate = DateTime.Now,
+                                ProfileImageUrl = "/Assets/img/user.jpg"
+                            };
+
+                            profileDb.UserProfiles.Add(userProfile);
+                            await profileDb.SaveChangesAsync();
+                        }
+
+                        var profile = new ProfileData
+                        {
+                            Id = userProfile.Id,
+                            UserId = userProfile.UserId,
+                            FirstName = userProfile.FirstName,
+                            LastName = userProfile.LastName,
+                            Email = userProfile.Email,
+                            Address = userProfile.Address,
+                            PhoneNumber = userProfile.PhoneNumber,
+                            ProfileImageUrl = userProfile.ProfileImageUrl
                         };
 
-                        profileDb.UserProfiles.Add(userProfile);
-                        profileDb.SaveChanges();
+                        return profile;
                     }
-
-                    var config = new MapperConfiguration(cfg =>
-                    {
-                        cfg.CreateMap<ProfileDbTable, ProfileData>();
-                    });
-
-                    var mapper = config.CreateMapper();
-                    profile = mapper.Map<ProfileData>(userProfile);
                 }
-
-                return profile;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return null;  
+                return null;
             }
         }
 
-        internal ProfileResp UpdateProfileAction(ProfileData profileData)
+        internal async Task<ProfileResp> UpdateProfileAction(ProfileData profileData)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(profileData.FirstName) || profileData.FirstName.Length < 5)
-                { 
-                    return new ProfileResp 
-                    { 
-                        Status = false, 
-                        StatusMsg = "First name must be at least 5 characters!" 
+                {
+                    return new ProfileResp
+                    {
+                        Status = false,
+                        StatusMsg = "First name must be at least 5 characters!"
                     };
                 }
 
@@ -653,8 +641,8 @@ namespace eUseControl.BusinessLogic.Core
 
                 using (var userDb = new UserContext())
                 {
-                    var existingEmailUser = userDb.Users
-                        .FirstOrDefault(u => u.Email == profileData.Email && u.Id != profileData.UserId);
+                    var existingEmailUser = await userDb.Users
+                        .FirstOrDefaultAsync(u => u.Email == profileData.Email && u.Id != profileData.UserId);
 
                     if (existingEmailUser != null)
                     {
@@ -667,8 +655,8 @@ namespace eUseControl.BusinessLogic.Core
 
                     using (var profileDb = new ProfileContext())
                     {
-                        var userProfile = profileDb.UserProfiles
-                            .FirstOrDefault(p => p.UserId == profileData.UserId);
+                        var userProfile = await profileDb.UserProfiles
+                            .FirstOrDefaultAsync(p => p.UserId == profileData.UserId);
 
                         if (userProfile == null)
                         {
@@ -684,21 +672,24 @@ namespace eUseControl.BusinessLogic.Core
                         userProfile.Email = profileData.Email;
                         userProfile.Address = profileData.Address;
                         userProfile.PhoneNumber = profileData.PhoneNumber;
-                        if (!string.IsNullOrEmpty(profileData.ProfileImageUrl))
-                            userProfile.ProfileImageUrl = profileData.ProfileImageUrl;
                         userProfile.LastProfileUpdate = DateTime.Now;
+                        if (!string.IsNullOrEmpty(profileData.ProfileImageUrl))
+                        {
+                            userProfile.ProfileImageUrl = profileData.ProfileImageUrl;
+                        }
 
                         profileDb.Entry(userProfile).State = EntityState.Modified;
-                        profileDb.SaveChanges();
+                        await profileDb.SaveChangesAsync();
 
-                        var user = userDb.Users
-                            .FirstOrDefault(u => u.Id == profileData.UserId);
+                        var user = await userDb.Users
+                            .FirstOrDefaultAsync(u => u.Id == profileData.UserId);
 
                         if (user != null)
                         {
                             user.Email = profileData.Email;
+
                             userDb.Entry(user).State = EntityState.Modified;
-                            userDb.SaveChanges();
+                            await userDb.SaveChangesAsync();
                         }
                     }
 
@@ -712,42 +703,42 @@ namespace eUseControl.BusinessLogic.Core
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new ProfileResp 
-                { 
-                    Status = false, 
-                    StatusMsg = "Oops! There was an error saving your changes!" 
+                return new ProfileResp
+                {
+                    Status = false,
+                    StatusMsg = "Oops! There was an error saving your changes!"
                 };
             }
         }
 
-        internal ProfileResp ChangePasswordAction(string currentPassword, string newPassword, int userId)
+        internal async Task<ProfileResp> ChangePasswordAction(string currentPassword, string newPassword, int userId)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(currentPassword) || string.IsNullOrWhiteSpace(newPassword))
                 {
-                    return new ProfileResp 
-                    { 
-                        Status = false, 
-                        StatusMsg = "Passwords cannot be empty!" 
+                    return new ProfileResp
+                    {
+                        Status = false,
+                        StatusMsg = "Passwords cannot be empty!"
                     };
                 }
 
                 if (newPassword.Length < 8)
                 {
-                    return new ProfileResp 
-                    { 
-                        Status = false, 
-                        StatusMsg = "New password must be at least 8 characters long!" 
+                    return new ProfileResp
+                    {
+                        Status = false,
+                        StatusMsg = "New password must be at least 8 characters long!"
                     };
                 }
 
                 if (currentPassword == newPassword)
                 {
-                    return new ProfileResp 
-                    { 
-                        Status = false, 
-                        StatusMsg = "New password must be different from the current one!" 
+                    return new ProfileResp
+                    {
+                        Status = false,
+                        StatusMsg = "New password must be different from the current one!"
                     };
                 }
 
@@ -765,63 +756,63 @@ namespace eUseControl.BusinessLogic.Core
 
                 using (var db = new UserContext())
                 {
-                    var user = db.Users
-                        .FirstOrDefault(u => u.Id == userId && u.Password == hashedCurrent);
+                    var user = await db.Users
+                        .FirstOrDefaultAsync(u => u.Id == userId && u.Password == hashedCurrent);
 
                     if (user == null)
                     {
-                        return new ProfileResp 
-                        { 
-                            Status = false, 
-                            StatusMsg = "Incorrect current password!" 
+                        return new ProfileResp
+                        {
+                            Status = false,
+                            StatusMsg = "Incorrect current password!"
                         };
                     }
 
                     user.Password = hashedNew;
 
                     db.Entry(user).State = EntityState.Modified;
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
 
-                    return new ProfileResp 
-                    { 
-                        Status = true, 
-                        StatusMsg = "Password changed successfully!" 
+                    return new ProfileResp
+                    {
+                        Status = true,
+                        StatusMsg = "Password changed successfully!"
                     };
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new ProfileResp 
-                { 
-                    Status = false, 
-                    StatusMsg = "An error occurred while updating the password!" 
+                return new ProfileResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while updating the password!"
                 };
             }
         }
 
-        internal List<ProductSummary> GetAvailableProductsAction()
+        internal async Task<List<ProductSummary>> GetAvailableProductsAction()
         {
             try
             {
-                using (var db = new ProductContext())
+                using (var productDb = new ProductContext())
                 {
-                    var products = db.Products
+                    var products = await productDb.Products
                         .Where(p => p.ProductStatus == ProductStatus.Available)
-                        .ToList();
-
-                    var productsList = new List<ProductSummary>();
+                        .ToListAsync();
 
                     using (var categoryDb = new CategoryContext())
                     {
+                        var productsList = new List<ProductSummary>();
+
                         foreach (var product in products)
                         {
-                            var category = categoryDb.ProductCategories
-                                .FirstOrDefault(c => c.Id == product.CategoryId);
+                            var category = await categoryDb.ProductCategories
+                                .FirstOrDefaultAsync(c => c.Id == product.CategoryId);
 
                             if (category != null)
                             {
-                                var productSummary = new ProductSummary
+                                productsList.Add(new ProductSummary
                                 {
                                     Id = product.Id,
                                     ProductCategory = category.CategoryName,
@@ -832,14 +823,12 @@ namespace eUseControl.BusinessLogic.Core
                                     ProductPostDate = product.ProductPostDate,
                                     ProductRegion = product.ProductRegion,
                                     ProductQuantity = product.ProductQuantity
-                                };
-
-                                productsList.Add(productSummary);
+                                });
                             }
                         }
-                    }
 
-                    return productsList;
+                        return productsList;
+                    }
                 }
             }
             catch (Exception ex)
@@ -849,23 +838,21 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ProductResp UpdateProductStatusAction(int productId)
+        internal async Task<ProductResp> UpdateProductStatusAction(int productId)
         {
             try
             {
                 using (var db = new ProductContext())
                 {
-                    var product = db.Products
-                        .FirstOrDefault(p => p.Id == productId);
+                    var product = await db.Products
+                        .FirstOrDefaultAsync(p => p.Id == productId);
 
                     if (product != null)
                     {
-                        product.ProductStatus = product.ProductStatus == ProductStatus.Available
-                            ? ProductStatus.Unavailable
-                            : ProductStatus.Available;
+                        product.ProductStatus = product.ProductStatus == ProductStatus.Available ? ProductStatus.Unavailable : ProductStatus.Available;
 
                         db.Entry(product).State = EntityState.Modified;
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
 
                         return new ProductResp
                         {
@@ -894,7 +881,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal Dictionary<CategoryDbTable, int> GetCategoryProductCountsAction()
+        internal Dictionary<CategoryData, int> GetCategoryProductCountsAction()
         {
             try
             {
@@ -909,14 +896,20 @@ namespace eUseControl.BusinessLogic.Core
                             .Where(p => p.ProductStatus == ProductStatus.Available)
                             .ToList();
 
-                        var result = new Dictionary<CategoryDbTable, int>();
+                        var result = new Dictionary<CategoryData, int>();
 
                         foreach (var category in categories)
                         {
+                            var productCategory = new CategoryData
+                            {
+                                Id = category.Id,
+                                CategoryName = category.CategoryName
+                            };
+
                             int count = products
                                 .Count(p => p.CategoryId == category.Id);
 
-                            result[category] = count;
+                            result[productCategory] = count;
                         }
 
                         return result;
@@ -926,26 +919,26 @@ namespace eUseControl.BusinessLogic.Core
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new Dictionary<CategoryDbTable, int>();
+                return new Dictionary<CategoryData, int>();
             }
         }
 
-        internal List<ProductSummary> GetAvailableProductsByCategoryIdAction(int? categoryId)
+        internal async Task<List<ProductSummary>> GetAvailableProductsByCategoryIdAction(int? categoryId)
         {
             try
             {
                 using (var db = new ProductContext())
                 {
-                    var products = db.Products
+                    var products = await db.Products
                         .Where(p => p.CategoryId == categoryId && p.ProductStatus == ProductStatus.Available)
-                        .ToList();
+                        .ToListAsync();
 
                     var productsList = new List<ProductSummary>();
 
                     using (var categoryDb = new CategoryContext())
                     {
-                        var category = categoryDb.ProductCategories
-                            .FirstOrDefault(c => c.Id == categoryId);
+                        var category = await categoryDb.ProductCategories
+                            .FirstOrDefaultAsync(c => c.Id == categoryId);
 
                         if (category != null)
                         {
@@ -979,7 +972,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ReviewResp CreateReviewAction(ReviewData data, int userId)
+        internal async Task<ReviewResp> CreateReviewAction(ReviewData data, int userId)
         {
             try
             {
@@ -1013,7 +1006,7 @@ namespace eUseControl.BusinessLogic.Core
                     };
 
                     db.ProductReviews.Add(review);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
 
                 return new ReviewResp
@@ -1033,25 +1026,24 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal List<ReviewData> GetReviewsByProductIdAction(int productId)
+        internal async Task<List<ReviewData>> GetReviewsByProductIdAction(int productId)
         {
             try
             {
                 using (var db = new ReviewContext())
                 {
-                    var allReviews = db.ProductReviews
+                    return await db.ProductReviews
                         .Where(r => r.ProductId == productId)
-                        .ToList();
-
-                    var config = new MapperConfiguration(cfg =>
-                    {
-                        cfg.CreateMap<ReviewDbTable, ReviewData>();
-                    });
-
-                    var mapper = config.CreateMapper();
-                    var reviews = mapper.Map<List<ReviewData>>(allReviews);
-
-                    return reviews;
+                        .Select(r => new ReviewData
+                        {
+                            Id = r.Id,
+                            UserId = r.UserId,
+                            ProductId = r.ProductId,
+                            ReviewPostDate = r.ReviewPostDate,
+                            Review = r.Review,
+                            Rating = r.Rating
+                        })
+                        .ToListAsync();
                 }
             }
             catch (Exception ex)
@@ -1061,14 +1053,14 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ReviewResp DeleteReviewAction(int reviewId)
+        internal async Task<ReviewResp> DeleteReviewAction(int reviewId)
         {
             try
             {
                 using (var db = new ReviewContext())
                 {
-                    var review = db.ProductReviews
-                        .FirstOrDefault(r => r.Id == reviewId);
+                    var review = await db.ProductReviews
+                        .FirstOrDefaultAsync(r => r.Id == reviewId);
 
                     if (review == null)
                     {
@@ -1080,7 +1072,7 @@ namespace eUseControl.BusinessLogic.Core
                     }
 
                     db.ProductReviews.Remove(review);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
 
                     return new ReviewResp
                     {
@@ -1100,29 +1092,24 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ReviewData GetReviewByIdAction(int? reviewId)
+        internal async Task<ReviewData> GetReviewByIdAction(int? reviewId)
         {
             try
             {
                 using (var db = new ReviewContext())
                 {
-                    var reviewData = db.ProductReviews
-                        .FirstOrDefault(r => r.Id == reviewId);
-
-                    if (reviewData == null)
-                    {
-                        return null;
-                    }
-
-                    var config = new MapperConfiguration(cfg =>
-                    {
-                        cfg.CreateMap<ReviewDbTable, ReviewData>();
-                    });
-
-                    var mapper = config.CreateMapper();
-                    var review = mapper.Map<ReviewData>(reviewData);
-
-                    return review;
+                    return await db.ProductReviews
+                        .Where(r => r.Id == reviewId)
+                        .Select(r => new ReviewData
+                        {
+                            Id = r.Id,
+                            UserId = r.UserId,
+                            ProductId = r.ProductId,
+                            ReviewPostDate = r.ReviewPostDate,
+                            Review = r.Review,
+                            Rating = r.Rating
+                        })
+                        .FirstOrDefaultAsync();
                 }
             }
             catch (Exception ex)
@@ -1132,7 +1119,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ReviewResp UpdateReviewAction(ReviewData data)
+        internal async Task<ReviewResp> UpdateReviewAction(ReviewData data)
         {
             try
             {
@@ -1156,8 +1143,8 @@ namespace eUseControl.BusinessLogic.Core
 
                 using (var db = new ReviewContext())
                 {
-                    var reviewData = db.ProductReviews
-                        .FirstOrDefault(r => r.Id == data.Id);
+                    var reviewData = await db.ProductReviews
+                        .FirstOrDefaultAsync(r => r.Id == data.Id);
 
                     if (reviewData == null)
                     {
@@ -1173,7 +1160,7 @@ namespace eUseControl.BusinessLogic.Core
                     reviewData.ReviewPostDate = DateTime.Now;
 
                     db.Entry(reviewData).State = EntityState.Modified;
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
 
                     return new ReviewResp
                     {
@@ -1193,31 +1180,31 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ProductResp UpdateProductRatingAction(int productId)
+        internal async Task<ProductResp> UpdateProductRatingAction(int productId)
         {
             try
             {
                 using (var db = new ReviewContext())
                 {
-                    var ratings = db.ProductReviews
+                    var ratings = await db.ProductReviews
                         .Where(r => r.ProductId == productId)
                         .Select(r => r.Rating)
-                        .ToList();
+                        .ToListAsync();
 
                     double average = ratings.Any() ? ratings.Average() : 5;
                     int rating = (int)Math.Ceiling(average);
 
                     using (var productDb = new ProductContext())
                     {
-                        var product = productDb.Products
-                            .FirstOrDefault(p => p.Id == productId);
+                        var product = await productDb.Products
+                            .FirstOrDefaultAsync(p => p.Id == productId);
 
                         if (product != null)
                         {
                             product.ProductRating = rating;
 
                             productDb.Entry(product).State = EntityState.Modified;
-                            productDb.SaveChanges();
+                            await productDb.SaveChangesAsync();
 
                             return new ProductResp
                             {
@@ -1247,24 +1234,21 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal UserSummary GetUserByIdAction(int userId)
+        internal async Task<UserSummary> GetUserByIdAction(int userId)
         {
             try
             {
                 using (var db = new UserContext())
                 {
-                    var userData = db.Users
-                        .FirstOrDefault(u => u.Id == userId);
-
-                    if (userData == null) return null;
-
-                    var config = new MapperConfiguration(cfg =>
-                    {
-                        cfg.CreateMap<UDbTable, UserSummary>();
-                    });
-
-                    var mapper = config.CreateMapper();
-                    return mapper.Map<UserSummary>(userData);
+                    return await db.Users
+                        .Where(u => u.Id == userId)
+                        .Select(u => new UserSummary
+                        {
+                            Id = u.Id,
+                            Username = u.Username,
+                            Email = u.Email
+                        })
+                        .FirstOrDefaultAsync();
                 }
             }
             catch (Exception ex)
@@ -1274,44 +1258,44 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal List<ProductSummary> SortProductsAction(string sortOption, List<ProductSummary> products)
+        internal async Task<List<ProductSummary>> SortProductsAction(string sortOption, List<ProductSummary> products)
         {
             try
             {
                 switch (sortOption)
                 {
                     case "lowToHigh":
-                        return products
+                        return await Task.FromResult(products
                             .OrderBy(p => p.ProductPrice)
-                            .ToList();
+                            .ToList());
 
                     case "highToLow":
-                        return products
+                        return await Task.FromResult(products
                             .OrderByDescending(p => p.ProductPrice)
-                            .ToList();
+                            .ToList());
 
                     case "oldest":
-                        return products
+                        return await Task.FromResult(products
                             .OrderBy(p => p.ProductPostDate)
-                            .ToList();
+                            .ToList());
 
                     case "newest":
-                        return products
+                        return await Task.FromResult(products
                             .OrderByDescending(p => p.ProductPostDate)
-                            .ToList();
+                            .ToList());
 
                     default:
-                        return products;
+                        return await Task.FromResult(products);
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return products ?? new List<ProductSummary>();
+                return await Task.FromResult(products ?? new List<ProductSummary>());
             }
         }
 
-        internal List<ProductSummary> GetProductsByMaxPriceAction(int maxPrice, List<ProductSummary> products)
+        internal async Task<List<ProductSummary>> GetProductsByMaxPriceAction(int maxPrice, List<ProductSummary> products)
         {
             try
             {
@@ -1319,22 +1303,22 @@ namespace eUseControl.BusinessLogic.Core
                     .Where(p => p.ProductPrice <= maxPrice)
                     .ToList();
 
-                return filteredProducts;
+                return await Task.FromResult(filteredProducts);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new List<ProductSummary>();
+                return await Task.FromResult(new List<ProductSummary>());
             }
         }
 
-        internal List<ProductSummary> GetProductsBySearchQueryAction(string searchQuery, List<ProductSummary> products)
+        internal async Task<List<ProductSummary>> GetProductsBySearchQueryAction(string searchQuery, List<ProductSummary> products)
         {
             try
             {
                 if (string.IsNullOrEmpty(searchQuery))
                 {
-                    return products;
+                    return await Task.FromResult(products);
                 }
 
                 var searchWords = searchQuery
@@ -1347,45 +1331,45 @@ namespace eUseControl.BusinessLogic.Core
                     ))
                     .ToList();
 
-                return filteredProducts;
+                return await Task.FromResult(filteredProducts);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new List<ProductSummary>();
+                return await Task.FromResult(new List<ProductSummary>());
             }
         }
 
-        internal List<ProductSummary> GetProductsByCountryAction(string country, List<ProductSummary> products)
+        internal async Task<List<ProductSummary>> GetProductsByCountryAction(string country, List<ProductSummary> products)
         {
             try
             {
                 if (string.IsNullOrEmpty(country))
                 {
-                    return products;
+                    return await Task.FromResult(products);
                 }
 
                 var filteredProducts = products
                     .Where(p => string.Equals(p.ProductRegion, country, StringComparison.OrdinalIgnoreCase))
                     .ToList();
 
-                return filteredProducts;
+                return await Task.FromResult(filteredProducts);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new List<ProductSummary>();
+                return await Task.FromResult(new List<ProductSummary>());
             }
         }
 
-        internal WishlistResp AddProductToWishlistAction(int userId, int productId)
+        internal async Task<WishlistResp> AddProductToWishlistAction(int userId, int productId)
         {
             try
             {
                 using (var db = new WishlistContext())
                 {
-                    var existingProduct = db.WishlistProducts
-                        .FirstOrDefault(w => w.UserId == userId && w.ProductId == productId);
+                    var existingProduct = await db.WishlistProducts
+                        .FirstOrDefaultAsync(w => w.UserId == userId && w.ProductId == productId);
 
                     if (existingProduct == null)
                     {
@@ -1397,7 +1381,7 @@ namespace eUseControl.BusinessLogic.Core
                         };
 
                         db.WishlistProducts.Add(wishlistItem);
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
 
                         return new WishlistResp
                         {
@@ -1426,32 +1410,38 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal List<ProductLite> GetAllWishlistProductsAction(int userId)
+        internal async Task<List<ProductLite>> GetAllWishlistProductsAction(int userId)
         {
             try
             {
                 using (var db = new WishlistContext())
                 {
-                    var productIds = db.WishlistProducts
+                    var productIds = await db.WishlistProducts
                         .Where(w => w.UserId == userId)
                         .Select(w => w.ProductId)
-                        .ToList();
+                        .ToListAsync();
 
-                    if (!productIds.Any()) return new List<ProductLite>();
+                    if (!productIds.Any())
+                    {
+                        return new List<ProductLite>();
+                    }
 
                     using (var productsDb = new ProductContext())
                     {
-                        var products = productsDb.Products
+                        var products = await productsDb.Products
                             .Where(p => productIds.Contains(p.Id))
-                            .ToList();
+                            .Select(p => new ProductLite
+                            {
+                                Id = p.Id,
+                                ProductName = p.ProductName,
+                                ProductPrice = p.ProductPrice,
+                                ProductImageUrl = p.ProductImageUrl,
+                                ProductQuantity = p.ProductQuantity,
+                                ProductQuality = p.ProductQuality,
+                            })
+                            .ToListAsync();
 
-                        var config = new MapperConfiguration(cfg =>
-                        {
-                            cfg.CreateMap<ProductDbTable, ProductLite>();
-                        });
-
-                        var mapper = config.CreateMapper();
-                        return mapper.Map<List<ProductLite>>(products);
+                        return products;
                     }
                 }
             }
@@ -1462,18 +1452,16 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal List<int> GetWishlistProductIdsAction(int userId)
+        internal async Task<List<int>> GetWishlistProductIdsAction(int userId)
         {
             try
             {
                 using (var db = new WishlistContext())
                 {
-                    var productIds = db.WishlistProducts
+                    return await db.WishlistProducts
                         .Where(w => w.UserId == userId)
                         .Select(w => w.ProductId)
-                        .ToList();
-
-                    return productIds;
+                        .ToListAsync();
                 }
             }
             catch (Exception ex)
@@ -1490,7 +1478,7 @@ namespace eUseControl.BusinessLogic.Core
                 using (var db = new WishlistContext())
                 {
                     return db.WishlistProducts
-                             .Count(w => w.UserId == userId);
+                        .Count(w => w.UserId == userId);
                 }
             }
             catch (Exception ex)
@@ -1500,27 +1488,16 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal WishlistResp RemoveProductFromWishlistAction(int productId, int userId)
+        internal async Task<WishlistResp> RemoveProductFromWishlistAction(int productId, int userId)
         {
             try
             {
                 using (var db = new WishlistContext())
                 {
-                    var wishlistItem = db.WishlistProducts
-                        .FirstOrDefault(w => w.UserId == userId && w.ProductId == productId);
+                    var wishlistItem = await db.WishlistProducts
+                        .FirstOrDefaultAsync(w => w.UserId == userId && w.ProductId == productId);
 
-                    if (wishlistItem != null)
-                    {
-                        db.WishlistProducts.Remove(wishlistItem);
-                        db.SaveChanges();
-
-                        return new WishlistResp
-                        {
-                            Status = true,
-                            StatusMsg = "Product removed from wishlist!"
-                        };
-                    }
-                    else
+                    if (wishlistItem == null)
                     {
                         return new WishlistResp
                         {
@@ -1528,6 +1505,15 @@ namespace eUseControl.BusinessLogic.Core
                             StatusMsg = "Product not found in wishlist!"
                         };
                     }
+
+                    db.WishlistProducts.Remove(wishlistItem);
+                    await db.SaveChangesAsync();
+
+                    return new WishlistResp
+                    {
+                        Status = true,
+                        StatusMsg = "Product removed from wishlist!"
+                    };
                 }
             }
             catch (Exception ex)
@@ -1541,20 +1527,28 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal CartResp AddItemToCartAction(int productId, int userId)
+        internal async Task<CartResp> AddItemToCartAction(int productId, int userId)
         {
             try
             {
                 using (var db = new CartContext())
                 {
-                    var existingItem = db.CartItems
-                        .FirstOrDefault(c => c.ProductId == productId && c.UserId == userId);
+                    var existingItem = await db.CartItems
+                        .FirstOrDefaultAsync(c => c.ProductId == productId && c.UserId == userId);
 
-                    decimal itemPrice = 0;
+                    if (existingItem != null)
+                    {
+                        return new CartResp
+                        {
+                            Status = false,
+                            StatusMsg = "Product is already in the cart!"
+                        };
+                    }
+
                     using (var productsDb = new ProductContext())
                     {
-                        var product = productsDb.Products
-                            .FirstOrDefault(p => p.Id == productId);
+                        var product = await productsDb.Products
+                            .FirstOrDefaultAsync(p => p.Id == productId);
 
                         if (product == null)
                         {
@@ -1565,35 +1559,22 @@ namespace eUseControl.BusinessLogic.Core
                             };
                         }
 
-                        itemPrice = product.ProductPrice;
-                    }
-
-                    if (existingItem == null)
-                    {
                         var cartItem = new CartDbTable
                         {
                             UserId = userId,
                             ProductId = productId,
                             SelectedQuantity = 1,
-                            Subtotal = itemPrice,
+                            Subtotal = product.ProductPrice,
                             AddedDate = DateTime.Now
                         };
 
                         db.CartItems.Add(cartItem);
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
 
                         return new CartResp
                         {
                             Status = true,
                             StatusMsg = "Product successfully added to the cart!"
-                        };
-                    }
-                    else
-                    {
-                        return new CartResp
-                        {
-                            Status = false,
-                            StatusMsg = "Product is already in the cart!"
                         };
                     }
                 }
@@ -1609,45 +1590,57 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal List<CartData> GetCartItemsByUserIdAction(int userId)
+        internal async Task<List<CartData>> GetCartItemsByUserIdAction(int userId)
         {
-            var cartDataList = new List<CartData>();
-
             try
             {
+                var cartDataList = new List<CartData>();
+
                 using (var db = new CartContext())
                 {
-                    var allCartItems = db.CartItems
+                    var allCartItems = await db.CartItems
                         .Where(c => c.UserId == userId)
-                        .ToList();
+                        .ToListAsync();
 
-                    using (var productsDb = new ProductContext())
+                    if (allCartItems.Any())
                     {
-                        foreach (var cartItem in allCartItems)
+                        var productIds = allCartItems
+                            .Select(c => c.ProductId)
+                            .Distinct()
+                            .ToList();
+
+                        using (var productsDb = new ProductContext())
                         {
-                            var product = productsDb.Products
+                            var products = await productsDb.Products
+                                .Where(p => productIds.Contains(p.Id))
+                                .ToListAsync();
+
+                            foreach (var cartItem in allCartItems)
+                            {
+                                var product = products
                                     .FirstOrDefault(p => p.Id == cartItem.ProductId);
 
-                            if (product != null)
-                            {
-                                var cartData = new CartData
+                                if (product != null)
                                 {
-                                    ProductId = cartItem.ProductId,
-                                    ProductName = product.ProductName,
-                                    ProductImageUrl = product.ProductImageUrl,
-                                    ProductPrice = product.ProductPrice,
-                                    ProductQuantity = product.ProductQuantity,
-                                    SelectedQuantity = cartItem.SelectedQuantity,
-                                    Subtotal = cartItem.Subtotal
-                                };
+                                    var cartData = new CartData
+                                    {
+                                        ProductId = cartItem.ProductId,
+                                        ProductName = product.ProductName,
+                                        ProductImageUrl = product.ProductImageUrl,
+                                        ProductPrice = product.ProductPrice,
+                                        ProductQuantity = product.ProductQuantity,
+                                        SelectedQuantity = cartItem.SelectedQuantity,
+                                        Subtotal = cartItem.Subtotal
+                                    };
 
-                                cartDataList.Add(cartData);
+                                    cartDataList.Add(cartData);
+                                }
                             }
                         }
                     }
-
-                    return cartDataList;
                 }
+
+                return cartDataList;
             }
             catch (Exception ex)
             {
@@ -1656,19 +1649,19 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal CartResp RemoveItemFromCartAction(int productId, int userId)
+        internal async Task<CartResp> RemoveItemFromCartAction(int productId, int userId)
         {
             try
             {
                 using (var db = new CartContext())
                 {
-                    var cartItem = db.CartItems
-                        .FirstOrDefault(p => p.ProductId == productId && p.UserId == userId);
+                    var cartItem = await db.CartItems
+                        .FirstOrDefaultAsync(p => p.ProductId == productId && p.UserId == userId);
 
                     if (cartItem != null)
                     {
                         db.CartItems.Remove(cartItem);
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
 
                         return new CartResp
                         {
@@ -1714,15 +1707,14 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal CartResp ChangeProductQuantityAction(int productId, int userId, int newQuantity)
+        internal async Task<CartResp> ChangeProductQuantityAction(int productId, int userId, int newQuantity)
         {
             try
             {
-                decimal currentProductPrice;
                 using (var productsDb = new ProductContext())
                 {
-                    var product = productsDb.Products
-                        .FirstOrDefault(p => p.Id == productId);
+                    var product = await productsDb.Products
+                        .FirstOrDefaultAsync(p => p.Id == productId);
 
                     if (product == null)
                     {
@@ -1733,35 +1725,33 @@ namespace eUseControl.BusinessLogic.Core
                         };
                     }
 
-                    currentProductPrice = product.ProductPrice;
-                }
-
-                using (var db = new CartContext())
-                {
-                    var cartItem = db.CartItems
-                        .FirstOrDefault(c => c.ProductId == productId && c.UserId == userId);
-
-                    if (cartItem != null)
+                    using (var db = new CartContext())
                     {
-                        cartItem.SelectedQuantity = newQuantity;
-                        cartItem.Subtotal = newQuantity * currentProductPrice;
+                        var cartItem = await db.CartItems
+                            .FirstOrDefaultAsync(c => c.ProductId == productId && c.UserId == userId);
 
-                        db.Entry(cartItem).State = EntityState.Modified;
-                        db.SaveChanges();
+                        if (cartItem != null)
+                        {
+                            cartItem.SelectedQuantity = newQuantity;
+                            cartItem.Subtotal = newQuantity * product.ProductPrice;
 
-                        return new CartResp
+                            db.Entry(cartItem).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+
+                            return new CartResp
+                            {
+                                Status = true,
+                                StatusMsg = "The quantity has been successfully updated!"
+                            };
+                        }
+                        else
                         {
-                            Status = true,
-                            StatusMsg = "The quantity has been successfully updated!"
-                        };
-                    }
-                    else
-                    {
-                        return new CartResp
-                        {
-                            Status = false,
-                            StatusMsg = "The requested item is not in your cart!"
-                        };
+                            return new CartResp
+                            {
+                                Status = false,
+                                StatusMsg = "The requested item is not in your cart!"
+                            };
+                        }
                     }
                 }
             }
@@ -1804,14 +1794,14 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal decimal ApplyCouponDiscountAction(decimal totalPrice, string couponCode)
+        internal async Task<decimal> ApplyCouponDiscountAction(decimal totalPrice, string couponCode)
         {
             try
             {
                 using (var db = new CouponContext())
                 {
-                    var coupon = db.DiscountCoupons
-                        .FirstOrDefault(c => c.Code == couponCode);
+                    var coupon = await db.DiscountCoupons
+                        .FirstOrDefaultAsync(c => c.Code == couponCode);
 
                     if (coupon != null && coupon.IsActive && coupon.ExpirationDate >= DateTime.Now)
                     {
@@ -1832,20 +1822,20 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal CartResp ClearCartItemsAfterOrderAction(int userId)
+        internal async Task<CartResp> ClearCartItemsAfterOrderAction(int userId)
         {
             try
             {
                 using (var db = new CartContext())
                 {
-                    var userCartItems = db.CartItems
+                    var userCartItems = await db.CartItems
                         .Where(c => c.UserId == userId)
-                        .ToList();
+                        .ToListAsync();
 
                     if (userCartItems.Any())
                     {
                         db.CartItems.RemoveRange(userCartItems);
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
                     }
 
                     return new CartResp
@@ -1875,11 +1865,11 @@ namespace eUseControl.BusinessLogic.Core
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return -1; 
+                return -1;
             }
         }
 
-        internal decimal ComputeDiscountAmountAction(decimal initialPrice, decimal finalPrice) 
+        internal decimal ComputeDiscountAmountAction(decimal initialPrice, decimal finalPrice)
         {
             try
             {
@@ -1892,7 +1882,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal OrderResp PlaceOrderAction(OrderData orderData, int userId)
+        internal async Task<OrderResp> PlaceOrderAction(OrderData orderData, int userId)
         {
             try
             {
@@ -1928,16 +1918,6 @@ namespace eUseControl.BusinessLogic.Core
                     };
                 }
 
-                CouponDbTable coupon = null;
-                if (!string.IsNullOrWhiteSpace(orderData.CouponCode))
-                {
-                    using (var couponsDb = new CouponContext())
-                    {
-                        coupon = couponsDb.DiscountCoupons
-                            .FirstOrDefault(c => c.Code ==  orderData.CouponCode);
-                    };
-                }
-
                 using (var db = new OrderContext())
                 {
                     var newOrder = new OrderDbTable
@@ -1955,13 +1935,22 @@ namespace eUseControl.BusinessLogic.Core
                         TotalPrice = orderData.TotalPrice
                     };
 
-                    if (coupon != null && coupon.IsActive && coupon.ExpirationDate >= DateTime.Now)
+                    if (!string.IsNullOrWhiteSpace(orderData.CouponCode))
                     {
-                        newOrder.CouponId = coupon.Id;
+                        using (var couponsDb = new CouponContext())
+                        {
+                            var coupon = await couponsDb.DiscountCoupons
+                                .FirstOrDefaultAsync(c => c.Code == orderData.CouponCode);
+
+                            if (coupon != null && coupon.IsActive && coupon.ExpirationDate >= DateTime.Now)
+                            {
+                                newOrder.CouponId = coupon.Id;
+                            }
+                        }
                     }
 
                     db.CustomerOrders.Add(newOrder);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
 
                     return new OrderResp
                     {
@@ -1982,31 +1971,32 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal OrderResp CancelUnpaidOrdersAction(int userId)
+        internal async Task<OrderResp> CancelUnpaidOrdersAction(int userId)
         {
             try
             {
                 using (var db = new OrderContext())
                 {
-                    var orders = db.CustomerOrders
+                    var orders = await db.CustomerOrders
                         .Where(c => c.UserId == userId && c.OrderStatus == OrderStatus.Pending && c.PaymentMethod == "Card")
-                        .ToList();
+                        .ToListAsync();
 
                     using (var transactionsDb = new TransactionContext())
                     {
                         foreach (var order in orders)
                         {
-                            bool hasTransaction = transactionsDb.UserTransactions
-                                .Any(t => t.OrderId == order.Id);
+                            bool hasTransaction = await transactionsDb.UserTransactions
+                                .AnyAsync(t => t.OrderId == order.Id);
 
                             if (!hasTransaction)
                             {
                                 order.OrderStatus = OrderStatus.Cancelled;
+                                db.Entry(order).State = EntityState.Modified;
                             }
                         }
                     }
 
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
 
                     return new OrderResp
                     {
@@ -2026,28 +2016,21 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal OrderMinimal GetOrderByIdAction(int orderId)
+        internal async Task<OrderMinimal> GetOrderByIdAction(int orderId)
         {
             try
             {
                 using (var db = new OrderContext())
                 {
-                    var orderData = db.CustomerOrders
-                        .FirstOrDefault(c => c.Id == orderId);
-
-                    if (orderData != null)
-                    {
-                        var order = new OrderMinimal
+                    return await db.CustomerOrders
+                        .Where(c => c.Id == orderId)
+                        .Select(c => new OrderMinimal
                         {
-                            Id = orderData.Id,
-                            TotalPrice = orderData.TotalPrice,
-                            OrderDate = orderData.OrderDate
-                        };
-
-                        return order;
-                    }
-
-                    return null;
+                            Id = c.Id,
+                            TotalPrice = c.TotalPrice,
+                            OrderDate = c.OrderDate
+                        })
+                        .FirstOrDefaultAsync();
                 }
             }
             catch (Exception ex)
@@ -2084,7 +2067,7 @@ namespace eUseControl.BusinessLogic.Core
             {
                 return false;
             }
-                
+
             int year = Convert.ToInt32(yearPart);
             int month = Convert.ToInt32(monthPart);
 
@@ -2092,7 +2075,7 @@ namespace eUseControl.BusinessLogic.Core
             {
                 return false;
             }
-                
+
             int fullYear = 2000 + year;
             var lastDay = new DateTime(fullYear, month, DateTime.DaysInMonth(fullYear, month));
 
@@ -2141,7 +2124,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal TransactionResp ProcessPaymentAction(TransactionData transactionData, int userId)
+        internal async Task<TransactionResp> ProcessPaymentAction(TransactionData transactionData, int userId)
         {
             try
             {
@@ -2181,54 +2164,53 @@ namespace eUseControl.BusinessLogic.Core
                     };
                 }
 
-                OrderDbTable order = null;
                 using (var orderDb = new OrderContext())
                 {
-                    order = orderDb.CustomerOrders
-                        .FirstOrDefault(c => c.Id == transactionData.OrderId);
-                }
+                    var order = await orderDb.CustomerOrders
+                        .FirstOrDefaultAsync(c => c.Id == transactionData.OrderId);
 
-                if (order.TotalPrice <= 0)
-                {
-                    return new TransactionResp
+                    if (order == null || order.TotalPrice <= 0)
                     {
-                        Status = false,
-                        StatusMsg = "The amount entered is invalid!"
-                    };
-                }
-
-                var paymentResult = MakePayment(order.TotalPrice);
-
-                if (paymentResult.Status)
-                {
-                    using (var db = new TransactionContext())
-                    {
-                        var transaction = new TransactionDbTable
-                        {
-                            OrderId = transactionData.OrderId,
-                            UserId = userId,
-                            Amount = order.TotalPrice,
-                            TransactionDate = DateTime.Now,
-                            TransactionStatus = TransactionStatus.Successful
-                        };
-
-                        db.UserTransactions.Add(transaction);
-                        db.SaveChanges();
-
                         return new TransactionResp
                         {
-                            Status = true,
-                            StatusMsg = "Payment was successfully completed!"
+                            Status = false,
+                            StatusMsg = "The amount entered is invalid!"
                         };
                     }
-                }
-                else
-                {
-                    return new TransactionResp
+
+                    var paymentResult = MakePayment(order.TotalPrice);
+
+                    if (paymentResult.Status)
                     {
-                        Status = false,
-                        StatusMsg = "Your payment could not be processed!"
-                    };
+                        using (var db = new TransactionContext())
+                        {
+                            var transaction = new TransactionDbTable
+                            {
+                                OrderId = transactionData.OrderId,
+                                UserId = userId,
+                                Amount = order.TotalPrice,
+                                TransactionDate = DateTime.Now,
+                                TransactionStatus = TransactionStatus.Successful
+                            };
+
+                            db.UserTransactions.Add(transaction);
+                            await db.SaveChangesAsync();
+
+                            return new TransactionResp
+                            {
+                                Status = true,
+                                StatusMsg = "Payment was successfully completed!"
+                            };
+                        }
+                    }
+                    else
+                    {
+                        return new TransactionResp
+                        {
+                            Status = false,
+                            StatusMsg = "Your payment could not be processed!"
+                        };
+                    }
                 }
             }
             catch (Exception ex)
@@ -2242,7 +2224,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ProductResp UpdateProductQuantitiesAfterOrderAction(List<CartData> cartItems)
+        internal async Task<ProductResp> UpdateProductQuantitiesAfterOrderAction(List<CartData> cartItems)
         {
             try
             {
@@ -2250,8 +2232,8 @@ namespace eUseControl.BusinessLogic.Core
                 {
                     foreach (var item in cartItems)
                     {
-                        var product = db.Products
-                            .FirstOrDefault(p => p.Id == item.ProductId);
+                        var product = await db.Products
+                            .FirstOrDefaultAsync(p => p.Id == item.ProductId);
 
                         if (product != null)
                         {
@@ -2261,10 +2243,12 @@ namespace eUseControl.BusinessLogic.Core
                             {
                                 product.ProductQuantity = 0;
                             }
+
+                            db.Entry(product).State = EntityState.Modified;
                         }
                     }
 
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
 
                     return new ProductResp
                     {
@@ -2284,34 +2268,32 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal Dictionary<ReviewData, ProfileData> RetrieveAllReviewsAction()
+        internal async Task<Dictionary<ReviewData, ProfileData>> RetrieveAllReviewsAction()
         {
             try
             {
                 using (var db = new ReviewContext())
                 {
-                    var allReviews = db.ProductReviews
-                        .ToList();
+                    var allReviews = await db.ProductReviews
+                        .ToListAsync();
 
-                    Dictionary<ReviewData, ProfileData> reviews = new Dictionary<ReviewData, ProfileData>();
-
-                    var config = new MapperConfiguration(cfg =>
-                    {
-                        cfg.CreateMap<ProfileDbTable, ProfileData>();
-                    });
-
-                    var mapper = config.CreateMapper();
+                    var reviews = new Dictionary<ReviewData, ProfileData>();
 
                     foreach (var item in allReviews)
                     {
                         using (var profileDb = new ProfileContext())
                         {
-                            var profileData = profileDb.UserProfiles
-                                .FirstOrDefault(p => p.UserId == item.UserId);
+                            var profileData = await profileDb.UserProfiles
+                                .FirstOrDefaultAsync(p => p.UserId == item.UserId);
 
                             if (profileData != null)
                             {
-                                var profile = mapper.Map<ProfileData>(profileData);
+                                var profile = new ProfileData
+                                {
+                                    FirstName = profileData.FirstName,
+                                    LastName = profileData.LastName,
+                                    ProfileImageUrl = profileData.ProfileImageUrl
+                                };
 
                                 var review = new ReviewData
                                 {
@@ -2335,11 +2317,11 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ContactResp SubmitContactRequestAction(ContactData contactData, int userId)
+        internal async Task<ContactResp> SubmitContactRequestAction(ContactData contactData, int userId)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(contactData.Username) || 
+                if (string.IsNullOrWhiteSpace(contactData.Username) ||
                     string.IsNullOrWhiteSpace(contactData.Email) ||
                     string.IsNullOrWhiteSpace(contactData.Message))
                 {
@@ -2363,7 +2345,7 @@ namespace eUseControl.BusinessLogic.Core
                     };
 
                     db.ContactRequests.Add(contact);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
 
                 return new ContactResp
@@ -2383,15 +2365,15 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal List<ProductSummary> GetRecommendedProductsAction()
+        internal async Task<List<ProductSummary>> GetRecommendedProductsAction()
         {
             try
             {
                 using (var db = new ProductContext())
                 {
-                    var allProducts = db.Products
+                    var allProducts = await db.Products
                         .Where(p => p.RecommendationStatus == RecommendationStatus.Preferred && p.ProductStatus == ProductStatus.Available)
-                        .ToList();
+                        .ToListAsync();
 
                     var recommendedProducts = new List<ProductSummary>();
 
@@ -2399,13 +2381,13 @@ namespace eUseControl.BusinessLogic.Core
                     {
                         foreach (var product in allProducts)
                         {
-                            var category = categoryDb.ProductCategories
-                                .FirstOrDefault(c => c.Id == product.CategoryId);
+                            var category = await categoryDb.ProductCategories
+                                .FirstOrDefaultAsync(c => c.Id == product.CategoryId);
 
                             var recommendedProduct = new ProductSummary
                             {
                                 Id = product.Id,
-                                ProductCategory = category.CategoryName,
+                                ProductCategory = category?.CategoryName,
                                 ProductDescription = product.ProductDescription,
                                 ProductImageUrl = product.ProductImageUrl,
                                 ProductName = product.ProductName,
@@ -2429,37 +2411,24 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal List<OrderLite> GetValidOrdersAction(int userId)
+        internal async Task<List<OrderLite>> GetValidOrdersAction(int userId)
         {
             try
             {
                 using (var db = new OrderContext())
                 {
-                    var validOrders = db.CustomerOrders
+                    return await db.CustomerOrders
                         .Where(c => c.UserId == userId && (c.OrderStatus == OrderStatus.Pending || c.OrderStatus == OrderStatus.Delivering))
-                        .ToList();
-
-                    var config = new MapperConfiguration(cfg =>
-                    {
-                        cfg.CreateMap<OrderDbTable, OrderLite>();
-                    });
-
-                    var mapper = config.CreateMapper();
-                    var orders = mapper.Map<List<OrderLite>>(validOrders); 
-
-                    foreach (var order in orders)
-                    {
-                        if (order.PaymentMethod == "Card")
+                        .Select(order => new OrderLite
                         {
-                            order.OrderImageUrl = "~/Assets/img/order/order-icon-1.jpg";
-                        }
-                        else
-                        {
-                            order.OrderImageUrl = "~/Assets/img/order/order-icon-2.jpg";
-                        }
-                    }
-
-                    return orders;
+                            Id = order.Id,
+                            TotalPrice = order.TotalPrice,
+                            PaymentMethod = order.PaymentMethod,
+                            OrderDate = order.OrderDate,
+                            OrderStatus = order.OrderStatus,
+                            OrderImageUrl = order.PaymentMethod == "Card" ? "~/Assets/img/order/order-icon-1.jpg" : "~/Assets/img/order/order-icon-2.jpg"
+                        })
+                        .ToListAsync();
                 }
             }
             catch (Exception ex)
@@ -2469,19 +2438,21 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal OrderResp CancelOrderAction(int orderId)
+        internal async Task<OrderResp> CancelOrderAction(int orderId)
         {
             try
             {
                 using (var db = new OrderContext())
                 {
-                    var currentOrder = db.CustomerOrders
-                        .FirstOrDefault(c => c.Id == orderId);
+                    var currentOrder = await db.CustomerOrders
+                        .FirstOrDefaultAsync(c => c.Id == orderId);
 
                     if (currentOrder != null)
                     {
                         currentOrder.OrderStatus = OrderStatus.Cancelled;
-                        db.SaveChanges();
+
+                        db.Entry(currentOrder).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
 
                         return new OrderResp
                         {
@@ -2510,19 +2481,19 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ProductResp RemoveProductAction(int productId)
+        internal async Task<ProductResp> RemoveProductAction(int productId)
         {
             try
             {
                 using (var db = new ProductContext())
                 {
-                    var currentProduct = db.Products
-                        .FirstOrDefault(p => p.Id == productId);
+                    var currentProduct = await db.Products
+                        .FirstOrDefaultAsync(p => p.Id == productId);
 
                     if (currentProduct != null)
                     {
                         db.Products.Remove(currentProduct);
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
 
                         return new ProductResp
                         {
@@ -2551,44 +2522,56 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal string GetResponseAction(string message)
+        internal async Task<ChatResp> GetResponseAction(string message, int userId)
         {
-            const int maxWords = 300;
+            const string _ollamaApiUrl = "http://localhost:11434/api/chat";
+            const int maxWords = 500;
 
             if (string.IsNullOrWhiteSpace(message))
             {
-                return "Message cannot be empty!";
+                return new ChatResp
+                {
+                    Status = false,
+                    StatusMsg = "Message cannot be empty!"
+                };
             }
 
             var wordCount = message.Split(new char[] { ' ', '\t', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length;
             if (wordCount > maxWords)
             {
-                return $"Message too long. Please limit your question to {maxWords} words!";
+                return new ChatResp
+                {
+                    Status = false,
+                    StatusMsg = $"Message too long. Please limit your question to {maxWords} words!"
+                };
             }
 
             using (var httpClient = new HttpClient())
             {
-                string domainContext = "You are an intelligent assistant developed strictly to support users of the Eco Market Place application." +
-                                       "You must only respond to questions that are directly related to this application's functionality, environmental goals, sustainability impact, user usage, or technical issues within the Eco Market Place." +
-                                       "If a user asks a question outside of this domain — such as sports, celebrities, history, or unrelated technology — you must not answer." +
-                                       "Instead, respond with: 'I'm sorry, but I can only assist with topics related to the Eco Market Place platform.'" +
-                                       "Do not attempt to provide unrelated information under any circumstance. Always remain concise and strictly within the scope of the application.";
-
-                var fullPrompt = domainContext + "\nUser question: " + message;
+                string domainContext =
+                    "You are an intelligent assistant designed specifically to support users of Terra Shop, an eco-friendly marketplace dedicated to sustainable products and environmental responsibility." +
+                    "This advanced chatbot, named TerraAI, provides rapid and precise assistance to customers by answering a wide range of questions typical for an online marketplace." +
+                    "You can help with product information such as detailed descriptions, stock availability, product comparisons, and personalized recommendations." +
+                    "You assist with order management including order status, delivery modifications, cancellations, and returns. " +
+                    "Additionally, you support payment and billing inquiries, explain policies on warranties, delivery, and taxes, and provide quick answers to frequently asked questions." +
+                    "TerraAI continuously learns and adapts to improve the Terra Shop customer experience, offering efficient and friendly 24/7 support focused on sustainability goals." +
+                    "If a user asks questions outside of Terra Shop’s scope or unrelated topics like sports, celebrities, or unrelated technologies, respond with:" +
+                    "'I'm sorry, but I can only assist with topics related to Terra Shop and its eco-friendly marketplace.'" +
+                    "Always remain concise, professional, and focused on supporting users within Terra Shop and its sustainability mission.";
 
                 var requestObj = new
                 {
                     model = "llama3.2",
                     messages = new[]
                     {
-                        new { 
-                            role = "system", 
-                            content = domainContext 
+                        new {
+                            role = "system",
+                            content = domainContext
                         },
 
-                        new { 
-                            role = "user", 
-                            content = message 
+                        new {
+                            role = "user",
+                            content = message
                         }
                     },
                     stream = false
@@ -2599,23 +2582,201 @@ namespace eUseControl.BusinessLogic.Core
 
                 try
                 {
-                    var response = httpClient.PostAsync(_ollamaApiUrl, content).Result;
+                    var response = await httpClient.PostAsync(_ollamaApiUrl, content);
 
                     if (!response.IsSuccessStatusCode)
                     {
-                        return $"Error from AI model: {response.StatusCode}";
+                        return new ChatResp
+                        {
+                            Status = false,
+                            StatusMsg = $"Error from AI model: {response.StatusCode}"
+                        };
                     }
 
-                    var responseString = response.Content.ReadAsStringAsync().Result;
+                    var responseString = await response.Content.ReadAsStringAsync();
                     var json = JObject.Parse(responseString);
                     var responseText = json["message"]?["content"]?.ToString();
 
-                    return string.IsNullOrWhiteSpace(responseText) ? "Unexpected JSON structure:\n" + responseString : responseText.Trim();
+                    if (string.IsNullOrWhiteSpace(responseText))
+                    {
+                        return new ChatResp
+                        {
+                            Status = false,
+                            StatusMsg = "Unexpected JSON structure: " + responseString
+                        };
+                    }
+
+                    var trimmedResponse = responseText.Trim();
+
+                    using (var db = new ChatContext())
+                    {
+                        var item = new ChatDbTable
+                        {
+                            UserId = userId,
+                            Prompt = message,
+                            Message = trimmedResponse,
+                            ResponseDate = DateTime.Now
+                        };
+
+                        db.ChatMessages.Add(item);
+                        await db.SaveChangesAsync();
+
+                        return new ChatResp
+                        {
+                            Status = true,
+                            StatusMsg = trimmedResponse
+                        };
+                    }
                 }
                 catch (Exception ex)
                 {
-                    return $"Error calling AI model: {ex.Message}";
+                    return new ChatResp
+                    {
+                        Status = false,
+                        StatusMsg = $"Error calling AI model: {ex.Message}"
+                    };
                 }
+            }
+        }
+
+        internal async Task<List<ChatData>> RetrieveUserChatsAction(int userId)
+        {
+            try
+            {
+                using (var db = new ChatContext())
+                {
+                    return await db.ChatMessages
+                        .Where(c => c.UserId == userId)
+                        .Select(chat => new ChatData
+                        {
+                            Prompt = chat.Prompt,
+                            Message = chat.Message
+                        })
+                        .ToListAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<ChatData>();
+            }
+        }
+
+        internal async Task<Dictionary<string, List<ProductSummary>>> GetProductsFromTopCategoriesAction()
+        {
+            try
+            {
+                using (var db = new ProductContext())
+                {
+                    var topCategoryIds = await db.Products
+                        .GroupBy(p => p.CategoryId)
+                        .Select(g => new
+                        {
+                            CategoryId = g.Key,
+                            ProductCount = g.Count()
+                        })
+                        .OrderByDescending(g => g.ProductCount)
+                        .Take(5)
+                        .Select(g => g.CategoryId)
+                        .ToListAsync();
+
+                    var categoryNames = new Dictionary<int, string>();
+
+                    using (var categoryDb = new CategoryContext())
+                    {
+                        categoryNames = await categoryDb.ProductCategories
+                            .Where(c => topCategoryIds.Contains(c.Id))
+                            .ToDictionaryAsync(c => c.Id, c => c.CategoryName);
+                    }
+
+                    var result = new Dictionary<string, List<ProductSummary>>();
+
+                    foreach (var categoryId in topCategoryIds)
+                    {
+                        var categoryName = categoryNames[categoryId];
+
+                        var productsInCategory = await db.Products
+                            .Where(p => p.CategoryId == categoryId)
+                            .Select(p => new ProductSummary
+                            {
+                                Id = p.Id,
+                                ProductName = p.ProductName,
+                                ProductDescription = p.ProductDescription,
+                                ProductPrice = p.ProductPrice,
+                                ProductImageUrl = p.ProductImageUrl,
+                                ProductPostDate = p.ProductPostDate,
+                                ProductRegion = p.ProductRegion,
+                                ProductQuantity = p.ProductQuantity,
+                            })
+                            .ToListAsync();
+
+                        result[categoryName] = productsInCategory;
+                    }
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new Dictionary<string, List<ProductSummary>>();
+            }
+        }
+
+        internal async Task<ChatResp> DeleteChatHistoryAction(int userId)
+        {
+            try
+            {
+                using (var db = new ChatContext())
+                {
+                    var messages = db.ChatMessages
+                        .Where(c => c.UserId == userId);
+
+                    if (!messages.Any())
+                    {
+                        return new ChatResp
+                        {
+                            Status = false,
+                            StatusMsg = "No messages found for this user!"
+                        };
+                    }
+
+                    db.ChatMessages.RemoveRange(messages);
+                    await db.SaveChangesAsync();
+
+                    return new ChatResp
+                    {
+                        Status = true,
+                        StatusMsg = "User messages successfully deleted!"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ChatResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while deleting the user messages!"
+                };
+            }
+        }
+
+        internal async Task<List<string>> ExtractCategoriesAction()
+        {
+            try
+            {
+                using (var db = new CategoryContext())
+                {
+                    return await db.ProductCategories
+                                   .Select(c => c.CategoryName)
+                                   .ToListAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<string>();
             }
         }
     }

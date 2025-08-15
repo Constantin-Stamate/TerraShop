@@ -9,29 +9,11 @@
     <div class="row no-gutters">
         <div class="col-md-3">
             <div class="list-group list-group-flush account-settings-links">
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("GeneralProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">General</a>
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("ChangePasswordProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    Change
-                    password
-                </a>
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("SettingsProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    Profile
-                    settings
-                </a>
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("ArticlesProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Articles</a>
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("OrdersProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    Orders
-                </a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("GeneralProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">General</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("ChangePasswordProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Change password</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("SettingsProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Profile settings</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("ArticlesProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Articles</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("OrdersProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Orders</a>
             </div>
         </div>
         <div class="col-md-9">
@@ -42,13 +24,9 @@
                 <div class="tab-content">
                     <div class="tab-pane fade active show" id="account-general">
                         <div class="card-body d-flex align-items-center flex-column text-center">
-                            <label class="btn-recycle btn border border-secondary align-items-center me-3">
-                                Upload new photo
-                                <input type="file" id="profileImage" name="profileImage" accept="image/*" class="account-settings-fileinput d-none">
-                            </label>
-                            <div id="uploadSuccessMessage" class="text-success mt-3 d-none">
-                                ✅ Image uploaded successfully!
-                            </div>
+                            @Html.Label("profileImage", "Upload new photo", new { @class = "btn-recycle btn border border-secondary align-items-center me-3" })
+                            @Html.TextBox("profileImage", null, new { type = "file", id = "profileImage", accept = "image/*", @class = "account-settings-fileinput d-none" })
+                            <div id="uploadSuccessMessage" class="text-success mt-3 d-none"></div>
                             <small class="text-muted mt-3">Allowed: JPG, GIF, PNG. Max size: 800KB</small>
                         </div>
                         <div style="margin-top: 10px;">
@@ -60,64 +38,38 @@
                                     </ul>
                                 </div>
                             }
-                            <hr class="border-light">
+                            <div class="border-bottom border-light my-3"></div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label class="form-label"><i class="fas fa-user mr-2"></i> First Name</label>
-                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control mb-3", placeholder = "Enter your first name", required = "required", style = "font-size: 0.9em;" })
+                                    @Html.Raw("<span class='form-label mb-1'><i class='fas fa-user mr-2'></i> First Name</span>")
+                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control mb-3", placeholder = "Enter your first name", required = "required", style = "font-size: 0.9em; margin-top: 8px;" })
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label"><i class="fas fa-user-tag mr-2"></i> Last Name</label>
-                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control mb-3", placeholder = "Enter your last name", required = "required", style = "font-size: 0.9em;" })
+                                    @Html.Raw("<span class='form-label'><i class='fas fa-user-tag mr-2'></i> Last Name</span>")
+                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control mb-3", placeholder = "Enter your last name", required = "required", style = "font-size: 0.9em; margin-top: 8px;" })
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label"><i class="fas fa-envelope mr-2"></i> E-mail</label>
-                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control mb-3", placeholder = "Enter your email", required = "required", style = "font-size: 0.9em;" })
+                                    @Html.Raw("<span class='form-label'><i class='fas fa-envelope mr-2'></i> E-mail</span>")
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control mb-3", placeholder = "Enter your email", required = "required", style = "font-size: 0.9em; margin-top: 8px;" })
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label"><i class="fas fa-map-marker-alt mr-2"></i> Address</label>
-                                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control mb-3", placeholder = "Enter your address", required = "required", style = "font-size: 0.9em;" })
+                                    @Html.Raw("<span class='form-label'><i class='fas fa-map-marker-alt mr-2'></i> Address</span>")
+                                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control mb-3", placeholder = "Enter your address", required = "required", style = "font-size: 0.9em; margin-top: 8px;" })
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label"><i class="fas fa-phone mr-2"></i> Phone number</label>
-                                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control mb-3", placeholder = "Enter your phone number", required = "required", style = "font-size: 0.9em;" })
+                                    @Html.Raw("<span class='form-label'><i class='fas fa-phone mr-2'></i> Phone number</span>")
+                                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control mb-3", placeholder = "Enter your phone number", required = "required", style = "font-size: 0.9em; margin-top: 8px;" })
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <button type="submit" class="btn-recycle btn border border-secondary align-items-center me-3">
-                            <i class="fas fa-cloud-download-alt"></i>
-                            Save changes
+                            <i class="fas fa-cloud-download-alt"></i>Save changes
                         </button>
-                        <div id="saveSuccessMessage" class="alert alert-success d-none">
-                            ✅ Changes saved successfully!
-                        </div>
                     </div>
                 </div>
             }
         </div>
     </div>
 </div>
-
-<style>
-    .no-bullets ul {
-        list-style: none;
-        padding-left: 0;
-        margin: 0;
-    }
-</style>
-
-<script>
-    document.querySelector('.btn-recycle').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('profileImage').click(); 
-    });
-
-    document.getElementById('profileImage').addEventListener('change', function() {
-        if (this.files && this.files[0]) {
-            document.getElementById('uploadSuccessMessage').classList.remove('d-none');
-            document.getElementById('uploadSuccessMessage').innerText = '✅ ' + this.files[0].name + ' selected!';
-        }
-    });
-</script>

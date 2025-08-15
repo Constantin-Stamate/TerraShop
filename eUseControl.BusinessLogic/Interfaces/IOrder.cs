@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using eUseControl.Domain.Entities.Order;
 
 namespace eUseControl.BusinessLogic.Interfaces
 {
     public interface IOrder
     {
-        OrderResp PlaceOrder(OrderData orderData, int userId);
+        Task<OrderResp> PlaceOrder(OrderData orderData, int userId);
 
-        OrderMinimal GetOrderById(int orderId);
+        Task<OrderMinimal> GetOrderById(int orderId);
 
-        OrderResp CancelUnpaidOrders(int userId);
+        Task<OrderResp> CancelUnpaidOrders(int userId);
 
-        List<OrderLite> GetValidOrders(int userId);
+        Task<List<OrderLite>> GetValidOrders(int userId);
 
-        OrderResp CancelOrder(int orderId);
+        Task<OrderResp> CancelOrder(int orderId);
     }
 }

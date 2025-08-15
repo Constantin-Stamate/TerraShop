@@ -171,9 +171,13 @@
     <Compile Include="Entities\Cart\CouponData.cs" />
     <Compile Include="Entities\Cart\CouponDbTable.cs" />
     <Compile Include="Entities\Cart\CouponResp.cs" />
+    <Compile Include="Entities\Chat\ChatData.cs" />
+    <Compile Include="Entities\Chat\ChatDbTable.cs" />
+    <Compile Include="Entities\Chat\ChatResp.cs" />
     <Compile Include="Entities\Contact\ContactData.cs" />
     <Compile Include="Entities\Contact\ContactDbTable.cs" />
     <Compile Include="Entities\Contact\ContactResp.cs" />
+    <Compile Include="Entities\Contact\ContactSummary.cs" />
     <Compile Include="Entities\Order\OrderData.cs" />
     <Compile Include="Entities\Order\OrderDbTable.cs" />
     <Compile Include="Entities\Order\OrderLite.cs" />
@@ -225,6 +229,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

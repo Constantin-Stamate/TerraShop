@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
-using eUseControl.Domain.Entities.Order;
-using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Profile;
 using eUseControl.Web.Models.Order;
 using eUseControl.Web.Models.Product;
@@ -22,18 +21,20 @@ namespace eUseControl.Web.Controllers
         private readonly ISession _session;
         private readonly IProfile _profile;
         private readonly IOrder _order;
+        private readonly IMapper _mapper;
 
-        public ProfileController()
+        public ProfileController(IMapper mapper)
         {
             var bl = new BusinessLogicManager();
             _product = bl.GetProductBL();
             _session = bl.GetSessionBL();
             _profile = bl.GetProfileBL();
             _order = bl.GetOrderBL();
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult GeneralProfile()
+        public async Task<ActionResult> GeneralProfile()
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -47,25 +48,19 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            var profile = _profile.GetProfileByUserId(user.Id);
+            var profile = await _profile.GetProfileByUserId(user.Id);
             if (profile == null)
             {
                 return RedirectToAction("Index", "Main", new { error = true });
             }
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ProfileData, ProfileCompact>();
-            });
+            var userProfile = _mapper.Map<ProfileCompact>(profile);
 
-            var mapper = config.CreateMapper();
-            var userProfile = mapper.Map<ProfileCompact>(profile);
-            
             return View(userProfile);
         }
 
         [HttpGet]
-        public ActionResult ArticlesProfile()
+        public async Task<ActionResult> ArticlesProfile()
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -79,15 +74,9 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            var productsMinimals = _product.GetProductsByUserId(user.Id);
+            var productsMinimals = await _product.GetProductsByUserId(user.Id);
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ProductMinimal, ProductCompact>();
-            });
-
-            var mapper = config.CreateMapper();
-            var products = mapper.Map<List<ProductCompact>>(productsMinimals);
+            var products = _mapper.Map<List<ProductCompact>>(productsMinimals);
 
             return View(products);
         }
@@ -100,7 +89,7 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ChangePasswordProfile(string currentPassword, string newPassword)
+        public async Task<ActionResult> ChangePasswordProfile(string currentPassword, string newPassword)
         {
             if (ModelState.IsValid)
             {
@@ -116,7 +105,7 @@ namespace eUseControl.Web.Controllers
                     return RedirectToAction("Login", "Login", new { error = true });
                 }
 
-                var result = _profile.ChangePassword(currentPassword, newPassword, user.Id);
+                var result = await _profile.ChangePassword(currentPassword, newPassword, user.Id);
 
                 if (result.Status)
                 {
@@ -125,7 +114,6 @@ namespace eUseControl.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", result.StatusMsg);
                     TempData["ErrorMessage"] = result.StatusMsg;
                     return RedirectToAction("ChangePasswordProfile", "Profile", new { error = true });
                 }
@@ -138,7 +126,7 @@ namespace eUseControl.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult OrdersProfile()
+        public async Task<ActionResult> OrdersProfile()
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -152,22 +140,15 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            var validOrders = _order.GetValidOrders(user.Id);
+            var validOrders = await _order.GetValidOrders(user.Id);
 
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<OrderLite, OrderInfo>();
-            });
-
-            var mapper = config.CreateMapper();
-            var orders = mapper.Map<List<OrderInfo>>(validOrders);
+            var orders = _mapper.Map<List<OrderInfo>>(validOrders);
 
             return View(orders);
         }
 
         [HttpGet]
-        public ActionResult SettingsProfile()
+        public async Task<ActionResult> SettingsProfile()
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -181,26 +162,20 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            var profile = _profile.GetProfileByUserId(user.Id);
+            var profile = await _profile.GetProfileByUserId(user.Id);
             if (profile == null)
             {
                 return RedirectToAction("Index", "Main", new { error = true });
             }
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ProfileData, ProfileCompact>();
-            });
-
-            var mapper = config.CreateMapper();
-            var userProfile = mapper.Map<ProfileCompact>(profile);
+            var userProfile = _mapper.Map<ProfileCompact>(profile);
 
             return View(userProfile);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SettingsProfile(ProfileCompact profileCompact, HttpPostedFileBase profileImage)
+        public async Task<ActionResult> SettingsProfile(ProfileCompact profileCompact, HttpPostedFileBase profileImage)
         {
             if (ModelState.IsValid)
             {
@@ -229,7 +204,10 @@ namespace eUseControl.Web.Controllers
                     {
                         try
                         {
-                            profileImage.SaveAs(filePath);
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await profileImage.InputStream.CopyToAsync(stream);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -241,27 +219,9 @@ namespace eUseControl.Web.Controllers
                     profileCompact.ProfileImageUrl = "~/Uploads/avatars/" + fileName;
                 }
 
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<ProfileCompact, ProfileData>();
-                });
+                var profile = _mapper.Map<ProfileData>(profileCompact);
 
-                var mapper = config.CreateMapper();
-                var profile = mapper.Map<ProfileData>(profileCompact);
-
-                var cookie = Request.Cookies["X-KEY"]?.Value;
-                if (string.IsNullOrEmpty(cookie))
-                {
-                    return RedirectToAction("Login", "Login", new { error = true });
-                }
-
-                var user = _session.GetUserByCookie(cookie);
-                if (user == null)
-                {
-                    return RedirectToAction("Login", "Login", new { error = true });
-                }
-
-                var result = _profile.UpdateProfile(profile);
+                var result = await _profile.UpdateProfile(profile);
 
                 if (result.Status)
                 {
@@ -269,7 +229,6 @@ namespace eUseControl.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", result.StatusMsg);
                     TempData["ErrorMessage"] = result.StatusMsg;
                     return RedirectToAction("SettingsProfile", "Profile", new { error = true });
                 }

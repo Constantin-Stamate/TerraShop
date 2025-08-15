@@ -17,6 +17,7 @@ namespace eUseControl.Web.Controllers
                 {
                     Expires = DateTime.Now.AddDays(-1)
                 };
+
                 Response.Cookies.Add(cookie);
             }
 

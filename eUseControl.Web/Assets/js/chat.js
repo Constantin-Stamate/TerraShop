@@ -8,52 +8,7 @@ const clearChatButton = document.getElementById("deleteButton");
 let currentUserMessage = null;
 let isGeneratingResponse = false;
 
-const loadSavedChatHistory = () => {
-    const savedConversations = JSON.parse(localStorage.getItem("saved-api-chats")) || [];
-    const isLightTheme = localStorage.getItem("themeColor") === "light_mode";
-
-    document.body.classList.toggle("light_mode", isLightTheme);
-    themeToggleButton.innerHTML = isLightTheme ? '<i class="bx bx-moon"></i>' : '<i class="bx bx-sun"></i>';
-
-    chatHistoryContainer.innerHTML = '';
-
-    savedConversations.forEach(conversation => {
-        const userMessageHtml = `
-            <div class="message__content">
-                <img class="message__avatar" src="/Assets/img/chat-icons/user.png" alt="User avatar">
-                <p class="message__text">${conversation.userMessage}</p>
-            </div>
-        `;
-
-        chatHistoryContainer.appendChild(createChatMessageElement(userMessageHtml, "message--outgoing"));
-
-        const responseText = conversation.apiResponse?.responseText || '';
-        const parsedApiResponse = marked.parse(responseText);
-
-        const responseHtml = `
-            <div class="message__content">
-                <img class="message__avatar" src="/Assets/img/chat-icons/terra.svg" alt="Terra avatar">
-                <p class="message__text">${parsedApiResponse}</p>
-                <div class="message__loading-indicator hide">
-                    <div class="message__loading-bar"></div>
-                    <div class="message__loading-bar"></div>
-                    <div class="message__loading-bar"></div>
-                </div>
-            </div>
-            <span onClick="copyMessageToClipboard(this)" class="message__icon"><i class='bx bx-copy-alt'></i></span>
-        `;
-
-        const incomingMessageElement = createChatMessageElement(responseHtml, "message--incoming");
-        chatHistoryContainer.appendChild(incomingMessageElement);
-        chatHistoryContainer.scrollTop = chatHistoryContainer.scrollHeight;
-    });
-
-    hljs.highlightAll();
-    addCopyButtonToCodeBlocks();
-
-    document.body.classList.toggle("hide-header", savedConversations.length > 0);
-};
-
+// Create Chat Message Element
 const createChatMessageElement = (htmlContent, ...cssClasses) => {
     const messageElement = document.createElement("div");
     messageElement.classList.add("message", ...cssClasses);
@@ -61,6 +16,7 @@ const createChatMessageElement = (htmlContent, ...cssClasses) => {
     return messageElement;
 };
 
+// Typing Effect
 const showTypingEffect = (rawText, htmlText, messageElement, incomingMessageElement, skipEffect = false) => {
     const copyIconElement = incomingMessageElement.querySelector(".message__icon");
     copyIconElement.classList.add("hide");
@@ -90,6 +46,7 @@ const showTypingEffect = (rawText, htmlText, messageElement, incomingMessageElem
     }, 75);
 };
 
+// Handle Outgoing Message
 const handleOutgoingMessage = async () => {
     currentUserMessage = messageForm.querySelector(".prompt__form-input").value.trim() || currentUserMessage;
     if (!currentUserMessage || isGeneratingResponse) return;
@@ -99,12 +56,10 @@ const handleOutgoingMessage = async () => {
     const outgoingMessageHtml = `
         <div class="message__content">
             <img class="message__avatar" src="/Assets/img/chat-icons/user.png" alt="User avatar">
-            <p class="message__text"></p>
+            <p class="message__text">${currentUserMessage}</p>
         </div>
     `;
-
     const outgoingMessageElement = createChatMessageElement(outgoingMessageHtml, "message--outgoing");
-    outgoingMessageElement.querySelector(".message__text").innerText = currentUserMessage;
     chatHistoryContainer.appendChild(outgoingMessageElement);
 
     messageForm.reset();
@@ -122,7 +77,6 @@ const handleOutgoingMessage = async () => {
         </div>
         <span onClick="copyMessageToClipboard(this)" class="message__icon hide"><i class='bx bx-copy-alt'></i></span>
     `;
-
     const incomingMessageElement = createChatMessageElement(loadingHtml, "message--incoming", "message--loading");
     chatHistoryContainer.appendChild(incomingMessageElement);
     const messageTextElement = incomingMessageElement.querySelector(".message__text");
@@ -137,20 +91,17 @@ const handleOutgoingMessage = async () => {
         if (!response.ok) throw new Error(`Server error: ${response.statusText}`);
 
         const data = await response.json();
-        const responseText = data.responseText || "No response";
 
+        if (!data.success) {
+            isGeneratingResponse = false;
+            messageTextElement.innerText = data.error || "Unknown error";
+            messageTextElement.closest(".message").classList.add("message--error");
+            return;
+        }
+
+        const responseText = data.responseText || "No response";
         const parsedApiResponse = marked.parse(responseText);
         showTypingEffect(responseText, parsedApiResponse, messageTextElement, incomingMessageElement);
-
-        let savedConversations = JSON.parse(localStorage.getItem("saved-api-chats")) || [];
-        savedConversations.push({
-            userMessage: currentUserMessage,
-            apiResponse: {
-                responseText: responseText
-            }
-        });
-
-        localStorage.setItem("saved-api-chats", JSON.stringify(savedConversations));
     } catch (error) {
         isGeneratingResponse = false;
         messageTextElement.innerText = error.message;
@@ -160,9 +111,9 @@ const handleOutgoingMessage = async () => {
     }
 };
 
+// Add Copy Button to Code Blocks
 const addCopyButtonToCodeBlocks = () => {
     const codeBlocks = document.querySelectorAll('pre');
-
     codeBlocks.forEach(block => {
         const codeElement = block.querySelector('code');
         let language = [...codeElement.classList].find(cls => cls.startsWith('language-'))?.replace('language-', '') || 'Text';
@@ -189,6 +140,7 @@ const addCopyButtonToCodeBlocks = () => {
     });
 };
 
+// Copy Message to Clipboard
 const copyMessageToClipboard = (copyButton) => {
     const messageContent = copyButton.parentElement.querySelector(".message__text").innerText;
     navigator.clipboard.writeText(messageContent);
@@ -196,23 +148,20 @@ const copyMessageToClipboard = (copyButton) => {
     setTimeout(() => copyButton.innerHTML = `<i class='bx bx-copy-alt'></i>`, 1000);
 };
 
-themeToggleButton.addEventListener('click', () => {
-    const isLightTheme = document.body.classList.toggle("light_mode");
-    localStorage.setItem("themeColor", isLightTheme ? "light_mode" : "dark_mode");
-
-    const newIconClass = isLightTheme ? "bx bx-moon" : "bx bx-sun";
-    themeToggleButton.querySelector("i").className = newIconClass;
-});
-
-clearChatButton.addEventListener('click', () => {
-    if (confirm("Are you sure you want to delete all chat history?")) {
-        localStorage.removeItem("saved-api-chats");
-        loadSavedChatHistory();
+// Delete Chat History
+const deleteForm = document.getElementById("deleteChatForm");
+deleteForm.addEventListener("submit", e => {
+    if (!confirm("Are you sure you want to delete all chat history?")) {
+        e.preventDefault();
+    } else {
+        chatHistoryContainer.innerHTML = '';
         currentUserMessage = null;
         isGeneratingResponse = false;
+        document.body.classList.remove("hide-header");
     }
 });
 
+// Suggestion Item Click
 suggestionItems.forEach(suggestion => {
     suggestion.addEventListener('click', () => {
         currentUserMessage = suggestion.querySelector(".suggests__item-text").innerText;
@@ -220,9 +169,66 @@ suggestionItems.forEach(suggestion => {
     });
 });
 
+// Form Submit Send Message
 messageForm.addEventListener('submit', e => {
     e.preventDefault();
     handleOutgoingMessage();
 });
 
-loadSavedChatHistory();
+// Formats Numbered Lists
+document.addEventListener("DOMContentLoaded", () => {
+    const messageElements = document.querySelectorAll(".message__text");
+
+    messageElements.forEach(el => {
+        let rawText = el.textContent || "";
+
+        rawText = rawText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+        const escapeHtml = (text) =>
+            text.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        rawText = escapeHtml(rawText);
+        rawText = rawText.replace(/\*\*/g, '');
+
+        const lines = rawText.split('\n');
+
+        let html = "";
+        let previousWasNumbered = false;
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            const trimmed = line.trim();
+
+            const isNumbered = /^\d+\.\s/.test(trimmed);
+            const isBullet = /^[ \t]*([•*\-\+→»►])\s/.test(trimmed);
+
+            if (isNumbered) {
+                let formattedLine = line.replace(/^[ \t]*(\d+\.\s)([^:]+)(:)/,
+                    (match, p1, p2, p3) =>
+                        p1 + `<span style="font-weight:bold;">${p2}</span>` + p3);
+                formattedLine = formattedLine.replace(/^(\d+\.)\s/,
+                    (match, p1) =>
+                        `<span style="display:inline-block; width:30px; text-align:right; margin-right:8px; vertical-align:top;">${p1}</span> `);
+
+                html += `<p style="padding-left: 60px; text-indent: -38px; margin: 0 0 1em 0; white-space: pre-wrap;">${formattedLine.trim()}</p>`;
+                previousWasNumbered = true;
+            } else if (isBullet) {
+                let formattedLine = line.replace(/^[ \t]*([•*\-\+→»►])\s/,
+                    (match, p1) =>
+                        `<span style="display:inline-block; width:30px; text-align:right; margin-right:8px; vertical-align:top;">${p1}</span> `);
+
+                html += `<p style="padding-left: 60px; text-indent: -38px; margin: 0 0 1em 0; white-space: pre-wrap;">${formattedLine.trim()}</p>`;
+                previousWasNumbered = false;
+            } else {
+                html += `<div style="margin: 0 0 1em 0; padding-left: 0; text-indent: 0; white-space: normal;"><p>${line.trim()}</p></div>`;
+                previousWasNumbered = false;
+            }
+        }
+
+        el.innerHTML = html;
+    });
+});

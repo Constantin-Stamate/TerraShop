@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
-using eUseControl.Domain.Entities.Cart;
 using eUseControl.Domain.Entities.Order;
 using eUseControl.Web.Models.Cart;
 using eUseControl.Web.Models.Order;
@@ -17,18 +17,20 @@ namespace eUseControl.Web.Controllers
         private readonly ISession _session;
         private readonly IOrder _order;
         private readonly IProduct _product;
+        private readonly IMapper _mapper;
 
-        public CheckoutController()
+        public CheckoutController(IMapper mapper)
         {
             var bl = new BusinessLogicManager();
             _cart = bl.GetCartBL();
             _session = bl.GetSessionBL();
             _order = bl.GetOrderBL();
             _product = bl.GetProductBL();
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult Checkout(string couponCode)
+        public async Task<ActionResult> Checkout(string couponCode)
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -42,25 +44,20 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            var allCartItems = _cart.GetCartItemsByUserId(user.Id);
+            var allCartItems = await _cart.GetCartItemsByUserId(user.Id);
+
+            var cartItems = _mapper.Map<List<CartCompact>>(allCartItems);
 
             var totals = _cart.CalculateCartTotal(allCartItems);
+
             decimal finalPrice = totals.totalPrice;
             decimal discountRate = 0;
 
             if (!string.IsNullOrEmpty(couponCode))
             {
-                finalPrice = _cart.ApplyCouponDiscount(finalPrice, couponCode);
+                finalPrice = await _cart.ApplyCouponDiscount(finalPrice, couponCode);
                 discountRate = _cart.ComputeDiscountAmount(totals.totalPrice, finalPrice);
             }
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<CartData, CartCompact>(); 
-            });
-
-            var mapper = config.CreateMapper();
-            var cartItems = mapper.Map<List<CartCompact>>(allCartItems);
 
             var model = new OrderViewModel
             {
@@ -77,7 +74,7 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PlaceOrder(OrderViewModel model)
+        public async Task<ActionResult> PlaceOrder(OrderViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -93,41 +90,36 @@ namespace eUseControl.Web.Controllers
                     return RedirectToAction("Login", "Login", new { error = true });
                 }
 
-                var allCartItems = _cart.GetCartItemsByUserId(user.Id);
+                var allCartItems = await _cart.GetCartItemsByUserId(user.Id);
 
                 var totals = _cart.CalculateCartTotal(allCartItems);
+
                 decimal finalPrice = totals.totalPrice;
 
                 if (!string.IsNullOrEmpty(model.CouponCode))
                 {
-                    finalPrice = _cart.ApplyCouponDiscount(finalPrice, model.CouponCode);
+                    finalPrice = await _cart.ApplyCouponDiscount(finalPrice, model.CouponCode);
                 }
 
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<OrderCompact, OrderData>();
-                });
-
-                var mapper = config.CreateMapper();
-                var orderData = mapper.Map<OrderData>(model.Order);
+                var orderData = _mapper.Map<OrderData>(model.Order);
 
                 orderData.CouponCode = model.CouponCode;
                 orderData.TotalPrice = _cart.ComputeOrderTotal(finalPrice, totals.shippingCost);
 
-                var resultOrders = _order.CancelUnpaidOrders(user.Id);
-                var result = _order.PlaceOrder(orderData, user.Id);
+                var resultOrders = await _order.CancelUnpaidOrders(user.Id);
+                var result = await _order.PlaceOrder(orderData, user.Id);
 
                 if (result.Status)
                 {
                     if (orderData.PaymentMethod == "Cash")
                     {
-                        var updateResult = _product.UpdateProductQuantitiesAfterOrder(allCartItems);
+                        var updateResult = await _product.UpdateProductQuantitiesAfterOrder(allCartItems);
                         if (!updateResult.Status)
                         {
                             return RedirectToAction("Checkout", "Checkout", new { error = true });
                         }
 
-                        var clearResult = _cart.ClearCartItemsAfterOrder(user.Id);
+                        var clearResult = await _cart.ClearCartItemsAfterOrder(user.Id);
                         if (!clearResult.Status)
                         {
                             return RedirectToAction("Checkout", "Checkout", new { error = true });

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using eUseControl.BusinessLogic.Core;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities.Cart;
@@ -8,84 +9,94 @@ namespace eUseControl.BusinessLogic.BusinessLayer
 {
     public class ProductBL : UserApi, IProduct
     {
-        public ProductResp CreateProduct(ProductData productData, int userId)
+        public async Task<ProductResp> CreateProduct(ProductData productData, int userId)
         {
-            return CreateProductAction(productData, userId);
+            return await CreateProductAction(productData, userId);
         }
 
-        public List<ProductMinimal> GetProductsByUserId(int userId)
+        public async Task<List<ProductMinimal>> GetProductsByUserId(int userId)
         {
-            return GetProductsByUserIdAction(userId);
+            return await GetProductsByUserIdAction(userId);
         }
 
-        public ProductResp UpdateProduct(ProductData productData)
+        public async Task<ProductResp> UpdateProduct(ProductData productData)
         {
-            return UpdateProductAction(productData);
-        } 
-
-        public ProductData GetProductById(int productId)
-        {
-            return GetProductByIdAction(productId);
+            return await UpdateProductAction(productData);
         }
 
-        public List<ProductSummary> GetAvailableProducts()
+        public async Task<ProductData> GetProductById(int productId)
         {
-            return GetAvailableProductsAction();
+            return await GetProductByIdAction(productId);
         }
 
-        public ProductResp UpdateProductStatus(int productId)
+        public async Task<List<ProductSummary>> GetAvailableProducts()
         {
-            return UpdateProductStatusAction(productId);
-        } 
+            return await GetAvailableProductsAction();
+        }
 
-        public Dictionary<CategoryDbTable, int> GetCategoryProductCounts()
+        public async Task<ProductResp> UpdateProductStatus(int productId)
+        {
+            return await UpdateProductStatusAction(productId);
+        }
+
+        public Dictionary<CategoryData, int> GetCategoryProductCounts()
         {
             return GetCategoryProductCountsAction();
         }
 
-        public List<ProductSummary> GetAvailableProductsByCategoryId(int? categoryId)
+        public async Task<List<ProductSummary>> GetAvailableProductsByCategoryId(int? categoryId)
         {
-            return GetAvailableProductsByCategoryIdAction(categoryId);
+            return await GetAvailableProductsByCategoryIdAction(categoryId);
         }
 
-        public ProductResp UpdateProductRating(int productId)
+        public async Task<ProductResp> UpdateProductRating(int productId)
         {
-            return UpdateProductRatingAction(productId);
+            return await UpdateProductRatingAction(productId);
         }
 
-        public List<ProductSummary> SortProducts(string sortOption, List<ProductSummary> products)
+        public async Task<List<ProductSummary>> SortProducts(string sortOption, List<ProductSummary> products)
         {
-            return SortProductsAction(sortOption, products);
+            return await SortProductsAction(sortOption, products);
         }
 
-        public List<ProductSummary> GetProductsByMaxPrice(int maxPrice, List<ProductSummary> products)
+        public async Task<List<ProductSummary>> GetProductsByMaxPrice(int maxPrice, List<ProductSummary> products)
         {
-            return GetProductsByMaxPriceAction(maxPrice, products);
+            return await GetProductsByMaxPriceAction(maxPrice, products);
         }
 
-        public List<ProductSummary> GetProductsBySearchQuery(string searchQuery, List<ProductSummary> products)
+        public async Task<List<ProductSummary>> GetProductsBySearchQuery(string searchQuery, List<ProductSummary> products)
         {
-            return GetProductsBySearchQueryAction(searchQuery, products);
+            return await GetProductsBySearchQueryAction(searchQuery, products);
         }
 
-        public List<ProductSummary> GetProductsByCountry(string country, List<ProductSummary> products)
+        public async Task<List<ProductSummary>> GetProductsByCountry(string country, List<ProductSummary> products)
         {
-            return GetProductsByCountryAction(country, products);
+            return await GetProductsByCountryAction(country, products);
         }
 
-        public ProductResp UpdateProductQuantitiesAfterOrder(List<CartData> cartItems)
+        public async Task<ProductResp> UpdateProductQuantitiesAfterOrder(List<CartData> cartItems)
         {
-            return UpdateProductQuantitiesAfterOrderAction(cartItems);
+            return await UpdateProductQuantitiesAfterOrderAction(cartItems);
         }
 
-        public List<ProductSummary> GetRecommendedProducts()
+        public async Task<List<ProductSummary>> GetRecommendedProducts()
         {
-            return GetRecommendedProductsAction();
+            return await GetRecommendedProductsAction();
         }
 
-        public ProductResp RemoveProduct(int productId)
+        public async Task<ProductResp> RemoveProduct(int productId)
         {
-            return RemoveProductAction(productId);
+            return await RemoveProductAction(productId);
+        }
+
+        public async Task<Dictionary<string, List<ProductSummary>>> GetProductsFromTopCategories()
+        {
+            return await GetProductsFromTopCategoriesAction();
+        }
+
+        public async Task<List<string>> ExtractCategories()
+        {
+            return await ExtractCategoriesAction();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,43 +18,95 @@ namespace eUseControl.Tests.ServicesTests
         }
 
         [TestMethod]
-        public void EmptyMessage()
+        public async Task EmptyMessageError()
         {
-            string emptyMessage = "";
+            string message = "";
+            int userId = 1;
 
-            string result = _chat.GetResponse(emptyMessage);
+            var result = await _chat.GetResponse(message, userId);
 
-            Assert.AreEqual("Message cannot be empty!", result);
+            Assert.IsFalse(result.Status, "Expected failure when message is empty!");
+            Assert.AreEqual("Message cannot be empty!", result.StatusMsg);
         }
 
         [TestMethod]
-        public void LongMessage()
+        public async Task TooLongMessageError()
         {
-            string longMessage = string.Join(" ", Enumerable.Repeat("word", 301));
+            string message = string.Join(" ", Enumerable.Repeat("word", 601));
+            int userId = 1;
 
-            string result = _chat.GetResponse(longMessage);
+            var result = await _chat.GetResponse(message, userId);
 
-            Assert.IsTrue(result.Contains("Message too long"));
+            Assert.IsFalse(result.Status, "Expected failure when message exceeds allowed word limit!");
+            Assert.IsTrue(result.StatusMsg.Contains("Message too long"));
         }
 
         [TestMethod]
-        public void ValidMessage()
+        public async Task ValidMessageSuccess()
         {
-            string validMessage = "How does Eco Market Place work?";
+            string message = "How does Eco Market Place work?";
+            int userId = 1;
 
-            string result = _chat.GetResponse(validMessage);
+            var result = await _chat.GetResponse(message, userId);
 
-            Assert.IsFalse(string.IsNullOrEmpty(result), "Expected a non-empty response!");
+            Assert.IsTrue(result.Status, "Expected success for valid message input!");
+            Assert.IsFalse(string.IsNullOrEmpty(result.StatusMsg), "Expected a meaningful response for a valid message!");
         }
 
         [TestMethod]
-        public void OutOfDomain()
+        public async Task OutOfScopeMessageHandled()
         {
-            string outOfDomainMessage = "Who won the football world cup?";
+            string message = "Who won the football world cup?";
+            int userId = 1;
 
-            string result = _chat.GetResponse(outOfDomainMessage);
+            var result = await _chat.GetResponse(message, userId);
 
-            Assert.IsTrue(result.Contains("Eco Market Place"));
+            Assert.IsTrue(result.Status, "Expected status to remain true even for out-of-domain questions!");
+            Assert.IsTrue(result.StatusMsg.Contains("Eco Market Place") || result.StatusMsg.Contains("I can only assist") || result.StatusMsg.Contains("platform"), "Expected informative message indicating domain limitation for the AI assistant!");
+        }
+
+        [TestMethod]
+        public async Task RetrieveUserChatsSuccess()
+        {
+            int existingUserId = 1;
+
+            var chats = await _chat.RetrieveUserChats(existingUserId);
+
+            Assert.IsNotNull(chats, "Expected a list of chat data!");
+            Assert.IsTrue(chats.Count > 0, "Expected at least one chat entry for existing user!");
+        }
+
+        [TestMethod]
+        public async Task RetrieveUserChatsFailForInvalidUser()
+        {
+            int nonExistentUserId = -1;
+
+            var chats = await _chat.RetrieveUserChats(nonExistentUserId);
+
+            Assert.IsNotNull(chats, "Expected a list even for invalid user!");
+            Assert.AreEqual(0, chats.Count, "Expected empty list for non-existent user!");
+        }
+
+        [TestMethod]
+        public async Task DeleteChatSuccess()
+        {
+            int userIdWithMessages = 1;
+
+            var result = await _chat.DeleteChatHistory(userIdWithMessages);
+
+            Assert.IsTrue(result.Status, "Expected true when deleting existing user messages!");
+            Assert.AreEqual("User messages successfully deleted!", result.StatusMsg);
+        }
+
+        [TestMethod]
+        public async Task DeleteChatFail()
+        {
+            int userIdWithoutMessages = -1;
+
+            var result = await _chat.DeleteChatHistory(userIdWithoutMessages);
+
+            Assert.IsFalse(result.Status, "Expected false when no messages exist for the user!");
+            Assert.AreEqual("No messages found for this user!", result.StatusMsg);
         }
     }
 }

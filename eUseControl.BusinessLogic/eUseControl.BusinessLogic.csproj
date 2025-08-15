@@ -71,6 +71,7 @@
     <Compile Include="Core\UserApi.cs" />
     <Compile Include="DBModel\CartContext.cs" />
     <Compile Include="DBModel\CategoryContext.cs" />
+    <Compile Include="DBModel\ChatContext.cs" />
     <Compile Include="DBModel\ContactContext.cs" />
     <Compile Include="DBModel\CouponContext.cs" />
     <Compile Include="DBModel\OrderContext.cs" />
@@ -104,6 +105,11 @@
       <DependentUpon>202506051620141_CreateProductCategoriesTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Category\Configuration.cs" />
+    <Compile Include="Migrations\Chat\202507282351217_CreateChatMessagesTable.cs" />
+    <Compile Include="Migrations\Chat\202507282351217_CreateChatMessagesTable.Designer.cs">
+      <DependentUpon>202507282351217_CreateChatMessagesTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Chat\Configuration.cs" />
     <Compile Include="Migrations\Contact\202506101834059_CreateContactRequestsTable.cs" />
     <Compile Include="Migrations\Contact\202506101834059_CreateContactRequestsTable.Designer.cs">
       <DependentUpon>202506101834059_CreateContactRequestsTable.cs</DependentUpon>
@@ -177,6 +183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Category\202506051620141_CreateProductCategoriesTable.resx">
       <DependentUpon>202506051620141_CreateProductCategoriesTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Chat\202507282351217_CreateChatMessagesTable.resx">
+      <DependentUpon>202507282351217_CreateChatMessagesTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Contact\202506101834059_CreateContactRequestsTable.resx">
       <DependentUpon>202506101834059_CreateContactRequestsTable.cs</DependentUpon>

@@ -20,8 +20,7 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
@@ -33,35 +32,21 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     @Styles.Render("~/bundles/main/css")
-    @Styles.Render("~/bundles/global/css")
+    @Styles.Render("~/bundles/layout/css")
 
     <!-- Template Stylesheet -->
     @Styles.Render("~/bundles/style/css")
-
-    <style>
-        .position-relative {
-            position: relative;
-        }
-
-        .bg-image {
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            min-height: 100vh;
-        }
-    </style>
 </head>
 
 <body>
     <!-- Spinner Start -->
-    <div id="spinner"
-         class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+    <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
     <!-- Spinner End -->
 
     <!-- Navbar Start -->
-    <div class="container-fluid fixed-top">
+    <div class="container-fluid fixed-top" style="margin-left: -7px;">
         @Html.Action("Navbar", "Main")
     </div>
     <!-- Navbar End -->
@@ -73,14 +58,7 @@
     <!-- Modal Search End -->
 
     <!-- Add Coupon Form Start -->
-    <section class="login-section bg-image"
-             style="background: linear-gradient(to right, rgba(129, 196, 8, 0.5), rgba(129, 196, 8, 0.7)), url('/Assets/img/backgrounds/background.jpg');
-                background-size: cover;
-                background-position: top;
-                  background-size: 100% 100%;
-                background-repeat: no-repeat;
-                background-attachment: fixed;
-                margin-top: -24px;">
+    <section class="login-section bg-image" style="background: linear-gradient(to right, rgba(129, 196, 8, 0.5), rgba(129, 196, 8, 0.7)), url('/Assets/img/backgrounds/background.jpg'); background-size: cover; background-position: top; background-size: 100% 100%; background-repeat: no-repeat; background-attachment: fixed; margin-top: -24px;">
         @RenderBody()
     </section>
     <!-- Add Coupon Form End -->
@@ -97,24 +75,10 @@
     @Scripts.Render("~/bundles/waypoints/js")
     @Scripts.Render("~/bundles/lightbox/js")
     @Scripts.Render("~/bundles/owl/carousel/min/js")
-    @Scripts.Render("~/bundles/base/js")
+    @Scripts.Render("~/bundles/animations/js")
 
     <!-- Template Javascript -->
     @Scripts.Render("~/bundles/main/js")
-
-    <script>
-        (function () {
-            const input = document.getElementById('expDate');
-            input.addEventListener('focus', () => {
-                input.type = 'date';
-            });
-            input.addEventListener('blur', () => {
-                if (!input.value) {
-                    input.type = 'text';
-                }
-            });
-        })();
-    </script>
 </body>
 
 </html>

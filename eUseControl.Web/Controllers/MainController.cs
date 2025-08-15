@@ -1,15 +1,14 @@
-﻿using System.Web.Mvc;
-using eUseControl.BusinessLogic.Interfaces;
-using eUseControl.BusinessLogic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 using AutoMapper;
-using eUseControl.Domain.Entities.Product;
-using System.Collections.Generic;
-using eUseControl.Web.Models.Product;
-using eUseControl.Domain.Entities.Profile;
-using eUseControl.Web.Models.Profile;
-using eUseControl.Domain.Entities.Review;
-using eUseControl.Web.Models.Review;
+using eUseControl.BusinessLogic;
+using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Web.Models.Main;
+using eUseControl.Web.Models.Product;
+using eUseControl.Web.Models.Profile;
+using eUseControl.Web.Models.Review;
 
 namespace eUseControl.Web.Controllers
 {
@@ -20,8 +19,9 @@ namespace eUseControl.Web.Controllers
         private readonly ISession _session;
         private readonly ICart _cart;
         private readonly IReview _review;
+        private readonly IMapper _mapper;
 
-        public MainController()
+        public MainController(IMapper mapper)
         {
             var bl = new BusinessLogicManager();
             _product = bl.GetProductBL();
@@ -29,38 +29,42 @@ namespace eUseControl.Web.Controllers
             _session = bl.GetSessionBL();
             _cart = bl.GetCartBL();
             _review = bl.GetReviewBL();
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var allReviews = _review.RetrieveAllReviews();
+            var cookieValue = Request.Cookies["X-KEY"]?.Value;
 
-            var list = new List<ReviewProfileData>();
+            var user = !string.IsNullOrEmpty(cookieValue) ? _session.GetUserByCookie(cookieValue) : null;
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ProfileData, ProfileMini>();
-                cfg.CreateMap<ReviewData, ReviewMini>();
-            });
+            var productIds = user != null ? await _wishlist.GetWishlistProductIds(user.Id) : new List<int>();
 
-            var mapper = config.CreateMapper();
+            var allReviews = await _review.RetrieveAllReviews();
 
-            foreach (var pair in allReviews)
-            {
-                var review = mapper.Map<ReviewMini>(pair.Key);
-                var profile = mapper.Map<ProfileMini>(pair.Value);
-
-                list.Add(new ReviewProfileData
+            var reviewsWithProfiles = allReviews
+                .Select(pair => new ReviewProfileData
                 {
-                    Review = review,
-                    Profile = profile
-                });
-            }
+                    Review = _mapper.Map<ReviewMini>(pair.Key),
+                    Profile = _mapper.Map<ProfileMini>(pair.Value)
+                })
+                .ToList();
+
+            var topProducts = await _product.GetProductsFromTopCategories();
+
+            var topProductsMapped = topProducts.ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value
+                .Select(p => _mapper.Map<ProductMini>(p))
+                .ToList()
+            );
 
             var model = new MainViewModel
             {
-                ReviewsWithProfiles = list
+                ReviewsWithProfiles = reviewsWithProfiles,
+                Products = topProductsMapped,
+                WishlistProductIds = productIds
             };
 
             return View(model);
@@ -75,7 +79,8 @@ namespace eUseControl.Web.Controllers
                 return PartialView("_Navbar", new ProductNavigationViewModel
                 {
                     Categories = new Dictionary<ProductCategory, int>(),
-                    WishlistCount = 0
+                    WishlistCount = 0,
+                    CartCount = 0
                 });
             }
 
@@ -85,22 +90,18 @@ namespace eUseControl.Web.Controllers
                 return PartialView("_Navbar", new ProductNavigationViewModel
                 {
                     Categories = new Dictionary<ProductCategory, int>(),
-                    WishlistCount = 0
+                    WishlistCount = 0,
+                    CartCount = 0
                 });
             }
 
             var categoryProductCounts = _product.GetCategoryProductCounts();
+
+            var productCountsByCategory = _mapper.Map<Dictionary<ProductCategory, int>>(categoryProductCounts);
+
             var wishlistProductsCount = _wishlist.GetWishlistCountByUserId(user.Id);
-            var cartProductsCount = _cart.GetCartCountByUserId(user.Id); 
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ProductSummary, ProductMini>();
-                cfg.CreateMap<CategoryDbTable, ProductCategory>();
-            });
-
-            var mapper = config.CreateMapper();
-            var productCountsByCategory = mapper.Map<Dictionary<ProductCategory, int>>(categoryProductCounts);
+            var cartProductsCount = _cart.GetCartCountByUserId(user.Id);
 
             var model = new ProductNavigationViewModel
             {

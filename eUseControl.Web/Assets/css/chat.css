@@ -9,19 +9,6 @@
 }
 
 :root {
-    --primary-color: #131314;
-    --secondary-color: #1E1F20;
-    --secondary-hover-color: #333537;
-    --focus-color: #282A2C;
-    --focus-hover-color: #37393B;
-    --button-hover-color: #2f3030;
-    --text-color: #fff;
-    --text-secondary-color: #D8D8D8;
-    --heading-secondary-color: #444746;
-    --placeholder-color: #ABAFB3;
-}
-
-.light_mode {
     --primary-color: #FFFFFF;
     --secondary-color: #F0F4F9;
     --secondary-hover-color: #DDE3EA;
@@ -231,7 +218,7 @@ body.hide-header .header {
 
 .chats {
     padding: 2rem 1rem 10rem;
-    max-height: 100%;
+    max-height: 200%;
     overflow-y: auto;
     scrollbar-color: #999 transparent;
 }

@@ -1,19 +1,20 @@
-﻿using eUseControl.Domain.Entities;
+﻿using System.Threading.Tasks;
 using System.Web;
+using eUseControl.Domain.Entities;
 using eUseControl.Domain.Entities.User;
 
 namespace eUseControl.BusinessLogic.Interfaces
 {
     public interface ISession
     {
-        URegisterResp UserRegister(URegisterData data);
+        Task<URegisterResp> UserRegister(URegisterData data);
 
-        HttpCookie GenCookie(string loginCredential);
+        Task<HttpCookie> GenCookie(string loginCredential);
 
         UserMinimal GetUserByCookie(string apiCookieValue);
 
-        ULoginResp UserLogin(ULoginData data);
+        Task<ULoginResp> UserLogin(ULoginData data);
 
-        UserSummary GetUserById(int userId);
+        Task<UserSummary> GetUserById(int userId);
     }
 }

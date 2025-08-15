@@ -11,6 +11,8 @@
     <meta charset="utf-8">
     <title>TerraShop</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
 
     <!-- Favicon Image -->
     <link rel="shortcut icon" type="image/x-icon" href="@Url.Content("~/Assets/img/favicon.ico")">
@@ -18,8 +20,7 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
@@ -31,29 +32,21 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     @Styles.Render("~/bundles/main/css")
-    @Styles.Render("~/bundles/global/css")
+    @Styles.Render("~/bundles/legal/css")
 
     <!-- Template Stylesheet -->
     @Styles.Render("~/bundles/style/css")
-
-    <style>
-        body {
-            padding-top: 141px;
-            font-family: 'Poppins', sans-serif;
-        }
-    </style>
 </head>
 
 <body>
     <!-- Spinner Start -->
-    <div id="spinner"
-         class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+    <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
     <!-- Spinner End -->
 
     <!-- Navbar Start -->
-    <div class="container-fluid fixed-top">
+    <div class="container-fluid fixed-top" style="margin-left: -5px;">
         @Html.Action("Navbar", "Main")
     </div>
     <!-- Navbar End -->
@@ -94,7 +87,6 @@
     @Scripts.Render("~/bundles/waypoints/js")
     @Scripts.Render("~/bundles/lightbox/js")
     @Scripts.Render("~/bundles/owl/carousel/min/js")
-    @Scripts.Render("~/bundles/base/js")
 
     <!-- Template Javascript -->
     @Scripts.Render("~/bundles/main/js")

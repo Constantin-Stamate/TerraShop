@@ -9,19 +9,19 @@
             CreateTable(
                 "dbo.WishlistProducts",
                 c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        UserId = c.Int(nullable: false),
-                        ProductId = c.Int(nullable: false),
-                        AddedDate = c.DateTime(nullable: false),
-                    })
+                {
+                    Id = c.Int(nullable: false, identity: true),
+                    UserId = c.Int(nullable: false),
+                    ProductId = c.Int(nullable: false),
+                    AddedDate = c.DateTime(nullable: false),
+                })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
                 .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: false)
                 .Index(t => t.UserId)
                 .Index(t => t.ProductId);
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.WishlistProducts", "ProductId", "dbo.Products");

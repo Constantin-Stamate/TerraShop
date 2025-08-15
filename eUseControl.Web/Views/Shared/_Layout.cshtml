@@ -3,6 +3,7 @@
 }
 
 @using System.Web.Optimization
+
 @model eUseControl.Web.Models.Main.MainViewModel
 
 <!DOCTYPE html>
@@ -21,8 +22,7 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
@@ -34,7 +34,8 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     @Styles.Render("~/bundles/main/css")
-    @Styles.Render("~/bundles/global/css")
+    @Styles.Render("~/bundles/product-ui/css")
+    @Styles.Render("~/bundles/layout/css")
 
     <!-- Template Stylesheet -->
     @Styles.Render("~/bundles/style/css")
@@ -42,8 +43,7 @@
 
 <body>
     <!-- Spinner Start -->
-    <div id="spinner"
-         class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+    <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
     <!-- Spinner End -->
@@ -67,29 +67,25 @@
                 <div class="col-md-12 col-lg-7">
                     <h4 class="mb-3 text-secondary">Sustainable Products for a Better Tomorrow</h4>
                     <h1 class="mb-5 display-3 text-primary" style="font-size: 52px;">Choose green, embrace change</h1>
-                    <form method="get" action="@Url.Action("Shop", "Shop")">
+                    @using (Html.BeginForm("Shop", "Shop", FormMethod.Get))
+                    {
                         <div class="position-relative mx-auto">
-                            <input name="searchQuery" class="form-control border-2 border-secondary w-75 py-3 px-4 rounded-pill" type="search"
-                                   placeholder="Search">
-                            <button type="submit"
-                                    class="btn btn-primary border-2 border-secondary py-3 px-4 position-absolute rounded-pill text-white h-100"
-                                    style="top: 0; right: 25%;">
+                            @Html.TextBox("searchQuery", null, new { @class = "form-control border-2 border-secondary w-75 py-3 px-4 rounded-pill", type = "search", placeholder = "Search" })
+                            <button type="submit" class="btn btn-primary border-2 border-secondary py-3 px-4 position-absolute rounded-pill text-white h-100" style="top: 0; right: 25%;">
                                 Submit Now
                             </button>
                         </div>
-                    </form>
+                    }
                 </div>
                 <div class="col-md-12 col-lg-5">
                     <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
                         <div class="carousel-inner" role="listbox">
                             <div class="carousel-item active rounded">
-                                <img src="@Url.Content("~/Assets/img/volunteer-categories/volunteer-category-1.jpg")" class="img-fluid w-100 h-100 bg-secondary rounded"
-                                     alt="First slide">
+                                <img src="@Url.Content("~/Assets/img/volunteer-categories/volunteer-category-1.jpg")" class="img-fluid w-100 h-100 bg-secondary rounded" alt="First slide">
                                 <a href="@Url.Action("Index", "Main")" class="btn px-4 py-2 text-white rounded">Wellness</a>
                             </div>
                             <div class="carousel-item rounded">
-                                <img src="@Url.Content("~/Assets/img/volunteer-categories/volunteer-category-2.jpg")" class="img-fluid w-100 h-100 rounded"
-                                     alt="Second slide">
+                                <img src="@Url.Content("~/Assets/img/volunteer-categories/volunteer-category-2.jpg")" class="img-fluid w-100 h-100 rounded" alt="Second slide">
                                 <a href="@Url.Action("Index", "Main")" class="btn px-4 py-2 text-white rounded">Handmade</a>
                             </div>
                             <div class="carousel-item rounded">
@@ -97,23 +93,19 @@
                                 <a href="@Url.Action("Index", "Main")" class="btn px-4 py-2 text-white rounded">Toys</a>
                             </div>
                             <div class="carousel-item rounded">
-                                <img src="@Url.Content("~/Assets/img/volunteer-categories/volunteer-category-4.jpg")" class="img-fluid w-100 h-100 rounded"
-                                     alt="Fourth slide">
+                                <img src="@Url.Content("~/Assets/img/volunteer-categories/volunteer-category-4.jpg")" class="img-fluid w-100 h-100 rounded" alt="Fourth slide">
                                 <a href="@Url.Action("Index", "Main")" class="btn px-4 py-2 text-white rounded">Recycled</a>
                             </div>
                             <div class="carousel-item rounded">
-                                <img src="@Url.Content("~/Assets/img/volunteer-categories/volunteer-category-5.jpg")" class="img-fluid w-100 h-100 rounded"
-                                     alt="Fifth slide">
+                                <img src="@Url.Content("~/Assets/img/volunteer-categories/volunteer-category-5.jpg")" class="img-fluid w-100 h-100 rounded" alt="Fifth slide">
                                 <a href="@Url.Action("Index", "Main")" class="btn px-4 py-2 text-white rounded">Crafts</a>
                             </div>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselId"
-                                data-bs-slide="prev">
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselId"
-                                data-bs-slide="next">
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                         </button>
@@ -187,15 +179,8 @@
                     <div class="py-4">
                         <h1 class="display-3 text-white">Shop with Purpose</h1>
                         <p class="fw-normal display-3 text-dark mb-4">NGO & Eco Support</p>
-                        <p class="mb-4 text-dark">
-                            Every purchase you make at TerraShop helps NGOs and artisans create
-                            a better future. Discover handcrafted, recycled, and eco-friendly products that give back to the
-                            community while protecting the planet.
-                        </p>
-                        <a href="@Url.Action("Index", "Main")" class="banner-btn btn border-2 border-white rounded-pill text-dark py-3 px-5"
-                           style="transition: background-color 0.3s ease, color 0.3s ease;"
-                           onmouseover="this.style.backgroundColor='#FFB524'; this.style.borderColor='#FFB524'; this.style.color='white';"
-                           onmouseout="this.style.backgroundColor='transparent'; this.style.borderColor='white'; this.style.color='black';">
+                        <p class="mb-4 text-dark">Every purchase you make at TerraShop helps NGOs and artisans create a better future. Discover handcrafted, recycled, and eco-friendly products that give back to the community while protecting the planet.</p>
+                        <a href="@Url.Action("Index", "Main")" class="banner-btn btn border-2 border-white rounded-pill text-dark py-3 px-5" style="transition: background-color 0.3s ease, color 0.3s ease;" onmouseover="this.style.backgroundColor='#FFB524'; this.style.borderColor='#FFB524'; this.style.color='white';" onmouseout="this.style.backgroundColor='transparent'; this.style.borderColor='white'; this.style.color='black';">
                             DISCOVER MORE
                         </a>
                     </div>
@@ -216,406 +201,86 @@
             <div class="tab-class text-center">
                 <div class="row g-4">
                     <div class="col-lg-4 text-start">
-                        <h1>Shop for a Cause</h1>
+                        <h1>Featured Categories</h1>
                     </div>
                     <div class="col-lg-8 text-end">
-                        <ul class="nav nav-pills d-inline-flex text-center mb-5">
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill" href="#tab-1">
-                                    <span class="text-dark" style="width: 125px;">All Products</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="d-flex py-2 m-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-2">
-                                    <span class="text-dark" style="width: 125px;">Handmade</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-3">
-                                    <span class="text-dark" style="width: 125px;">Recycled</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-4">
-                                    <span class="text-dark" style="width: 125px;">Toys</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-5">
-                                    <span class="text-dark" style="width: 125px;">Crafts</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-5">
-                                    <span class="text-dark" style="width: 125px;">Wellness</span>
-                                </a>
-                            </li>
+                        <ul class="nav nav-pills d-inline-flex text-center mb-5" role="tablist">
+                            @{
+                                int tabIndex = 1;
+                                foreach (var category in Model.Products.Keys)
+                                {
+                                    var activeClass = tabIndex == 1 ? "active" : "";
+                                    <li class="nav-item">
+                                        <a class="d-flex m-2 py-2 bg-light rounded-pill @activeClass" data-bs-toggle="pill" href="#tab-@tabIndex" role="tab">
+                                            <span class="text-dark" style="width: 155px; white-space: nowrap;">@category</span>
+                                        </a>
+                                    </li>
+                                    tabIndex++;
+                                }
+                            }
                         </ul>
                     </div>
                 </div>
                 <div class="tab-content">
-                    <div id="tab-1" class="tab-pane fade show p-0 active">
-                        <div class="row g-4">
-                            <div class="col-lg-12">
+                    @{
+                        int tab = 1;
+                        foreach (var kvp in Model.Products)
+                        {
+                            var activeClass = tab == 1 ? "active show" : "";
+                            <div id="tab-@tab" class="tab-pane fade @activeClass p-0" role="tabpanel">
                                 <div class="row g-4">
-                                    <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="@Url.Content("~/Assets/img/volunteer-products/volunteer-product-1.jpg")" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">
-                                                Handmade
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>Crocheted Bracelet</h4>
-                                                <p>
-                                                    Handmade crocheted bracelet, crafted from natural yarn and eco-friendly
-                                                    accessories
-                                                </p>
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">$9.99 / pc</p>
-                                                    <a href="#"
-                                                       class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                        cart
+                                    @foreach (var product in kvp.Value)
+                                    {
+                                        <div class="col-md-6 col-lg-4 col-xl-3">
+                                            <div class="rounded position-relative fruite-item">
+                                                <div class="fruite-img">
+                                                    <a href="@Url.Action("ProductDetails", "Product", new { productId = product.Id })">
+                                                        <img src="@Url.Content(product.ProductImageUrl)" class="img-fluid w-100 rounded-top custom-image" alt="Product Image">
                                                     </a>
+                                                </div>
+                                                @using (Html.BeginForm(Model.WishlistProductIds.Contains(product.Id) ? "RemoveProductFromWishlist" : "AddProductToWishlist", "Wishlist", FormMethod.Post, new { @style = "position: absolute; top: 16px; right: 10px; z-index: 10;" }))
+                                                {
+                                                    @Html.AntiForgeryToken()
+                                                    @Html.Hidden("productId", product.Id)
+                                                    <button type="submit" style="background: none; border: none; cursor: pointer;">
+                                                        <i class="@(Model.WishlistProductIds.Contains(product.Id) ? "fas fa-heart" : "far fa-heart") fa-lg pulsing-heart" style="color: #FFB524; transition: transform 0.3s ease;"></i>
+                                                    </button>
+                                                }
+                                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
+                                                    @kvp.Key
+                                                </div>
+                                                <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                                    <h4 class="text-center product-name">@Html.DisplayFor(m => product.ProductName)</h4>
+                                                    <p class="product-description">@Html.DisplayFor(m => product.ProductDescription)</p>
+                                                    <div class="d-flex justify-content-between flex-lg-wrap">
+                                                        <p class="text-dark fs-5 fw-bold mb-0">$@Html.DisplayFor(m => product.ProductPrice)</p>
+                                                        @if (product.ProductQuantity > 0)
+                                                        {
+                                                            using (Html.BeginForm("AddProductToCart", "Cart", FormMethod.Post, new { @class = "d-inline" }))
+                                                            {
+                                                                @Html.AntiForgeryToken()
+                                                                @Html.Hidden("productId", product.Id)
+                                                                <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary pulse-js">
+                                                                    <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to Cart
+                                                                </button>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="#" class="btn border border-secondary rounded-pill px-3 pulse-js" style="background-color: #fff; color: #ccc; cursor: not-allowed; pointer-events: none;">
+                                                                <i class="fa fa-shopping-bag me-2" style="color: #ccc;"></i> Add to Cart
+                                                            </a>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="@Url.Content("~/Assets/img/volunteer-products/volunteer-product-2.jpg")" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">
-                                                Handmade
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>Handwoven Basket</h4>
-                                                <p>
-                                                    Beautifully crafted from natural fibers, perfect for home decor or
-                                                    storage
-                                                </p>
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">$14.99 / pc</p>
-                                                    <a href="#"
-                                                       class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                        cart
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="@Url.Content("~/Assets/img/volunteer-products/volunteer-product-3.jpg")" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">
-                                                Handmade
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>Ceramic Cup</h4>
-                                                <p>
-                                                    Beautifully designed, handcrafted with care, perfect for your morning
-                                                    coffee or tea
-                                                </p>
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">$12.99 / pc</p>
-                                                    <a href="#"
-                                                       class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                        cart
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="@Url.Content("~/Assets/img/volunteer-products/volunteer-product-4.jpg")" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">
-                                                Recycled
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>Eco Paper Notebook</h4>
-                                                <p>
-                                                    Made from 100% recycled paper, ideal for writing and sketching, while
-                                                    helping reduce waste
-                                                </p>
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">$8.99 / pc</p>
-                                                    <a href="#"
-                                                       class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                        cart
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="@Url.Content("~/Assets/img/volunteer-products/volunteer-product-5.jpg")" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">
-                                                Recycled
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>Recycled Pen Set</h4>
-                                                <p>
-                                                    Eco-friendly pen set made from recycled materials, perfect for
-                                                    sustainable office supplies
-                                                </p>
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">$5.99 / set</p>
-                                                    <a href="#"
-                                                       class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                        cart
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="@Url.Content("~/Assets/img/volunteer-products/volunteer-product-6.jpg")" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">
-                                                Toys
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>Wooden Toy Car</h4>
-                                                <p>
-                                                    Handcrafted from natural wood, this eco-friendly toy car is designed to
-                                                    provide hours of fun
-                                                </p>
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">$10.99 / pc</p>
-                                                    <a href="#"
-                                                       class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                        cart
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="@Url.Content("~/Assets/img/volunteer-products/volunteer-product-7.jpg")" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">
-                                                Toys
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>Wooden Puzzle</h4>
-                                                <p>
-                                                    Eco-friendly puzzle made from natural wood, featuring cute animal
-                                                    shapes
-                                                </p>
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">$12.99 / set</p>
-                                                    <a href="#"
-                                                       class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                        cart
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="@Url.Content("~/Assets/img/volunteer-products/volunteer-product-8.jpg")" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">
-                                                Crafts
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>Wooden Night Lamp</h4>
-                                                <p>Elegant and rustic, perfect for adding warmth to your bedside table</p>
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">$24.99 / pc</p>
-                                                    <a href="#"
-                                                       class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                        cart
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="@Url.Content("~/Assets/img/volunteer-products/volunteer-product-9.jpg")" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">
-                                                Crafts
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>Wooden Frame</h4>
-                                                <p>
-                                                    Perfect for showcasing your favorite photos or artwork, handcrafted with
-                                                    care
-                                                </p>
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">$19.99 / pc</p>
-                                                    <a href="#"
-                                                       class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                        cart
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="@Url.Content("~/Assets/img/volunteer-products/volunteer-product-10.jpg")" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">
-                                                Wellness
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>Essential Oil Diffuser</h4>
-                                                <p>
-                                                    Promotes relaxation and a calming atmosphere with soothing essential
-                                                    oils
-                                                </p>
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">$29.99 / pc</p>
-                                                    <a href="#"
-                                                       class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                        cart
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="@Url.Content("~/Assets/img/volunteer-products/volunteer-product-11.jpg")" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">
-                                                Wellness
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>Herbal Soap</h4>
-                                                <p>
-                                                    Made with natural ingredients, perfect for gentle skin care and
-                                                    relaxation
-                                                </p>
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">$7.99 / bar</p>
-                                                    <a href="#"
-                                                       class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                        cart
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="@Url.Content("~/Assets/img/volunteer-products/volunteer-product-12.jpg")" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">
-                                                Wellness
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>Herbal Tea</h4>
-                                                <p>Made from organic herbs to soothe and relax your mind and body</p>
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">$8.99 / box</p>
-                                                    <a href="#"
-                                                       class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                        cart
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    }
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div id="tab-2" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            <div class="col-lg-12">
-                                <div class="row g-4">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab-3" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            <div class="col-lg-12">
-                                <div class="row g-4">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab-4" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            <div class="col-lg-12">
-                                <div class="row g-4">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab-5" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            <div class="col-lg-12">
-                                <div class="row g-4">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                            tab++;
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -630,15 +295,9 @@
                     <div class="py-4">
                         <h1 class="display-3 text-white">Sustainable Picks</h1>
                         <p class="fw-normal display-3 text-dark mb-4">Shop at TerraShop</p>
-                        <p class="mb-4 text-dark">
-                            Explore a diverse range of eco-friendly products, crafted with
-                            sustainability in mind, to support a greener and healthier future.
-                            Our products are designed to reduce environmental impact while offering you high-quality,
-                            sustainable alternatives for everyday use.
-                        </p>
+                        <p class="mb-4 text-dark">Explore a diverse range of eco-friendly products, crafted with sustainability in mind, to support a greener and healthier future. Our products are designed to reduce environmental impact while offering you high-quality, sustainable alternatives for everyday use.</p>
                         <a href="@Url.Action("Shop", "Shop")" class="banner-btn btn border-2 border-white rounded-pill text-dark py-3 px-5">
-                            BUY
-                            NOW
+                            BUY NOW
                         </a>
                     </div>
                 </div>
@@ -703,22 +362,17 @@
                 {
                     <div class="testimonial-item img-border-radius bg-light rounded p-4">
                         <div class="position-relative">
-                            <i class="fa fa-quote-right fa-2x text-secondary position-absolute"
-                               style="bottom: 30px; right: 0;"></i>
-
+                            <i class="fa fa-quote-right fa-2x text-secondary position-absolute" style="bottom: 30px; right: 0;"></i>
                             <div class="mb-4 pb-4 border-bottom border-secondary">
-                                <p class="mb-0">
-                                    @item.Review.Review
-                                </p>
+                                <p class="mb-0 truncate-text-large">@Html.DisplayFor(m => item.Review.Review)</p>
                             </div>
-
                             <div class="d-flex align-items-center flex-nowrap">
                                 <div class="rounded overflow-hidden" style="width: 100px; height: 100px;">
-                                    <img src="@Url.Content(item.Profile.ProfileImageUrl)" class="img-fluid w-100 h-100 object-fit-cover" alt="Client Image">
+                                    <img src="@Url.Content(item.Profile.ProfileImageUrl)" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="Client Image">
                                 </div>
                                 <div class="ms-4 d-block">
-                                    <h4 class="text-dark">@item.Profile.FirstName @item.Profile.LastName</h4>
-                                    <p class="m-0 pb-3">@item.Review.ReviewPostDate</p>
+                                    <h4 class="text-dark truncate-text-user">@Html.DisplayFor(m => item.Profile.FirstName) @Html.DisplayFor(m => item.Profile.LastName)</h4>
+                                    <p class="m-0 pb-3">@Html.Raw(item.Review.ReviewPostDate.ToString("dd MMM yyyy, HH:mm", System.Globalization.CultureInfo.InvariantCulture))</p>
                                     <div class="d-flex pe-5">
                                         @for (int i = 1; i <= 5; i++)
                                         {
@@ -766,7 +420,7 @@
     @Scripts.Render("~/bundles/waypoints/js")
     @Scripts.Render("~/bundles/lightbox/js")
     @Scripts.Render("~/bundles/owl/carousel/min/js")
-    @Scripts.Render("~/bundles/base/js")
+    @Scripts.Render("~/bundles/animations/js")
 
     <!-- Template Javascript -->
     @Scripts.Render("~/bundles/main/js")

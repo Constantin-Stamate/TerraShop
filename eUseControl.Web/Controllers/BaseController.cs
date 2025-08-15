@@ -25,6 +25,8 @@ namespace eUseControl.Web.Controllers
                 var profile = _session.GetUserByCookie(apiCookie.Value);
                 if (profile != null)
                 {
+                    System.Web.HttpContext.Current.Session["User"] = profile;
+
                     System.Web.HttpContext.Current.SetMySessionObject(profile);
                     System.Web.HttpContext.Current.Session["LoginStatus"] = "login";
                 }
@@ -59,13 +61,11 @@ namespace eUseControl.Web.Controllers
             var currentController = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
             var currentAction = filterContext.ActionDescriptor.ActionName;
 
-            bool isHomePage = currentController.Equals("Main", StringComparison.OrdinalIgnoreCase) &&
-                              currentAction.Equals("Index", StringComparison.OrdinalIgnoreCase);
+            bool isHomePage = currentController.Equals("Main", StringComparison.OrdinalIgnoreCase) && currentAction.Equals("Index", StringComparison.OrdinalIgnoreCase);
 
             bool isLoginPage = currentController.Equals("Login", StringComparison.OrdinalIgnoreCase);
 
-            bool isNavbar = currentController.Equals("Main", StringComparison.OrdinalIgnoreCase) &&
-                            currentAction.Equals("Navbar", StringComparison.OrdinalIgnoreCase);
+            bool isNavbar = currentController.Equals("Main", StringComparison.OrdinalIgnoreCase) && currentAction.Equals("Navbar", StringComparison.OrdinalIgnoreCase);
 
             if (!isHomePage && !isLoginPage && !isNavbar)
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
@@ -13,11 +14,13 @@ namespace eUseControl.Web.Controllers
     public class RegisterController : Controller
     {
         private readonly ISession _session;
+        private readonly IMapper _mapper;
 
-        public RegisterController()
+        public RegisterController(IMapper mapper)
         {
             var bl = new BusinessLogicManager();
             _session = bl.GetSessionBL();
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -28,29 +31,23 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(UserRegister register)
+        public async Task<ActionResult> Register(UserRegister register)
         {
             if (ModelState.IsValid)
             {
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<UserRegister, URegisterData>();
-                });
-
-                var mapper = config.CreateMapper();
-                var data = mapper.Map<URegisterData>(register);
+                var data = _mapper.Map<URegisterData>(register);
 
                 data.RegistrationIp = Request.UserHostAddress;
                 data.RegistrationDateTime = DateTime.Now;
                 data.Level = URole.User;
 
-                var userRegister = _session.UserRegister(data);
+                var userRegister = await _session.UserRegister(data);
 
                 if (userRegister.Status)
                 {
                     Session["Username"] = register.Username;
 
-                    HttpCookie cookie = _session.GenCookie(register.Username);
+                    HttpCookie cookie = await _session.GenCookie(register.Username);
                     ControllerContext.HttpContext.Response.Cookies.Add(cookie);
 
                     TempData["SuccessMessage"] = userRegister.StatusMsg;
@@ -58,9 +55,7 @@ namespace eUseControl.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", userRegister.StatusMsg);
                     TempData["ErrorMessage"] = userRegister.StatusMsg;
-
                     return RedirectToAction("Register", "Register", new { error = true });
                 }
             }
@@ -69,6 +64,6 @@ namespace eUseControl.Web.Controllers
                 TempData["ErrorMessage"] = "The model you submitted is invalid!";
                 return RedirectToAction("Register", "Register", new { error = true });
             }
-        } 
+        }
     }
 }

@@ -1,9 +1,10 @@
-﻿using eUseControl.Domain.Entities.Contact;
+﻿using System.Threading.Tasks;
+using eUseControl.Domain.Entities.Contact;
 
 namespace eUseControl.BusinessLogic.Interfaces
 {
     public interface IContact
     {
-        ContactResp SubmitContactRequest(ContactData contactData, int userId);
+        Task<ContactResp> SubmitContactRequest(ContactData contactData, int userId);
     }
 }
