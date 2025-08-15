@@ -83,3 +83,4 @@ C:\Users\Costea\source\repos\eUseControl\eUseControl.Domain\bin\Debug\System.Run
 C:\Users\Costea\source\repos\eUseControl\eUseControl.Domain\bin\Debug\System.Text.Encodings.Web.xml
 C:\Users\Costea\source\repos\eUseControl\eUseControl.Domain\bin\Debug\System.Threading.Tasks.Extensions.xml
 C:\Users\Costea\source\repos\eUseControl\eUseControl.Domain\bin\Debug\System.ValueTuple.xml
+C:\Users\Costea\source\repos\eUseControl\eUseControl.Domain\bin\Debug\eUseControl.Domain.dll.config

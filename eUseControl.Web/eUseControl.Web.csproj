@@ -55,12 +55,46 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="FluentAssertions, Version=8.5.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.8.5.0\lib\net47\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="Markdig, Version=0.41.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Markdig.0.41.3\lib\net462\Markdig.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\lib\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.3.6.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.6\lib\net45\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.Common.3.3.0\lib\net45\Ninject.Web.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common.WebHost, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.Common.WebHost.3.3.0\lib\net45\Ninject.Web.Common.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Mvc, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.MVC5.3.3.0\lib\net45\Ninject.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.6.0\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.6.0\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.6.0\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.0\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -99,6 +133,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
@@ -109,11 +146,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\css\account-profile.css" />
+    <Content Include="Assets\css\change-password.css" />
     <Content Include="Assets\css\chat.css" />
-    <Content Include="Assets\css\global.css" />
+    <Content Include="Assets\css\customer-orders.css" />
+    <Content Include="Assets\css\form-errors.css" />
+    <Content Include="Assets\css\layout.css" />
+    <Content Include="Assets\css\legal.css" />
     <Content Include="Assets\css\login.css" />
+    <Content Include="Assets\css\order-confirmation.css" />
+    <Content Include="Assets\css\order-failure.css" />
     <Content Include="Assets\css\payment.css" />
+    <Content Include="Assets\css\product-ui.css" />
+    <Content Include="Assets\css\profile-settings.css" />
     <Content Include="Assets\css\style.css" />
+    <Content Include="Assets\css\success-message.css" />
+    <Content Include="Assets\css\user-products.css" />
     <Content Include="Assets\img\app-logo.png" />
     <Content Include="Assets\img\backgrounds\contact-bg.jpg" />
     <Content Include="Assets\img\backgrounds\home-bg.jpg" />
@@ -152,10 +200,12 @@
     <Content Include="Assets\img\volunteer-products\volunteer-product-7.jpg" />
     <Content Include="Assets\img\volunteer-products\volunteer-product-8.jpg" />
     <Content Include="Assets\img\volunteer-products\volunteer-product-9.jpg" />
+    <Content Include="Assets\js\account-settings.js" />
+    <Content Include="Assets\js\animations.js" />
+    <Content Include="Assets\js\cart-actions.js" />
     <Content Include="Assets\js\chat.js" />
     <Content Include="Assets\js\main.js" />
     <Content Include="Assets\js\payment.js" />
-    <Content Include="Assets\js\base.js" />
     <Content Include="Assets\lib\easing\easing.js" />
     <Content Include="Assets\lib\easing\easing.min.js" />
     <Content Include="Assets\lib\lightbox\css\lightbox.min.css" />
@@ -213,6 +263,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\NinjectConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -237,9 +288,22 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Mappings\AccountProfile.cs" />
+    <Compile Include="Mappings\CartProfile.cs" />
+    <Compile Include="Mappings\CategoryProfile.cs" />
+    <Compile Include="Mappings\ChatProfile.cs" />
+    <Compile Include="Mappings\ContactProfile.cs" />
+    <Compile Include="Mappings\CouponProfile.cs" />
+    <Compile Include="Mappings\OrderProfile.cs" />
+    <Compile Include="Mappings\ProductProfile.cs" />
+    <Compile Include="Mappings\ReviewProfile.cs" />
+    <Compile Include="Mappings\TransactionProfile.cs" />
+    <Compile Include="Mappings\UserProfile.cs" />
     <Compile Include="Models\Cart\CartCompact.cs" />
     <Compile Include="Models\Cart\CouponCompact.cs" />
+    <Compile Include="Models\Chat\ChatCompact.cs" />
     <Compile Include="Models\Contact\ContactCompact.cs" />
+    <Compile Include="Models\Contact\ContactInfo.cs" />
     <Compile Include="Models\Main\MainViewModel.cs" />
     <Compile Include="Models\Main\ReviewProfileData.cs" />
     <Compile Include="Models\Order\OrderInfo.cs" />
@@ -247,6 +311,7 @@
     <Compile Include="Models\Order\OrderCompact.cs" />
     <Compile Include="Models\Order\OrderMini.cs" />
     <Compile Include="Models\Payment\TransactionCompact.cs" />
+    <Compile Include="Models\Product\AddProductViewModel.cs" />
     <Compile Include="Models\Product\Product.cs" />
     <Compile Include="Models\Product\ProductCategory.cs" />
     <Compile Include="Models\Product\ProductCompact.cs" />
@@ -421,6 +486,9 @@
     <Content Include="Views\Management\CategoriesManagement.cshtml" />
     <Content Include="Views\Shared\_LayoutCategoriesManagement.cshtml" />
     <Content Include="Views\Chat\Chat.cshtml" />
+    <Content Include="Views\Shared\_LayoutRequestsManagement.cshtml" />
+    <Content Include="Views\Management\RequestsManagement.cshtml" />
+    <Content Include="Views\Shared\_LayoutChat.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

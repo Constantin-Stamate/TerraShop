@@ -32,3 +32,5 @@ C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUs
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Contact.CreateContactRequestsTable.resources
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\bin\Debug\eUseControl.Domain.dll.config
+C:\Users\Costea\source\repos\eUseControl\eUseControl.BusinessLogic\obj\Debug\eUseControl.BusinessLogic.Migrations.Chat.CreateChatMessagesTable.resources
