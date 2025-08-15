@@ -282,6 +282,7 @@
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
+    <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="Extension\HttpContextExtensions.cs" />
     <Compile Include="Filtres\AdminAuthorizeAttribute.cs" />
@@ -489,6 +490,8 @@
     <Content Include="Views\Shared\_LayoutRequestsManagement.cshtml" />
     <Content Include="Views\Management\RequestsManagement.cshtml" />
     <Content Include="Views\Shared\_LayoutChat.cshtml" />
+    <Content Include="Views\Shared\_LayoutSubscriptionConfirmation.cshtml" />
+    <Content Include="Views\Subscription\SubscriptionConfirmation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
