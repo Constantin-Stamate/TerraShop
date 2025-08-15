@@ -10,7 +10,7 @@ namespace eUseControl.Web.Models.Product
 
         public int TotalPages { get; set; }
 
-        public string SortOption {  get; set; }
+        public string SortOption { get; set; }
 
         public int MaxPrice { get; set; }
 
@@ -18,7 +18,7 @@ namespace eUseControl.Web.Models.Product
 
         public string Country { get; set; }
 
-        public List<int> WishlistProductIds { get; set; } 
+        public List<int> WishlistProductIds { get; set; }
 
         public List<ProductMini> Products { get; set; }
 
