@@ -1,0 +1,104 @@
+﻿body {
+    padding-top: 100px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.list-group-item.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.profile-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.profile-info p {
+    font-size: 1rem;
+    margin: 10px 0;
+}
+
+.list-group-item {
+    border: none !important;
+    transition: background-color 0.3s ease;
+}
+
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+
+a.btn:hover {
+    background-color: #FFB524;
+    color: red;
+    border-color: #FFB524;
+}
+
+.anim:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.fruite2-img {
+    position: relative;
+}
+
+.activate-deactivate-button a {
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+.product-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    height: 3em;
+    line-height: 1.5em;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.product-name {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 1.5em;
+    line-height: 1.5em;
+    word-wrap: break-word;
+}
+
+.btn-cancel-order {
+    border: 1px solid #FFB524;
+    transition: all 0.3s ease;
+}
+
+    .btn-cancel-order:hover {
+        background-color: #FFB524;
+        color: #fff;
+        background-image: none;
+    }
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+    .card-body .product-description {
+        flex-grow: 1;
+    }
+
+    .card-body .btn {
+        margin-top: 10px;
+    }
+
+    .card-body p.text-dark {
+        margin-bottom: 10px;
+    }

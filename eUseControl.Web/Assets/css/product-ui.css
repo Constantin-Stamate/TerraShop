@@ -1,0 +1,43 @@
+﻿.product-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.5em;
+    height: 4.5em;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.product-name {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 1.5em;
+    line-height: 1.5em;
+    word-wrap: break-word;
+}
+
+.custom-image {
+    height: 210px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.info-message {
+    font-size: 16px;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.bg-image {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+}

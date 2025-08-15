@@ -1,0 +1,48 @@
+﻿body {
+    padding-top: 100px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.list-group-item.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.profile-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.profile-info p {
+    font-size: 1rem;
+    margin: 10px 0;
+}
+
+.success-message {
+    display: none;
+    color: green;
+    background-color: #d4edda;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 0;
+}
+
+#saveSuccessMessage {
+    margin-left: 10px;
+    display: flex;
+    color: green;
+    background-color: #d4edda;
+    padding: 10px;
+    border-radius: 5px;
+    height: 40px;
+}
+
+.list-group-item {
+    border: none !important;
+    transition: background-color 0.3s ease;
+}
+
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }

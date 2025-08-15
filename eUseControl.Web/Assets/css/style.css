@@ -24,7 +24,6 @@
     transition: 0.5s;
     z-index: 99;
 }
-
 /*** Spinner End ***/
 
 /*** Button Start ***/
@@ -72,6 +71,7 @@
         background: var(--bs-secondary) !important;
         color: var(--bs-white) !important;
     }
+/*** Button End ***/
 
 /*** Topbar Start ***/
 .fixed-top {
@@ -113,7 +113,6 @@
                 .topbar .top-link a small:hover i {
                     color: var(--bs-primary) !important;
                 }
-
 /*** Topbar End ***/
 
 /*** Navbar Start ***/
@@ -174,10 +173,9 @@
 #searchModal .modal-content {
     background: rgba(255, 255, 255, .8);
 }
-
 /*** Navbar End ***/
 
-/*** Hero Header ***/
+/*** Hero Header Start ***/
 .hero-header {
     background: linear-gradient(rgba(248, 223, 173, 0.1), rgba(248, 223, 173, 0.1)), url('/Assets/img/backgrounds/home-bg.jpg');
     background-position: center center;
@@ -239,10 +237,9 @@
         margin-top: 97px !important;
     }
 }
+/*** Hero Header End ***/
 
-/*** Hero Header end ***/
-
-/*** featurs Start ***/
+/*** Featurs Start ***/
 .featurs .featurs-item .featurs-icon {
     position: relative;
     width: 120px;
@@ -260,10 +257,9 @@
         transform: rotate(45deg);
         background: var(--bs-secondary);
     }
+/*** Featurs End ***/
 
-/*** featurs End ***/
-
-/*** service Start ***/
+/*** Service Start ***/
 .service .service-item .service-content {
     position: relative;
     width: 250px;
@@ -272,8 +268,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
-
-/*** service End ***/
+/*** Service End ***/
 
 /*** Fruits Start ***/
 .fruite .tab-class .nav-item a.active {
@@ -318,10 +313,9 @@
             .fruite .fruite-item .fruite-img img:hover {
                 transform: scale(1.3);
             }
-
 /*** Fruits End ***/
 
-/*** vesitable Start ***/
+/*** Vesitable Start ***/
 .vesitable .vesitable-item {
     height: 100%;
     transition: 0.5s;
@@ -381,15 +375,12 @@
         background: var(--bs-secondary);
         color: var(--bs-white);
     }
-
-/*** vesitable End ***/
-
+/*** Vesitable End ***/
 
 /*** Banner Section Start ***/
 .banner .banner-btn:hover {
     background: var(--bs-primary);
 }
-
 /*** Banner Section End ***/
 
 /*** Facts Start ***/
@@ -413,10 +404,9 @@
     .counter h1 {
         margin-bottom: 0;
     }
-
 /*** Facts End ***/
 
-/*** testimonial Start ***/
+/*** Testimonial Start ***/
 .testimonial .owl-nav .owl-prev {
     position: absolute;
     top: -58px;
@@ -448,8 +438,7 @@
         background: var(--bs-secondary);
         color: var(--bs-white);
     }
-
-/*** testimonial End ***/
+/*** Testimonial End ***/
 
 /*** Single Page Start ***/
 .pagination {
@@ -478,7 +467,6 @@
 .nav.nav-tabs .nav-link.active {
     border-bottom: 2px solid var(--bs-secondary) !important;
 }
-
 /*** Single Page End ***/
 
 /*** Footer Start ***/
@@ -495,7 +483,6 @@
 .footer .footer-item p.mb-4 {
     line-height: 35px;
 }
-
 /*** Footer End ***/
 
 /*** Recycle Button Start ***/
@@ -525,5 +512,4 @@
 .me-3 {
     margin-right: 1rem;
 }
-
 /*** Recycle Button End ***/
