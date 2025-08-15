@@ -14,7 +14,7 @@
 
         protected override void Seed(eUseControl.BusinessLogic.DBModel.CouponContext context)
         {
-            context.DiscountCoupons.AddOrUpdate(c => c.Code, 
+            context.DiscountCoupons.AddOrUpdate(c => c.Code,
 
                 new CouponDbTable
                 {
