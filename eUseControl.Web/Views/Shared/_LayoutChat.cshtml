@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "_LayoutChat";
+}
+
+@using System.Web.Optimization
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TerraShop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon Image -->
+    <link rel="shortcut icon" type="image/x-icon" href="@Url.Content("~/Assets/img/favicon.ico")">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Libraries Stylesheet -->
+    @Styles.Render("~/bundles/chat/css")
+</head>
+
+<body>
+    <!-- Navbar Start -->
+    <nav class="navbar">
+        <h3 class="navbar__logo">TerraAI — Your Eco Marketplace Assistant</h3>
+        <div style="display: flex; gap: 0.5rem;">
+            <a href="@Url.Action("Index", "Main")" class="navbar__button" title="Home">
+                <i class='bx bx-home'></i>
+            </a>
+            <a href="@Url.Action("Shop", "Shop")" class="navbar__button" title="Shop">
+                <i class='bx bx-shopping-bag'></i>
+            </a>
+            <a href="@Url.Action("Contact", "Contact")" class="navbar__button" title="Contact">
+                <i class='bx bx-envelope'></i>
+            </a>
+            <a href="@Url.Action("Wishlist", "Wishlist")" class="navbar__button" title="Wishlist">
+                <i class='bx bx-heart'></i>
+            </a>
+            <a href="@Url.Action("Cart", "Cart")" class="navbar__button" title="Cart">
+                <i class='bx bx-cart'></i>
+            </a>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+    @RenderBody()
+
+    <!-- Back to Top -->
+    <a href="@Url.Action("Chat", "Chat")" class="btn btn-primary border-3 border-primary rounded-circle back-to-top">
+        <i class="fa fa-arrow-up"></i>
+    </a>
+
+    <!-- JavaScript Libraries -->
+    <script src="/Assets/js/chat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</body>
+
+</html>

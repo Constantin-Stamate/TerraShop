@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "_LayoutTermsOfUse";
+    ViewBag.Title = "_LayoutRequestsManagement";
 }
 
 @using System.Web.Optimization
@@ -32,7 +32,7 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     @Styles.Render("~/bundles/main/css")
-    @Styles.Render("~/bundles/legal/css")
+    @Styles.Render("~/bundles/layout/css")
 
     <!-- Template Stylesheet -->
     @Styles.Render("~/bundles/style/css")
@@ -46,7 +46,7 @@
     <!-- Spinner End -->
 
     <!-- Navbar Start -->
-    <div class="container-fluid fixed-top" style="margin-left: -5px;">
+    <div class="container-fluid fixed-top">
         @Html.Action("Navbar", "Main")
     </div>
     <!-- Navbar End -->
@@ -57,11 +57,21 @@
     </div>
     <!-- Modal Search End -->
 
-    <!-- Main Content Start -->
-    <section class="container mt-5 pt-5" style="max-width: 800px; background-color: #fff; padding: 30px 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5">
+        <h1 class="text-center text-white display-6">Requests Management</h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Main")">Home</a></li>
+            <li class="breadcrumb-item active text-white">Requests Management</li>
+        </ol>
+    </div>
+    <!-- Single Page Header End -->
+
+    <!-- Requests Management Page Start -->
+    <div class="container-fluid py-5">
         @RenderBody()
-    </section>
-    <!-- Main Content End -->
+    </div>
+    <!-- Requests Management Page End -->
 
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5">
@@ -76,7 +86,7 @@
     <!-- Copyright End -->
 
     <!-- Back to Top -->
-    <a href="@Url.Action("TermsOfUse", "Legal")" class="btn btn-primary border-3 border-primary rounded-circle back-to-top">
+    <a href="@Url.Action("RequestsManagement", "Management")" class="btn btn-primary border-3 border-primary rounded-circle back-to-top">
         <i class="fa fa-arrow-up"></i>
     </a>
 

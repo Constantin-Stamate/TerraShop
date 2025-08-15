@@ -9,7 +9,10 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TerraShop</title>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
 
     <!-- Favicon Image -->
     <link rel="shortcut icon" type="image/x-icon" href="@Url.Content("~/Assets/img/favicon.ico")">
@@ -18,31 +21,27 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Customized Bootstrap Stylesheet -->
-    @Styles.Render("~/bundles/main/css")
-
-    <!-- Template Stylesheet -->
-    @Styles.Render("~/bundles/style/css")
-    @Styles.Render("~/bundles/payment/css")
-    @Styles.Render("~/bundles/global/css")
+    <!-- Google Web Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Rock+Salt|Source+Code+Pro:300,400,600" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
     @Styles.Render("~/bundles/lightbox/css")
     @Styles.Render("~/bundles/owl/carousel/min/css")
 
-    <!-- Google Web Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
-          rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Raleway|Rock+Salt|Source+Code+Pro:300,400,600" rel="stylesheet">
-    <script src="https://unpkg.com/imask"></script>
+    <!-- Customized Bootstrap Stylesheet -->
+    @Styles.Render("~/bundles/main/css")
+    @Styles.Render("~/bundles/payment/css")
+
+    <!-- Template Stylesheet -->
+    @Styles.Render("~/bundles/style/css")
 </head>
 
 <body>
     <!-- Spinner Start -->
-    <div id="spinner"
-         class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+    <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
     <!-- Spinner End -->
@@ -71,7 +70,7 @@
 
     <!-- Payment Start -->
     <section class="page-wrapper">
-       @RenderBody()
+        @RenderBody()
     </section>
     <!-- Payment End -->
 
@@ -95,12 +94,12 @@
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/imask"></script>
     @Scripts.Render("~/bundles/easing/min/js")
     @Scripts.Render("~/bundles/waypoints/js")
     @Scripts.Render("~/bundles/lightbox/js")
     @Scripts.Render("~/bundles/owl/carousel/min/js")
     @Scripts.Render("~/bundles/payment/js")
-    @Scripts.Render("~/bundles/base/js")
 
     <!-- Template Javascript -->
     @Scripts.Render("~/bundles/main/js")
