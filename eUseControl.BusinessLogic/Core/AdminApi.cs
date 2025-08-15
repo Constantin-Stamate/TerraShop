@@ -1,22 +1,24 @@
-﻿using eUseControl.BusinessLogic.DBModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
+using eUseControl.BusinessLogic.DBModel;
 using eUseControl.Domain.Entities;
 using eUseControl.Domain.Entities.Cart;
+using eUseControl.Domain.Entities.Contact;
 using eUseControl.Domain.Entities.Order;
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Profile;
 using eUseControl.Domain.Entities.Review;
 using eUseControl.Domain.Entities.User;
 using eUseControl.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
 
 namespace eUseControl.BusinessLogic.Core
 {
     public class AdminApi
     {
-        internal List<UserLite> GetAllUsersAction()
+        internal async Task<List<UserLite>> GetAllUsersAction()
         {
             try
             {
@@ -26,21 +28,21 @@ namespace eUseControl.BusinessLogic.Core
 
                 using (var userDb = new UserContext())
                 {
-                    users = userDb.Users
-                        .ToList();
+                    users = await userDb.Users
+                        .ToListAsync();
                 }
 
                 using (var profileDb = new ProfileContext())
                 {
-                    profiles = profileDb.UserProfiles
-                        .ToList();
+                    profiles = await profileDb.UserProfiles
+                        .ToListAsync();
                 }
 
                 using (var orderDb = new OrderContext())
                 {
-                    orders = orderDb.CustomerOrders
+                    orders = await orderDb.CustomerOrders
                         .Where(c => c.OrderStatus == OrderStatus.Pending || c.OrderStatus == OrderStatus.Delivering)
-                        .ToList();
+                        .ToListAsync();
                 }
 
                 var usersList = new List<UserLite>();
@@ -58,9 +60,9 @@ namespace eUseControl.BusinessLogic.Core
                         Id = user.Id,
                         Username = user.Username,
                         Email = user.Email,
-                        ProfileImageUrl = profile.ProfileImageUrl,
-                        PhoneNumber = profile.PhoneNumber,
-                        Address = profile.Address,
+                        ProfileImageUrl = profile?.ProfileImageUrl,
+                        PhoneNumber = profile?.PhoneNumber,
+                        Address = profile?.Address,
                         OrderCount = userOrders.Count(),
                         TotalSpent = userOrders.Sum(o => o.TotalPrice)
                     };
@@ -77,7 +79,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal CouponResp AddDiscountCouponAction(CouponData couponData)
+        internal async Task<CouponResp> AddDiscountCouponAction(CouponData couponData)
         {
             try
             {
@@ -110,8 +112,8 @@ namespace eUseControl.BusinessLogic.Core
 
                 using (var db = new CouponContext())
                 {
-                    var existing = db.DiscountCoupons
-                        .FirstOrDefault(c => c.Code == couponData.Code);
+                    var existing = await db.DiscountCoupons
+                        .FirstOrDefaultAsync(c => c.Code == couponData.Code);
 
                     if (existing != null)
                     {
@@ -131,7 +133,7 @@ namespace eUseControl.BusinessLogic.Core
                     };
 
                     db.DiscountCoupons.Add(newCoupon);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
 
                     return new CouponResp
                     {
@@ -151,29 +153,19 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal List<CategoryData> GetAllCategoriesAction()
+        internal async Task<List<CategoryData>> GetAllCategoriesAction()
         {
             try
             {
                 using (var db = new CategoryContext())
                 {
-                    var categories = db.ProductCategories
-                        .ToList();
-
-                    var allCategories = new List<CategoryData>();
-
-                    foreach (var category in categories)
-                    {
-                        var newCategory = new CategoryData
+                    return await db.ProductCategories
+                        .Select(c => new CategoryData
                         {
-                            Id = category.Id,
-                            CategoryName = category.CategoryName
-                        };
-
-                        allCategories.Add(newCategory);
-                    }
-
-                    return allCategories;
+                            Id = c.Id,
+                            CategoryName = c.CategoryName
+                        })
+                        .ToListAsync();
                 }
             }
             catch (Exception ex)
@@ -183,19 +175,19 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal CategoryResp RemoveCategoryAction(int categoryId)
+        internal async Task<CategoryResp> RemoveCategoryAction(int categoryId)
         {
             try
             {
                 using (var db = new CategoryContext())
                 {
-                    var currentCategory = db.ProductCategories
-                        .FirstOrDefault(c => c.Id == categoryId);
+                    var currentCategory = await db.ProductCategories
+                        .FirstOrDefaultAsync(c => c.Id == categoryId);
 
                     if (currentCategory != null)
                     {
                         db.ProductCategories.Remove(currentCategory);
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
 
                         return new CategoryResp
                         {
@@ -224,7 +216,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal CategoryResp CreateCategoryAction(string categoryName)
+        internal async Task<CategoryResp> CreateCategoryAction(string categoryName)
         {
             try
             {
@@ -239,8 +231,8 @@ namespace eUseControl.BusinessLogic.Core
 
                 using (var db = new CategoryContext())
                 {
-                    var existingCategory = db.ProductCategories
-                        .FirstOrDefault(c => c.CategoryName.ToLower() == categoryName.ToLower());
+                    var existingCategory = await db.ProductCategories
+                        .FirstOrDefaultAsync(c => c.CategoryName.ToLower() == categoryName.ToLower());
 
                     if (existingCategory != null)
                     {
@@ -257,7 +249,7 @@ namespace eUseControl.BusinessLogic.Core
                     };
 
                     db.ProductCategories.Add(newCategory);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
 
                     return new CategoryResp
                     {
@@ -277,32 +269,22 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal List<CouponData> GetAllDiscountCouponsAction()
+        internal async Task<List<CouponData>> GetAllDiscountCouponsAction()
         {
             try
             {
                 using (var db = new CouponContext())
                 {
-                    var discountCoupons = db.DiscountCoupons
-                        .ToList();
-
-                    var allDiscountCoupons = new List<CouponData>();
-
-                    foreach (var discount in discountCoupons)
-                    {
-                        var newCoupon = new CouponData
+                    return await db.DiscountCoupons
+                        .Select(discount => new CouponData
                         {
                             Id = discount.Id,
                             ExpirationDate = discount.ExpirationDate,
                             Code = discount.Code,
                             IsActive = discount.IsActive,
                             DiscountPercent = discount.DiscountPercent
-                        };
-
-                        allDiscountCoupons.Add(newCoupon);
-                    }
-
-                    return allDiscountCoupons;
+                        })
+                        .ToListAsync();
                 }
             }
             catch (Exception ex)
@@ -312,19 +294,19 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal CouponResp RemoveDiscountCouponAction(int couponId)
+        internal async Task<CouponResp> RemoveDiscountCouponAction(int couponId)
         {
             try
             {
                 using (var db = new CouponContext())
                 {
-                    var existingDiscountCoupon = db.DiscountCoupons
-                        .FirstOrDefault(c => c.Id == couponId);
+                    var existingDiscountCoupon = await db.DiscountCoupons
+                        .FirstOrDefaultAsync(c => c.Id == couponId);
 
                     if (existingDiscountCoupon != null)
                     {
                         db.DiscountCoupons.Remove(existingDiscountCoupon);
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
 
                         return new CouponResp
                         {
@@ -348,12 +330,12 @@ namespace eUseControl.BusinessLogic.Core
                 return new CouponResp
                 {
                     Status = false,
-                    StatusMsg = "An error occured while deleting the discount coupon!"
+                    StatusMsg = "An error occurred while deleting the discount coupon!"
                 };
             }
         }
 
-        internal List<ReviewSummary> RetrieveAllReviewsAction()
+        internal async Task<List<ReviewSummary>> RetrieveAllReviewsAction()
         {
             try
             {
@@ -362,14 +344,14 @@ namespace eUseControl.BusinessLogic.Core
 
                 using (var profilesDb = new ProfileContext())
                 {
-                    profiles = profilesDb.UserProfiles
-                        .ToList();
+                    profiles = await profilesDb.UserProfiles
+                        .ToListAsync();
                 }
 
                 using (var reviewsDb = new ReviewContext())
                 {
-                    reviews = reviewsDb.ProductReviews
-                        .ToList();
+                    reviews = await reviewsDb.ProductReviews
+                        .ToListAsync();
                 }
 
                 var reviewsList = new List<ReviewSummary>();
@@ -382,9 +364,9 @@ namespace eUseControl.BusinessLogic.Core
                     var item = new ReviewSummary
                     {
                         Id = review.Id,
-                        ProfileImageUrl = profile.ProfileImageUrl,
-                        FirstName = profile.FirstName,
-                        LastName = profile.LastName,
+                        ProfileImageUrl = profile?.ProfileImageUrl,
+                        FirstName = profile?.FirstName,
+                        LastName = profile?.LastName,
                         Review = review.Review,
                         ReviewPostDate = review.ReviewPostDate,
                         Rating = review.Rating
@@ -402,20 +384,19 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ReviewResp RemoveReviewAction(int reviewId)
+        internal async Task<ReviewResp> RemoveReviewAction(int reviewId)
         {
             try
             {
                 using (var db = new ReviewContext())
                 {
-                    var existingReview = db.ProductReviews
-                        .FirstOrDefault(r => r.Id == reviewId);
-
+                    var existingReview = await db.ProductReviews
+                        .FirstOrDefaultAsync(r => r.Id == reviewId);
 
                     if (existingReview != null)
                     {
                         db.ProductReviews.Remove(existingReview);
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
 
                         return new ReviewResp
                         {
@@ -444,7 +425,7 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal List<ProductLite> RetrieveAllProductsAction()
+        internal async Task<List<ProductLite>> RetrieveAllProductsAction()
         {
             try
             {
@@ -452,14 +433,14 @@ namespace eUseControl.BusinessLogic.Core
 
                 using (var categoriesDb = new CategoryContext())
                 {
-                    categories = categoriesDb.ProductCategories
-                        .ToList();
+                    categories = await categoriesDb.ProductCategories
+                        .ToListAsync();
                 }
 
                 using (var db = new ProductContext())
                 {
-                    var products = db.Products
-                        .ToList();
+                    var products = await db.Products
+                        .ToListAsync();
 
                     var allProducts = new List<ProductLite>();
 
@@ -478,8 +459,7 @@ namespace eUseControl.BusinessLogic.Core
                         var category = categories
                             .FirstOrDefault(c => c.Id == product.CategoryId);
 
-                        item.ProductCategory = category.CategoryName;
-
+                        item.ProductCategory = category?.CategoryName ?? "Unknown";
                         allProducts.Add(item);
                     }
 
@@ -493,19 +473,19 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal ProductResp RemoveProductAction(int productId)
+        internal async Task<ProductResp> RemoveProductAction(int productId)
         {
             try
             {
                 using (var db = new ProductContext())
                 {
-                    var existingproduct = db.Products
-                        .FirstOrDefault(p => p.Id == productId);
+                    var existingProduct = await db.Products
+                        .FirstOrDefaultAsync(p => p.Id == productId);
 
-                    if (existingproduct != null)
+                    if (existingProduct != null)
                     {
-                        db.Products.Remove(existingproduct);
-                        db.SaveChanges();
+                        db.Products.Remove(existingProduct);
+                        await db.SaveChangesAsync();
 
                         return new ProductResp
                         {
@@ -529,36 +509,21 @@ namespace eUseControl.BusinessLogic.Core
                 return new ProductResp
                 {
                     Status = false,
-                    StatusMsg = "An error occured while deleting the product!"
+                    StatusMsg = "An error occurred while deleting the product!"
                 };
             }
         }
 
-        internal ProductResp ChangeRecommendationStatusAction(int productId)
+        internal async Task<ProductResp> ChangeRecommendationStatusAction(int productId)
         {
             try
             {
                 using (var db = new ProductContext())
                 {
-                    var product = db.Products
-                        .FirstOrDefault(p => p.Id == productId);
+                    var product = await db.Products
+                        .FirstOrDefaultAsync(p => p.Id == productId);
 
-                    if (product != null)
-                    {
-                        product.RecommendationStatus = product.RecommendationStatus == RecommendationStatus.Preferred
-                            ? RecommendationStatus.Ignored
-                            : RecommendationStatus.Preferred;
-
-                        db.Entry(product).State = EntityState.Modified;
-                        db.SaveChanges();
-
-                        return new ProductResp
-                        {
-                            Status = true,
-                            StatusMsg = "Recommendation status updated successfully!"
-                        };
-                    }
-                    else
+                    if (product == null)
                     {
                         return new ProductResp
                         {
@@ -566,6 +531,17 @@ namespace eUseControl.BusinessLogic.Core
                             StatusMsg = "Product not found!"
                         };
                     }
+
+                    product.RecommendationStatus = product.RecommendationStatus == RecommendationStatus.Preferred ? RecommendationStatus.Ignored : RecommendationStatus.Preferred;
+
+                    db.Entry(product).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+
+                    return new ProductResp
+                    {
+                        Status = true,
+                        StatusMsg = "Recommendation status updated successfully!"
+                    };
                 }
             }
             catch (Exception ex)
@@ -579,20 +555,14 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal List<OrderLite> RetrieveAllOrdersAction()
+        internal async Task<List<OrderLite>> RetrieveAllOrdersAction()
         {
             try
             {
                 using (var db = new OrderContext())
                 {
-                    var orders = db.CustomerOrders
-                        .ToList();
-
-                    var allOrders = new List<OrderLite>();
-
-                    foreach (var order in orders)
-                    {
-                        var orderLite = new OrderLite
+                    return await db.CustomerOrders
+                        .Select(order => new OrderLite
                         {
                             Id = order.Id,
                             OrderDate = order.OrderDate,
@@ -602,12 +572,8 @@ namespace eUseControl.BusinessLogic.Core
                             PhoneNumber = order.PhoneNumber,
                             TotalPrice = order.TotalPrice,
                             OrderImageUrl = order.PaymentMethod == "Card" ? "~/Assets/img/order/order-icon-1.jpg" : "~/Assets/img/order/order-icon-2.jpg"
-                        };
-
-                        allOrders.Add(orderLite);
-                    }
-
-                    return allOrders;
+                        })
+                        .ToListAsync();
                 }
             }
             catch (Exception ex)
@@ -617,19 +583,19 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        internal OrderResp RemoveOrderAction(int orderId)
+        internal async Task<OrderResp> RemoveOrderAction(int orderId)
         {
             try
             {
                 using (var db = new OrderContext())
                 {
-                    var existingOrder = db.CustomerOrders
-                        .FirstOrDefault(o => o.Id == orderId);
+                    var existingOrder = await db.CustomerOrders
+                        .FirstOrDefaultAsync(o => o.Id == orderId);
 
                     if (existingOrder != null)
                     {
                         db.CustomerOrders.Remove(existingOrder);
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
 
                         return new OrderResp
                         {
@@ -653,18 +619,19 @@ namespace eUseControl.BusinessLogic.Core
                 return new OrderResp
                 {
                     Status = false,
-                    StatusMsg = "An error occured while deleting the order!"
+                    StatusMsg = "An error occurred while deleting the order!"
                 };
             }
         }
 
-        internal OrderResp ChangeOrderStatusAction(int orderId)
+        internal async Task<OrderResp> ChangeOrderStatusAction(int orderId)
         {
             try
             {
                 using (var db = new OrderContext())
                 {
-                    var existingOrder = db.CustomerOrders.FirstOrDefault(o => o.Id == orderId);
+                    var existingOrder = await db.CustomerOrders
+                        .FirstOrDefaultAsync(o => o.Id == orderId);
 
                     if (existingOrder == null)
                     {
@@ -684,12 +651,10 @@ namespace eUseControl.BusinessLogic.Core
                         };
                     }
 
-                    existingOrder.OrderStatus = existingOrder.OrderStatus == OrderStatus.Pending
-                        ? OrderStatus.Delivering
-                        : OrderStatus.Pending;
+                    existingOrder.OrderStatus = existingOrder.OrderStatus == OrderStatus.Pending ? OrderStatus.Delivering : OrderStatus.Pending;
 
                     db.Entry(existingOrder).State = EntityState.Modified;
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
 
                     return new OrderResp
                     {
@@ -705,6 +670,114 @@ namespace eUseControl.BusinessLogic.Core
                 {
                     Status = false,
                     StatusMsg = "An error occurred while updating the order status!"
+                };
+            }
+        }
+
+        internal async Task<List<ContactSummary>> RetrieveAllRequestsAction()
+        {
+            try
+            {
+                using (var db = new ContactContext())
+                {
+                    return await db.ContactRequests
+                        .Select(request => new ContactSummary
+                        {
+                            Id = request.Id,
+                            Username = request.Username,
+                            Email = request.Email,
+                            Message = request.Message,
+                            RequestPostDate = request.RequestPostDate,
+                            RequestStatus = request.RequestStatus
+                        })
+                        .ToListAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new List<ContactSummary>();
+            }
+        }
+
+        internal async Task<ContactResp> RemoveRequestAction(int requestId)
+        {
+            try
+            {
+                using (var db = new ContactContext())
+                {
+                    var existingContact = await db.ContactRequests
+                        .FirstOrDefaultAsync(r => r.Id == requestId);
+
+                    if (existingContact != null)
+                    {
+                        db.ContactRequests.Remove(existingContact);
+                        await db.SaveChangesAsync();
+
+                        return new ContactResp
+                        {
+                            Status = true,
+                            StatusMsg = "Contact request successfully deleted!"
+                        };
+                    }
+                    else
+                    {
+                        return new ContactResp
+                        {
+                            Status = false,
+                            StatusMsg = "Contact request not found!"
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ContactResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while deleting the contact request!"
+                };
+            }
+        }
+
+        internal async Task<ContactResp> ChangeRequestStatusAction(int requestId)
+        {
+            try
+            {
+                using (var db = new ContactContext())
+                {
+                    var existingRequest = await db.ContactRequests
+                        .FirstOrDefaultAsync(r => r.Id == requestId);
+
+                    if (existingRequest == null)
+                    {
+                        return new ContactResp
+                        {
+                            Status = false,
+                            StatusMsg = "Contact request not found!"
+                        };
+                    }
+
+                    existingRequest.RequestStatus = existingRequest.RequestStatus == RequestStatus.Pending ? RequestStatus.Resolved : RequestStatus.Pending;
+
+                    db.Entry(existingRequest).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+
+                    return new ContactResp
+                    {
+                        Status = true,
+                        StatusMsg = "Contact request status updated successfully!"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new ContactResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while updating the contact request status!"
                 };
             }
         }
