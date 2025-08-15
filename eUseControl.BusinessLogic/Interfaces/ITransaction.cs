@@ -1,9 +1,10 @@
-﻿using eUseControl.Domain.Entities.Payment;
+﻿using System.Threading.Tasks;
+using eUseControl.Domain.Entities.Payment;
 
 namespace eUseControl.BusinessLogic.Interfaces
 {
     public interface ITransaction
     {
-        TransactionResp ProcessPayment(TransactionData transactionData, int userId);
+        Task<TransactionResp> ProcessPayment(TransactionData transactionData, int userId);
     }
 }

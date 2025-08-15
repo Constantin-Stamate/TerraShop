@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using eUseControl.Domain.Entities.Cart;
+using eUseControl.Domain.Entities.Contact;
 using eUseControl.Domain.Entities.Order;
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Review;
@@ -9,34 +11,40 @@ namespace eUseControl.BusinessLogic.Interfaces
 {
     public interface IManagement
     {
-        List<UserLite> GetAllUsers();
+        Task<List<UserLite>> GetAllUsers();
 
-        CouponResp AddDiscountCoupon(CouponData couponData);
+        Task<CouponResp> AddDiscountCoupon(CouponData couponData);
 
-        List<CouponData> GetAllDiscountCoupons();
+        Task<List<CouponData>> GetAllDiscountCoupons();
 
-        CouponResp RemoveDiscountCoupon(int couponId);
+        Task<CouponResp> RemoveDiscountCoupon(int couponId);
 
-        List<CategoryData> GetAllCategories();
+        Task<List<CategoryData>> GetAllCategories();
 
-        CategoryResp RemoveCategory(int categoryId);
+        Task<CategoryResp> RemoveCategory(int categoryId);
 
-        CategoryResp CreateCategory(string categoryName);
+        Task<CategoryResp> CreateCategory(string categoryName);
 
-        List<ReviewSummary> RetrieveAllReviews();
+        Task<List<ReviewSummary>> RetrieveAllReviews();
 
-        ReviewResp RemoveReview(int reviewId);
+        Task<ReviewResp> RemoveReview(int reviewId);
 
-        List<ProductLite> RetrieveAllProducts();
+        Task<List<ProductLite>> RetrieveAllProducts();
 
-        ProductResp RemoveProduct(int productId);
+        Task<ProductResp> RemoveProduct(int productId);
 
-        ProductResp ChangeRecommendationStatus(int productId);
+        Task<ProductResp> ChangeRecommendationStatus(int productId);
 
-        List<OrderLite> RetrieveAllOrders();
+        Task<List<OrderLite>> RetrieveAllOrders();
 
-        OrderResp RemoveOrder(int orderId);
+        Task<OrderResp> RemoveOrder(int orderId);
 
-        OrderResp ChangeOrderStatus(int orderId);
+        Task<OrderResp> ChangeOrderStatus(int orderId);
+
+        Task<List<ContactSummary>> RetrieveAllRequests();
+
+        Task<ContactResp> RemoveRequest(int requestId);
+
+        Task<ContactResp> ChangeRequestStatus(int requestId);
     }
 }

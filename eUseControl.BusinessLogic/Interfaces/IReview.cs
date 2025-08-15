@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using eUseControl.Domain.Entities.Profile;
 using eUseControl.Domain.Entities.Review;
 
@@ -6,16 +7,16 @@ namespace eUseControl.BusinessLogic.Interfaces
 {
     public interface IReview
     {
-        ReviewResp CreateReview(ReviewData data, int userId);
+        Task<ReviewResp> CreateReview(ReviewData data, int userId);
 
-        List<ReviewData> GetReviewsByProductId(int productId);
+        Task<List<ReviewData>> GetReviewsByProductId(int productId);
 
-        ReviewResp DeleteReview(int reviewId);
+        Task<ReviewResp> DeleteReview(int reviewId);
 
-        ReviewData GetReviewById(int? reviewId);
+        Task<ReviewData> GetReviewById(int? reviewId);
 
-        ReviewResp UpdateReview(ReviewData data);
+        Task<ReviewResp> UpdateReview(ReviewData data);
 
-        Dictionary<ReviewData, ProfileData> RetrieveAllReviews();
+        Task<Dictionary<ReviewData, ProfileData>> RetrieveAllReviews();
     }
 }
