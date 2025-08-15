@@ -1,4 +1,5 @@
-﻿using eUseControl.BusinessLogic;
+﻿using System.Threading.Tasks;
+using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities.Contact;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,7 +18,7 @@ namespace eUseControl.Tests.ServicesTests
         }
 
         [TestMethod]
-        public void SubmitUsernameMissing()
+        public async Task SubmitUsernameMissing()
         {
             int userId = 1;
             var data = new ContactData
@@ -27,14 +28,14 @@ namespace eUseControl.Tests.ServicesTests
                 Message = "Hello"
             };
 
-            var result = _contact.SubmitContactRequest(data, userId);
+            var result = await _contact.SubmitContactRequest(data, userId);
 
             Assert.IsFalse(result.Status, "Expected Status to be false when username is missing!");
             Assert.AreEqual("Please complete all required fields!", result.StatusMsg);
         }
 
         [TestMethod]
-        public void SubmitEmailMissing()
+        public async Task SubmitEmailMissing()
         {
             int userId = 1;
             var data = new ContactData
@@ -44,14 +45,14 @@ namespace eUseControl.Tests.ServicesTests
                 Message = "Hello"
             };
 
-            var result = _contact.SubmitContactRequest(data, userId);
+            var result = await _contact.SubmitContactRequest(data, userId);
 
             Assert.IsFalse(result.Status, "Expected Status to be false when email is missing!");
             Assert.AreEqual("Please complete all required fields!", result.StatusMsg);
         }
 
         [TestMethod]
-        public void SubmitMessageMissing()
+        public async Task SubmitMessageMissing()
         {
             int userId = 1;
             var data = new ContactData
@@ -61,14 +62,14 @@ namespace eUseControl.Tests.ServicesTests
                 Message = ""
             };
 
-            var result = _contact.SubmitContactRequest(data, userId);
+            var result = await _contact.SubmitContactRequest(data, userId);
 
             Assert.IsFalse(result.Status, "Expected Status to be false when message is missing!");
             Assert.AreEqual("Please complete all required fields!", result.StatusMsg);
         }
 
         [TestMethod]
-        public void SubmitValidRequest()
+        public async Task SubmitValidRequest()
         {
             int userId = 1;
             var data = new ContactData
@@ -78,7 +79,7 @@ namespace eUseControl.Tests.ServicesTests
                 Message = "This is a valid message."
             };
 
-            var result = _contact.SubmitContactRequest(data, userId);
+            var result = await _contact.SubmitContactRequest(data, userId);
 
             Assert.IsTrue(result.Status, "Expected Status to be true for valid request!");
             Assert.AreEqual("Contact request submitted successfully!", result.StatusMsg);

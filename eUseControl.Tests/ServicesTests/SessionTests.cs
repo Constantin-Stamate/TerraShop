@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities;
@@ -20,7 +21,7 @@ namespace eUseControl.Tests.ServicesTests
         }
 
         [TestMethod]
-        public void RegisterPasswordTooShort()
+        public async Task RegisterPasswordTooShort()
         {
             var data = new URegisterData
             {
@@ -32,14 +33,14 @@ namespace eUseControl.Tests.ServicesTests
                 Level = URole.User
             };
 
-            var result = _session.UserRegister(data);
+            var result = await _session.UserRegister(data);
 
             Assert.IsFalse(result.Status, "Expected registration to fail due to password being too short!");
             Assert.AreEqual("Minimum 8 characters required!", result.StatusMsg);
         }
 
         [TestMethod]
-        public void RegisterWeakPassword()
+        public async Task RegisterWeakPassword()
         {
             var data = new URegisterData
             {
@@ -51,14 +52,14 @@ namespace eUseControl.Tests.ServicesTests
                 Level = URole.User
             };
 
-            var result = _session.UserRegister(data);
+            var result = await _session.UserRegister(data);
 
             Assert.IsFalse(result.Status, "Expected registration to fail due to weak password!");
             Assert.AreEqual("Password must meet complexity requirements!", result.StatusMsg);
         }
 
         [TestMethod]
-        public void RegisterEmailAlreadyUsed()
+        public async Task RegisterEmailAlreadyUsed()
         {
             var data = new URegisterData
             {
@@ -70,14 +71,14 @@ namespace eUseControl.Tests.ServicesTests
                 Level = URole.User
             };
 
-            var result = _session.UserRegister(data);
+            var result = await _session.UserRegister(data);
 
             Assert.IsFalse(result.Status, "Expected registration to fail because the email is already used!");
             Assert.AreEqual("Email has already been used!", result.StatusMsg);
         }
 
         [TestMethod]
-        public void RegisterUsernameAlreadyUsed()
+        public async Task RegisterUsernameAlreadyUsed()
         {
             var data = new URegisterData
             {
@@ -89,14 +90,14 @@ namespace eUseControl.Tests.ServicesTests
                 Level = URole.User
             };
 
-            var result = _session.UserRegister(data);
+            var result = await _session.UserRegister(data);
 
             Assert.IsFalse(result.Status, "Expected registration to fail because the username is already used!");
             Assert.AreEqual("Username has already been used!", result.StatusMsg);
         }
 
         [TestMethod]
-        public void RegisterSuccess()
+        public async Task RegisterSuccess()
         {
             var data = new URegisterData
             {
@@ -108,14 +109,14 @@ namespace eUseControl.Tests.ServicesTests
                 Level = URole.User
             };
 
-            var result = _session.UserRegister(data);
+            var result = await _session.UserRegister(data);
 
             Assert.IsTrue(result.Status, "Expected registration to succeed with valid data!");
             Assert.AreEqual("You have successfully registered!", result.StatusMsg);
         }
 
         [TestMethod]
-        public void LoginByUsernameSuccess()
+        public async Task LoginByUsernameSuccess()
         {
             var user = new ULoginData
             {
@@ -125,7 +126,7 @@ namespace eUseControl.Tests.ServicesTests
                 LastLogin = DateTime.Now
             };
 
-            var result = _session.UserLogin(user);
+            var result = await _session.UserLogin(user);
 
             Assert.IsTrue(result.Status, "Expected login to succeed with correct credentials!");
             Assert.IsNotNull(result.UserMinimal, "Expected user data to be returned after successful login!");
@@ -133,7 +134,7 @@ namespace eUseControl.Tests.ServicesTests
         }
 
         [TestMethod]
-        public void LoginWrongPassword()
+        public async Task LoginWrongPassword()
         {
             var user = new ULoginData
             {
@@ -143,14 +144,14 @@ namespace eUseControl.Tests.ServicesTests
                 LastLogin = DateTime.Now
             };
 
-            var result = _session.UserLogin(user);
+            var result = await _session.UserLogin(user);
 
             Assert.IsFalse(result.Status, "Expected login to fail due to wrong password!");
             Assert.AreEqual("The username or password is incorrect!", result.StatusMsg);
         }
 
         [TestMethod]
-        public void LoginUnknownUser()
+        public async Task LoginUnknownUser()
         {
             var user = new ULoginData
             {
@@ -160,14 +161,14 @@ namespace eUseControl.Tests.ServicesTests
                 LastLogin = DateTime.Now
             };
 
-            var result = _session.UserLogin(user);
+            var result = await _session.UserLogin(user);
 
             Assert.IsFalse(result.Status, "Expected login to fail because the user does not exist!");
             Assert.AreEqual("The username or password is incorrect!", result.StatusMsg);
         }
 
         [TestMethod]
-        public void LoginEmptyFields()
+        public async Task LoginEmptyFields()
         {
             var user = new ULoginData
             {
@@ -177,29 +178,29 @@ namespace eUseControl.Tests.ServicesTests
                 LastLogin = DateTime.Now
             };
 
-            var result = _session.UserLogin(user);
+            var result = await _session.UserLogin(user);
 
             Assert.IsFalse(result.Status, "Expected login to fail due to empty username and password!");
             Assert.AreEqual("The username or password is incorrect!", result.StatusMsg);
         }
 
         [TestMethod]
-        public void GetUserFound()
+        public async Task GetUserFound()
         {
             int userId = 1;
 
-            var result = _session.GetUserById(userId);
+            var result = await _session.GetUserById(userId);
 
             Assert.IsNotNull(result, "Expected to find a user with the given ID!");
             Assert.AreEqual(userId, result.Id, "Expected the returned user ID to match the requested ID!");
         }
 
         [TestMethod]
-        public void GetUserNotFound()
+        public async Task GetUserNotFound()
         {
             int userId = -1;
 
-            var result = _session.GetUserById(userId);
+            var result = await _session.GetUserById(userId);
 
             Assert.IsNull(result, "Expected no user to be found with invalid ID!");
         }
