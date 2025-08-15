@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using eUseControl.BusinessLogic.Core;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities.Profile;
@@ -8,34 +9,34 @@ namespace eUseControl.BusinessLogic.BusinessLayer
 {
     public class ReviewBL : UserApi, IReview
     {
-        public ReviewResp CreateReview(ReviewData data, int userId)
+        public async Task<ReviewResp> CreateReview(ReviewData data, int userId)
         {
-            return CreateReviewAction(data, userId);
+            return await CreateReviewAction(data, userId);
         }
 
-        public List<ReviewData> GetReviewsByProductId(int productId)
+        public async Task<List<ReviewData>> GetReviewsByProductId(int productId)
         {
-            return GetReviewsByProductIdAction(productId);
+            return await GetReviewsByProductIdAction(productId);
         }
 
-        public ReviewResp DeleteReview(int reviewId)
+        public async Task<ReviewResp> DeleteReview(int reviewId)
         {
-            return DeleteReviewAction(reviewId);
+            return await DeleteReviewAction(reviewId);
         }
 
-        public ReviewData GetReviewById(int? reviewId)
+        public async Task<ReviewData> GetReviewById(int? reviewId)
         {
-            return GetReviewByIdAction(reviewId);
+            return await GetReviewByIdAction(reviewId);
         }
 
-        public ReviewResp UpdateReview(ReviewData data)
+        public async Task<ReviewResp> UpdateReview(ReviewData data)
         {
-            return UpdateReviewAction(data);
+            return await UpdateReviewAction(data);
         }
 
-        public Dictionary<ReviewData, ProfileData> RetrieveAllReviews()
+        public async Task<Dictionary<ReviewData, ProfileData>> RetrieveAllReviews()
         {
-            return RetrieveAllReviewsAction();
+            return await RetrieveAllReviewsAction();
         }
     }
 }

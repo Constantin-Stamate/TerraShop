@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using eUseControl.BusinessLogic.Core;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities.Cart;
@@ -7,19 +8,19 @@ namespace eUseControl.BusinessLogic.BusinessLayer
 {
     public class CartBL : UserApi, ICart
     {
-        public CartResp AddItemToCart(int productId, int userId)
+        public async Task<CartResp> AddItemToCart(int productId, int userId)
         {
-            return AddItemToCartAction(productId, userId);
+            return await AddItemToCartAction(productId, userId);
         }
 
-        public List<CartData> GetCartItemsByUserId(int userId)
+        public async Task<List<CartData>> GetCartItemsByUserId(int userId)
         {
-            return GetCartItemsByUserIdAction(userId);
+            return await GetCartItemsByUserIdAction(userId);
         }
 
-        public CartResp RemoveItemFromCart(int productId, int userId)
+        public async Task<CartResp> RemoveItemFromCart(int productId, int userId)
         {
-            return RemoveItemFromCartAction(productId, userId);
+            return await RemoveItemFromCartAction(productId, userId);
         }
 
         public int GetCartCountByUserId(int userId)
@@ -27,9 +28,9 @@ namespace eUseControl.BusinessLogic.BusinessLayer
             return GetCartCountByUserIdAction(userId);
         }
 
-        public CartResp ChangeProductQuantity(int productId, int userId, int newQuantity)
+        public async Task<CartResp> ChangeProductQuantity(int productId, int userId, int newQuantity)
         {
-            return ChangeProductQuantityAction(productId, userId, newQuantity);
+            return await ChangeProductQuantityAction(productId, userId, newQuantity);
         }
 
         public (decimal totalPrice, decimal shippingCost) CalculateCartTotal(List<CartData> cartItems)
@@ -37,14 +38,14 @@ namespace eUseControl.BusinessLogic.BusinessLayer
             return CalculateCartTotalAction(cartItems);
         }
 
-        public decimal ApplyCouponDiscount(decimal totalPrice, string couponCode)
+        public async Task<decimal> ApplyCouponDiscount(decimal totalPrice, string couponCode)
         {
-            return ApplyCouponDiscountAction(totalPrice, couponCode);
+            return await ApplyCouponDiscountAction(totalPrice, couponCode);
         }
 
-        public CartResp ClearCartItemsAfterOrder(int userId)
+        public async Task<CartResp> ClearCartItemsAfterOrder(int userId)
         {
-            return ClearCartItemsAfterOrderAction(userId);
+            return await ClearCartItemsAfterOrderAction(userId);
         }
 
         public decimal ComputeOrderTotal(decimal finalPrice, decimal shippingCost)

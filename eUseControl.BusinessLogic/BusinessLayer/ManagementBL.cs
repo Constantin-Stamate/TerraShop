@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using eUseControl.BusinessLogic.Core;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities.Cart;
+using eUseControl.Domain.Entities.Contact;
 using eUseControl.Domain.Entities.Order;
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Review;
@@ -11,79 +13,94 @@ namespace eUseControl.BusinessLogic.BusinessLayer
 {
     public class ManagementBL : AdminApi, IManagement
     {
-        public List<UserLite> GetAllUsers()
+        public async Task<List<UserLite>> GetAllUsers()
         {
-            return GetAllUsersAction();
+            return await GetAllUsersAction();
         }
 
-        public CouponResp AddDiscountCoupon(CouponData couponData)
+        public async Task<CouponResp> AddDiscountCoupon(CouponData couponData)
         {
-            return AddDiscountCouponAction(couponData);
+            return await AddDiscountCouponAction(couponData);
         }
 
-        public List<CategoryData> GetAllCategories()
+        public async Task<List<CategoryData>> GetAllCategories()
         {
-            return GetAllCategoriesAction();
+            return await GetAllCategoriesAction();
         }
 
-        public CategoryResp RemoveCategory(int categoryId)
+        public async Task<CategoryResp> RemoveCategory(int categoryId)
         {
-            return RemoveCategoryAction(categoryId);
+            return await RemoveCategoryAction(categoryId);
         }
 
-        public CategoryResp CreateCategory(string categoryName)
+        public async Task<CategoryResp> CreateCategory(string categoryName)
         {
-            return CreateCategoryAction(categoryName);
+            return await CreateCategoryAction(categoryName);
         }
 
-        public List<CouponData> GetAllDiscountCoupons()
+        public async Task<List<CouponData>> GetAllDiscountCoupons()
         {
-            return GetAllDiscountCouponsAction();
+            return await GetAllDiscountCouponsAction();
         }
 
-        public CouponResp RemoveDiscountCoupon(int couponId)
+        public async Task<CouponResp> RemoveDiscountCoupon(int couponId)
         {
-            return RemoveDiscountCouponAction(couponId);
+            return await RemoveDiscountCouponAction(couponId);
         }
 
-        public List<ReviewSummary> RetrieveAllReviews()
+        public async Task<List<ReviewSummary>> RetrieveAllReviews()
         {
-            return RetrieveAllReviewsAction();
+            return await RetrieveAllReviewsAction();
         }
 
-        public ReviewResp RemoveReview(int reviewId)
+        public async Task<ReviewResp> RemoveReview(int reviewId)
         {
-            return RemoveReviewAction(reviewId);
+            return await RemoveReviewAction(reviewId);
         }
 
-        public List<ProductLite> RetrieveAllProducts()
+        public async Task<List<ProductLite>> RetrieveAllProducts()
         {
-            return RetrieveAllProductsAction();
+            return await RetrieveAllProductsAction();
         }
 
-        public ProductResp RemoveProduct(int productId)
+        public async Task<ProductResp> RemoveProduct(int productId)
         {
-            return RemoveProductAction(productId);
+            return await RemoveProductAction(productId);
         }
 
-        public ProductResp ChangeRecommendationStatus(int productId)
+        public async Task<ProductResp> ChangeRecommendationStatus(int productId)
         {
-            return ChangeRecommendationStatusAction(productId);
+            return await ChangeRecommendationStatusAction(productId);
         }
 
-        public List<OrderLite> RetrieveAllOrders()
+        public async Task<List<OrderLite>> RetrieveAllOrders()
         {
-            return RetrieveAllOrdersAction();
+            return await RetrieveAllOrdersAction();
         }
 
-        public OrderResp RemoveOrder(int orderId)
+        public async Task<OrderResp> RemoveOrder(int orderId)
         {
-            return RemoveOrderAction(orderId);
+            return await RemoveOrderAction(orderId);
         }
 
-        public OrderResp ChangeOrderStatus(int orderId)
+        public async Task<OrderResp> ChangeOrderStatus(int orderId)
         {
-            return ChangeOrderStatusAction(orderId);
+            return await ChangeOrderStatusAction(orderId);
+        }
+
+        public async Task<List<ContactSummary>> RetrieveAllRequests()
+        {
+            return await RetrieveAllRequestsAction();
+        }
+
+        public async Task<ContactResp> RemoveRequest(int contactId)
+        {
+            return await RemoveRequestAction(contactId);
+        }
+
+        public async Task<ContactResp> ChangeRequestStatus(int requestId)
+        {
+            return await ChangeRequestStatusAction(requestId);
         }
     }
 }

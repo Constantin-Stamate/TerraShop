@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Threading.Tasks;
+using System.Web;
 using eUseControl.BusinessLogic.Core;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities;
@@ -8,14 +9,14 @@ namespace eUseControl.BusinessLogic.BusinessLayer
 {
     public class SessionBL : UserApi, ISession
     {
-        public URegisterResp UserRegister(URegisterData data)
+        public async Task<URegisterResp> UserRegister(URegisterData data)
         {
-            return UserRegisterAction(data);
+            return await UserRegisterAction(data);
         }
 
-        public HttpCookie GenCookie(string loginCredential)
+        public async Task<HttpCookie> GenCookie(string loginCredential)
         {
-            return Cookie(loginCredential);
+            return await Cookie(loginCredential);
         }
 
         public UserMinimal GetUserByCookie(string apiCookieValue)
@@ -23,14 +24,14 @@ namespace eUseControl.BusinessLogic.BusinessLayer
             return UserCookie(apiCookieValue);
         }
 
-        public ULoginResp UserLogin(ULoginData data)
+        public async Task<ULoginResp> UserLogin(ULoginData data)
         {
-            return UserLoginAction(data);
+            return await UserLoginAction(data);
         }
 
-        public UserSummary GetUserById(int userId)
+        public async Task<UserSummary> GetUserById(int userId)
         {
-            return GetUserByIdAction(userId);
+            return await GetUserByIdAction(userId);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using eUseControl.BusinessLogic.Core;
+﻿using System.Threading.Tasks;
+using eUseControl.BusinessLogic.Core;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities.Profile;
 
@@ -6,19 +7,19 @@ namespace eUseControl.BusinessLogic.BusinessLayer
 {
     public class ProfileBL : UserApi, IProfile
     {
-        public ProfileData GetProfileByUserId(int userId)
+        public async Task<ProfileData> GetProfileByUserId(int userId)
         {
-            return GetProfileByUserIdAction(userId);
+            return await GetProfileByUserIdAction(userId);
         }
 
-        public ProfileResp UpdateProfile(ProfileData profileData)
+        public async Task<ProfileResp> UpdateProfile(ProfileData profileData)
         {
-            return UpdateProfileAction(profileData);
+            return await UpdateProfileAction(profileData);
         }
 
-        public ProfileResp ChangePassword(string currentPassword, string newPassword, int userId)
+        public async Task<ProfileResp> ChangePassword(string currentPassword, string newPassword, int userId)
         {
-            return ChangePasswordAction(currentPassword, newPassword, userId);
+            return await ChangePasswordAction(currentPassword, newPassword, userId);
         }
     }
 }
