@@ -9,9 +9,7 @@
     @if (!Model.Any())
     {
         <div class="info-message text-center mt-5">
-            <p style="font-size: 16px;">
-                There are currently no reviews available in the system!
-            </p>
+            <p style="font-size: 16px;">There are currently no reviews available in the system!</p>
         </div>
     }
     else
@@ -34,29 +32,27 @@
                         <tr>
                             <th scope="row">
                                 <div class="d-flex align-items-center">
-                                    <img src="@Url.Content(review.ProfileImageUrl)" class="img-fluid me-5 rounded-circle"
-                                         style="width: 80px; height: 80px; object-fit: cover;" alt="">
+                                    <img src="@Url.Content(review.ProfileImageUrl)" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" alt="">
                                 </div>
                             </th>
                             <td>
-                                <p class="mb-0 mt-4 title-truncate">@review.FirstName @review.LastName</p>
+                                <p class="mb-0 mt-4 truncate-text">@Html.DisplayFor(model => review.FirstName) @Html.DisplayFor(model => review.LastName)</p>
                             </td>
                             <td>
-                                <p class="mb-0 mt-4 title-truncate">@review.Review</p>
+                                <p class="mb-0 mt-4 truncate-text">@Html.DisplayFor(model => review.Review)</p>
                             </td>
                             <td>
-                                <p class="mb-0 mt-4">@review.Rating</p>
+                                <p class="mb-0 mt-4">@Html.DisplayFor(model => review.Rating)</p>
                             </td>
                             <td>
-                                <p class="mb-0 mt-4">@review.ReviewPostDate.ToString("dd MMM yyyy, HH:mm", System.Globalization.CultureInfo.InvariantCulture)</p>
+                                <p class="mb-0 mt-4">@Html.Raw(review.ReviewPostDate.ToString("dd MMM yyyy, HH:mm", System.Globalization.CultureInfo.InvariantCulture))</p>
                             </td>
                             <td>
                                 @using (Html.BeginForm("DeleteReview", "Management", FormMethod.Post, new { @class = "d-inline" }))
                                 {
                                     @Html.AntiForgeryToken()
                                     @Html.Hidden("reviewId", review.Id)
-                                    <button type="submit" class="btn btn-md rounded-circle bg-light border mt-4"
-                                            onclick="return confirm('Are you sure you want to delete this review?');">
+                                    <button type="submit" class="btn btn-md rounded-circle bg-light border mt-4" onclick="return confirm('Are you sure you want to delete this review?');">
                                         <i class="fa fa-times text-danger"></i>
                                     </button>
                                 }

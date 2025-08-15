@@ -11,20 +11,12 @@
             <div class="col-12">
                 <div class="text-center mx-auto" style="max-width: 700px;">
                     <h1 class="text-primary">Get in touch</h1>
-                    <p class="mb-4">
-                        Welcome to TerraShop! Your one-stop shop for amazing products. Explore our
-                        latest collections,
-                        enjoy a seamless shopping experience, and find the best deals today. Have any questions?
-                        Feel free to get in touch with us through our contact form.
-                    </p>
+                    <p class="mb-4">Welcome to TerraShop! Your one-stop shop for amazing products. Explore our latest collections, enjoy a seamless shopping experience, and find the best deals today. Have any questions? Feel free to get in touch with us through our contact form.</p>
                 </div>
             </div>
             <div class="col-lg-12">
                 <div class="h-100 rounded">
-                    <iframe class="rounded w-100"
-                            style="height: 400px;"
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27217.848609133935!2d28.823309699999997!3d47.025398199999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40c988bf60e1d9ff%3A0xc4a14e056de72d60!2sPentalog%20Chi%C8%99in%C4%83u%2C%20Bulevardul%20%C8%98tefan%20cel%20Mare%20%C8%99i%20Sf%C3%A2nt%20202%2F2%2C%20Chi%C8%99in%C4%83u%2C%20Moldova!5e0!3m2!1sen!2sro!4v1694968786459!5m2!1sen!2sro"
-                            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe class="rounded w-100" style="height: 400px;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27217.848609133935!2d28.823309699999997!3d47.025398199999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40c988bf60e1d9ff%3A0xc4a14e056de72d60!2sPentalog%20Chi%C8%99in%C4%83u%2C%20Bulevardul%20%C8%98tefan%20cel%20Mare%20%C8%99i%20Sf%C3%A2nt%20202%2F2%2C%20Chi%C8%99in%C4%83u%2C%20Moldova!5e0!3m2!1sen!2sro!4v1694968786459!5m2!1sen!2sro" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
             <div class="col-lg-7">
@@ -33,18 +25,14 @@
                     @Html.AntiForgeryToken()
                     <div class="form-group mb-4">
                         @Html.TextBoxFor(m => m.Username, new { @class = "w-100 form-control border-0 py-3", placeholder = "Your Name", required = "required" })
-                        @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group mb-4">
-                        @Html.TextBoxFor(m => m.Email, new { @type = "email", @class = "w-100 form-control border-0 py-3", placeholder = "Enter Your Email", required = "required" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        @Html.TextBoxFor(m => m.Email, new { @type = "email", @class = "w-100 form-control border-0 py-3", placeholder = "Your Email", required = "required" })
                     </div>
                     <div class="form-group mb-4">
                         @Html.TextAreaFor(m => m.Message, new { @class = "w-100 form-control border-0", rows = "6", placeholder = "Your Message", required = "required" })
-                        @Html.ValidationMessageFor(m => m.Message, "", new { @class = "text-danger" })
                     </div>
-                    <button type="submit" class="w-100 btn form-control border-secondary py-3 bg-white text-primary"
-                            style="color: #81c408;">
+                    <button type="submit" class="w-100 btn form-control border-secondary py-3 bg-white text-primary" style="color: #81c408;">
                         Submit
                     </button>
                 }

@@ -3,7 +3,7 @@
     ViewBag.Title = "AddProduct";
 }
 
-@model eUseControl.Web.Models.Product.Product
+@model eUseControl.Web.Models.Product.AddProductViewModel
 
 <div class="mask d-flex align-items-center gradient-custom-3" style="min-height: 100vh;">
     <div class="container" style="padding-top: 40px;">
@@ -11,8 +11,7 @@
             <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                 <div class="card" style="border-radius: 15px; max-width: 1000px; margin: 0 auto;">
                     <div class="card-body p-4" style="width: 100%;">
-                        <h2 class="text-nowrap text-center mb-4"
-                            style="font-size: 28px; font-weight: 600; margin-top: 20px; color: #81c408;">
+                        <h2 class="text-nowrap text-center mb-4" style="font-size: 28px; font-weight: 600; margin-top: 20px; color: #81c408;">
                             Create a new Product
                         </h2>
                         <div style="margin-top: 10px;">
@@ -24,7 +23,6 @@
                                     </ul>
                                 </div>
                             }
-
                             @if (TempData["SuccessMessage"] != null)
                             {
                                 <div class="text-success no-bullets" style="text-align: center; margin-top: -10px">
@@ -32,96 +30,79 @@
                                         <li>@TempData["SuccessMessage"]</li>
                                     </ul>
                                 </div>
-
                                 <script>
-                                    setTimeout(function () {
-                                        window.location.href = '@Url.Action("Shop", "Shop")';
-                                    }, 3500);
+                                    setTimeout(function () { window.location.href = '@Url.Action("Shop", "Shop")'; }, 3500);
                                 </script>
                             }
-
                             @using (Html.BeginForm("AddProduct", "Product", FormMethod.Post, new { @id = "AddProductForm", enctype = "multipart/form-data" }))
                             {
                                 @Html.AntiForgeryToken()
                                 <div class="row g-4">
                                     <div class="col-lg-6 mb-3" style="margin-top: 15mm;">
                                         <div class="border-bottom rounded">
-                                            @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control border-0 me-4", placeholder = "Product name *", required = "required" })
+                                            @Html.TextBoxFor(m => m.Product.ProductName, new { @class = "form-control border-0 me-4", placeholder = "Product name *", required = "required" })
                                         </div>
                                     </div>
                                     <div class="col-lg-6 mb-3" style="margin-top: 15mm;">
                                         <div class="border-bottom rounded">
-                                            @Html.TextBoxFor(m => m.ProductAddress, new { @class = "form-control border-0", placeholder = "Address *", required = "required" })
+                                            @Html.TextBoxFor(m => m.Product.ProductAddress, new { @class = "form-control border-0", placeholder = "Address *", required = "required" })
                                         </div>
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <div class="border-bottom rounded">
-                                            @Html.TextBoxFor(m => m.ProductQuantity, new { @class = "form-control border-0 me-4", placeholder = "Quantity *", required = "required" })
+                                            @Html.TextBox("Product.ProductQuantity", (Model.Product.ProductQuantity > 0 ? Model.Product.ProductQuantity.ToString() : ""), new { @class = "form-control border-0 me-4", placeholder = "Quantity *", type = "number", min = "1", required = "required" })
                                         </div>
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <div class="border-bottom rounded">
-                                            @Html.DropDownListFor(m => m.ProductQuality, new List<SelectListItem>
+                                            @Html.DropDownListFor(m => m.Product.ProductQuality,
+                                            new List<SelectListItem>
                                             {
                                                 new SelectListItem { Text = "Quality *", Value = "", Disabled = true, Selected = true },
                                                 new SelectListItem { Text = "Low", Value = "Low" },
                                                 new SelectListItem { Text = "Medium", Value = "Medium" },
                                                 new SelectListItem { Text = "High", Value = "High" },
                                                 new SelectListItem { Text = "Premium", Value = "Premium" },
-                                            }, new { @class = "form-control border-0 me-4", required = "required" })
+                                            },
+                                            new { @class = "form-control border-0 me-4", required = "required" })
                                         </div>
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <div class="border-bottom rounded">
-                                            @Html.TextBoxFor(m => m.ProductPrice, new { @class = "form-control border-0 me-4", placeholder = "Price *", required = "required" })
+                                            @Html.TextBox("Product.ProductPrice", (Model.Product.ProductPrice > 0 ? Model.Product.ProductPrice.ToString() : ""), new { @class = "form-control border-0 me-4", placeholder = "Price *", type = "text", required = "required" })
                                         </div>
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <div class="border-bottom rounded">
-                                            @Html.TextBoxFor(m => m.ProductRegion, new { @class = "form-control border-0 me-4", placeholder = "Region *", required = "required" })
+                                            @Html.TextBoxFor(m => m.Product.ProductRegion, new { @class = "form-control border-0 me-4", placeholder = "Region *", required = "required" })
                                         </div>
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <div class="border-bottom rounded">
-                                            @Html.DropDownListFor(m => m.ProductCategory, new List<SelectListItem>
+                                            @Html.DropDownListFor(m => m.Product.ProductCategory,
+                                            new List<SelectListItem> { new SelectListItem { Text = "Category *", Value = "", Disabled = true, Selected = string.IsNullOrEmpty(Model.Product.ProductCategory) } }
+                                            .Concat(Model.Categories.Select(cat => new SelectListItem
                                             {
-                                                new SelectListItem { Text = "Category *", Value = "", Disabled = true, Selected = true },
-                                                new SelectListItem { Text = "Personal Care", Value = "Personal Care" },
-                                                new SelectListItem { Text = "Household", Value = "Household" },
-                                                new SelectListItem { Text = "Kitchen", Value = "Kitchen" },
-                                                new SelectListItem { Text = "Eco Fashion", Value = "Eco Fashion" },
-                                                new SelectListItem { Text = "Organic Cosmetics", Value = "Organic Cosmetics" },
-                                                new SelectListItem { Text = "Health Care", Value = "Health Care" },
-                                                new SelectListItem { Text = "Eco Chemicals", Value = "Eco Chemicals" },
-                                                new SelectListItem { Text = "Renewable Energy", Value = "Renewable Energy" },
-                                                new SelectListItem { Text = "Bio Tableware", Value = "Bio Tableware" },
-                                                new SelectListItem { Text = "Eco Transport", Value = "Eco Transport" },
-                                                new SelectListItem { Text = "Eco Car Cleaning", Value = "Eco Car Cleaning" },
-                                                new SelectListItem { Text = "Eco Construction", Value = "Eco Construction" },
-                                                new SelectListItem { Text = "Pet Care", Value = "Pet Care" },
-                                                new SelectListItem { Text = "Eco Gardening", Value = "Eco Gardening" },
-                                                new SelectListItem { Text = "Eco Stationery", Value = "Eco Stationery" }
-                                            }, new { @class = "form-control border-0 me-4", required = "required" })
+                                                Text = cat,
+                                                Value = cat,
+                                                Selected = (Model.Product.ProductCategory == cat)
+                                            })),
+                                            new { @class = "form-control border-0 me-4", required = "required" })
                                         </div>
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <div class="border-bottom rounded">
-                                            <input type="file" id="productImageUrl" name="productImageUrl" accept="image/*"
-                                                   class="form-control border-0 me-4" placeholder="Click to upload an image"
-                                                   onchange="displayFileName(event)" style="background-color: white;">
+                                            @Html.TextBox("productImageUrl", null, new { type = "file", id = "productImageUrl", accept = "image/*", @class = "form-control border-0 me-4", placeholder = "Click to upload an image", onchange = "displayFileName(event)", style = "background-color: white;" })
                                         </div>
                                     </div>
                                     <div class="col-lg-12 mb-4">
                                         <div class="border-bottom rounded">
-                                            @Html.TextAreaFor(m => m.ProductDescription, new { @class = "form-control border-0", placeholder = "Details *", spellcheck = "false", required = "required", cols = 30, rows = 3 })
+                                            @Html.TextAreaFor(m => m.Product.ProductDescription, new { @class = "form-control border-0", placeholder = "Details *", spellcheck = "false", required = "required", cols = 30, rows = 3 })
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
-                                        <div class="d-flex justify-content-between py-2 mb-0"
-                                             style="margin-top: -10px;">
-                                            <button type="submit"
-                                                    class="btn border border-secondary rounded-pill px-4 py-3"
-                                                    style="color: #81c408 !important;">
+                                        <div class="d-flex justify-content-between py-2 mb-0" style="margin-top: -10px;">
+                                            <button type="submit" class="btn border border-secondary rounded-pill px-4 py-3" style="color: #81c408 !important;">
                                                 Publish Product
                                             </button>
                                         </div>
@@ -135,11 +116,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .no-bullets ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-    }
-</style>

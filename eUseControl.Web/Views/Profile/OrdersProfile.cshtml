@@ -4,35 +4,16 @@
 }
 
 @model IEnumerable<eUseControl.Web.Models.Order.OrderInfo>
-@using eUseControl.Domain.Enums
 
 <div class="card profile-card overflow-hidden">
     <div class="row no-gutters">
         <div class="col-md-3">
             <div class="list-group list-group-flush account-settings-links">
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("GeneralProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">General</a>
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("ChangePasswordProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    Change
-                    password
-                </a>
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("SettingsProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    Profile
-                    settings
-                </a>
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("ArticlesProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Articles</a>
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("OrdersProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    Orders
-                </a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("GeneralProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">General</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("ChangePasswordProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Change password</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("SettingsProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Profile settings</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("ArticlesProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Articles</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("OrdersProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Orders</a>
             </div>
         </div>
         <div class="col-md-9 py-5">
@@ -50,31 +31,31 @@
                     {
                         <div class="col-md-4 mb-2" style="margin-top: 25px; margin-bottom: 10px !important;">
                             <div class="order-card order-card-3 dark-card">
-                                <img src="@Url.Content(order.OrderImageUrl)" alt="Product"
-                                     class="product-image">
+                                <img src="@Url.Content(order.OrderImageUrl)" alt="Product" class="product-image">
                                 <div class="order-info">
-                                    <h5>Order number #@order.Id</h5>
+                                    <h5>Order number #@Html.DisplayFor(m => order.Id)</h5>
                                     <ul>
-                                        <li><strong>Total:</strong><span>$@order.TotalPrice</span></li>
-                                        <li><strong>Payment Method:</strong><span>@order.PaymentMethod</span></li>
-                                        <li><strong>Order Date:</strong><span>@order.OrderDate.ToString("dd/MM/yyyy")</span></li>
-                                        <li><strong>Order Status:</strong><span>@order.OrderStatus</span></li>
+                                        <li><strong>Total:</strong><span>$@Html.DisplayFor(m => order.TotalPrice)</span></li>
+                                        <li><strong>Payment Method:</strong><span>@Html.DisplayFor(m => order.PaymentMethod)</span></li>
+                                        <li><strong>Order Date:</strong><span style="margin-left: -10px;">@Html.Raw(order.OrderDate.ToString("dd MMM yyyy, HH:mm", System.Globalization.CultureInfo.InvariantCulture))</span></li>
+                                        <li><strong>Order Status:</strong><span>@Html.DisplayFor(m => order.OrderStatus)</span></li>
                                     </ul>
-                                    @{
-                                        var isDisabled = order.OrderStatus == OrderStatus.Delivering;
-                                    }
                                     @using (Html.BeginForm("CancelOrder", "Order", FormMethod.Post, new { @class = "d-flex justify-content-center mt-3 position-relative" }))
                                     {
                                         @Html.AntiForgeryToken()
-                                        <input type="hidden" name="orderId" value="@order.Id" />
-
-                                        <button type="submit"
-                                                class="btn btn-cancel-order rounded-pill px-lg-3 @(isDisabled ? "text-muted disabled" : "text-danger")"
-                                                style="white-space: nowrap !important; transition: all 0.3s ease !important; border: 1px solid @(isDisabled ? "#aaa" : "#FFB524"); background-color: @(isDisabled ? "#e0e0e0" : null) !important; color: @(isDisabled ? "#555" : "#dc3545") !important; box-shadow: @(isDisabled ? "inset 0 1px 3px rgba(0,0,0,0.2)" : "none") !important; margin-right: 130px !important; margin-top: 5px !important;"
-                                                onclick="return @(isDisabled ? "false" : "confirm('Are you sure you want to cancel this order?')");"
-                                                disabled="@(isDisabled ? "disabled" : null)">
-                                            @(isDisabled ? "Cannot Cancel" : "Cancel Order")
-                                        </button>
+                                        @Html.Hidden("orderId", order.Id)
+                                        if (order.OrderStatus == eUseControl.Domain.Enums.OrderStatus.Delivering)
+                                        {
+                                            <button type="button" class="btn btn-cancel-order rounded-pill px-lg-3 text-muted disabled" style="white-space: nowrap !important; transition: all 0.3s ease !important; border: 1px solid #aaa; background-color: #e0e0e0 !important; color: #555 !important; box-shadow: inset 0 1px 3px rgba(0,0,0,0.2) !important; margin-right: 130px !important; margin-top: 5px !important;" disabled>
+                                                Cannot Cancel
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" class="btn btn-cancel-order rounded-pill px-lg-3 text-danger" style="white-space: nowrap !important; transition: all 0.3s ease !important; border: 1px solid #FFB524; background-color: !important; color: #dc3545 !important; box-shadow: none !important; margin-right: 130px !important; margin-top: 5px !important;" onclick="return confirm('Are you sure you want to cancel this order?');">
+                                                Cancel Order
+                                            </button>
+                                        }
                                     }
                                 </div>
                             </div>
@@ -85,85 +66,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .order-card {
-        max-width: 320px;
-        background-color: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        overflow: hidden;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
-        margin-bottom: 10px;
-        min-height: 420px;
-    }
-
-        .order-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-        }
-
-    .product-image {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        display: block;
-    }
-
-    .order-info {
-        padding: 20px;
-    }
-
-        .order-info h5 {
-            color: #FFB524;
-            margin-bottom: 15px;
-            font-weight: 700;
-            font-size: 1.3rem;
-            letter-spacing: 0.05em;
-        }
-
-        .order-info ul {
-            padding-left: 0;
-            list-style: none;
-        }
-
-        .order-info li {
-            margin-bottom: 10px;
-            font-size: 0.95rem;
-            color: #555;
-            display: flex;
-            justify-content: space-between;
-        }
-
-            .order-info li strong {
-                color: #333;
-                min-width: 130px;
-            }
-
-    .btn-cancel-order:hover {
-        background-color: #FFB524;
-        color: #dc3545 !important;
-        border-color: #FFB524;
-    }
-
-    .order-info li {
-        margin-bottom: 8px;
-        font-size: 0.95rem;
-        color: #555;
-        display: flex;
-        flex-wrap: nowrap; 
-        justify-content: space-between;
-        white-space: nowrap; 
-        overflow: hidden; 
-        text-overflow: ellipsis; 
-    }
-
-        .order-info li span {
-            margin-left: 5px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 100%;
-        }
-</style>

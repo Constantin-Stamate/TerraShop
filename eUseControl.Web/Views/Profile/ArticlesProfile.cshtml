@@ -4,35 +4,16 @@
 }
 
 @model IEnumerable<eUseControl.Web.Models.Product.ProductCompact>
-@using eUseControl.Domain.Enums
 
 <div class="card profile-card overflow-hidden">
     <div class="row no-gutters">
         <div class="col-md-3">
             <div class="list-group list-group-flush account-settings-links">
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("GeneralProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">General</a>
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("ChangePasswordProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    Change
-                    password
-                </a>
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("SettingsProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    Profile
-                    settings
-                </a>
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("ArticlesProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Articles</a>
-                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary"
-                   href="@Url.Action("OrdersProfile", "Profile")"
-                   style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    Orders
-                </a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("GeneralProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">General</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("ChangePasswordProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Change password</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("SettingsProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Profile settings</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("ArticlesProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Articles</a>
+                <a class="list-group-item list-group-item-action btn border border-secondary rounded-pill px-3 text-primary" href="@Url.Action("OrdersProfile", "Profile")" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Orders</a>
             </div>
         </div>
         <div class="col-md-9 py-5">
@@ -52,52 +33,34 @@
                             <div class="card h-100 rounded position-relative shadow-sm border-0 anim">
                                 <div class="fruite2-img position-relative">
                                     <a href="@Url.Action("ProductDetails", "Product", new { productId = product.Id })">
-                                        <img src="@Url.Content(product.ProductImageUrl)"
-                                             class="img-fluid w-100 rounded-top card-img-top"
-                                             alt="Product Image"
-                                             style="object-fit: cover; height: 200px;">
+                                        <img src="@Url.Content(product.ProductImageUrl)" class="img-fluid w-100 rounded-top card-img-top" alt="Product Image" style="object-fit: cover; height: 200px;">
                                     </a>
                                     <div class="position-absolute top-0 end-0 m-2">
-                                        <form action="@Url.Action("ChangeProductStatus", "Product", new { productId = product.Id })" method="post">
+                                        @using (Html.BeginForm("ChangeProductStatus", "Product", FormMethod.Post))
+                                        {
                                             @Html.AntiForgeryToken()
-
-                                            @if (product.ProductStatus == ProductStatus.Available)
-                                            {
-                                                <button type="submit" class="btn btn-sm px-3 pulse-js" style="background-color: #FFB524; color: white;">
-                                                    Deactivate
-                                                </button>
-                                            }
-                                            else
-                                            {
-                                                <button type="submit" class="btn btn-sm px-3 pulse-js" style="background-color: #FFB524; color: white;">
-                                                    Activate
-                                                </button>
-                                            }
-                                        </form>
+                                            @Html.Hidden("productId", product.Id)
+                                            <button type="submit" class="btn btn-sm px-3 pulse-js" style="background-color: #FFB524; color: white;">
+                                                @(product.ProductStatus == eUseControl.Domain.Enums.ProductStatus.Available ? "Deactivate" : "Activate")
+                                            </button>
+                                        }
                                     </div>
                                 </div>
-                                <div class="card-body p-4 border border-top-0 rounded-bottom"
-                                     style="border-color: #f6ba31; min-height: 200px;">
-                                    <h5 class="card-title text-center product-name">@product.ProductName</h5>
-                                    <p class="card-text text-muted small product-description text-center">
-                                        @product.ProductDescription
-                                    </p>
+                                <div class="card-body p-4 border border-top-0 rounded-bottom" style="border-color: #f6ba31; min-height: 200px;">
+                                    <h5 class="card-title text-center product-name">@Html.DisplayFor(m => product.ProductName)</h5>
+                                    <p class="card-text text-muted small product-description text-center">@Html.DisplayFor(m => product.ProductDescription)</p>
                                     <p class="text-dark fs-5 fw-bold mb-0">
-                                        <span>$@product.ProductPrice</span>
+                                        <span>$@Html.DisplayFor(m => product.ProductPrice)</span>
                                     </p>
                                     <div class="d-flex justify-content-between flex-lg-wrap mt-3">
-                                        <a href="@Url.Action("UpdateProduct", "Product", new { Id = product.Id })"
-                                           class="btn rounded-pill px-3 text-primary" style="transition: all 0.3s ease; border: 1px solid #FFB524; text-decoration: none;">
+                                        <a href="@Url.Action("UpdateProduct", "Product", new { Id = product.Id })" class="btn rounded-pill px-3 text-primary" style="transition: all 0.3s ease; border: 1px solid #FFB524; text-decoration: none;">
                                             Change
                                         </a>
                                         @using (Html.BeginForm("DeleteProduct", "Product", FormMethod.Post, new { @class = "d-inline" }))
                                         {
                                             @Html.AntiForgeryToken()
-                                            <input type="hidden" name="productId" value="@product.Id" />
-                                            <button type="submit"
-                                                    class="btn btn-cancel-order text-danger rounded-pill px-3"
-                                                    style="transition: all 0.3s ease; border: 1px solid #FFB524; white-space: nowrap; transition: all 0.3s ease; text-decoration: none;"
-                                                    onclick="return confirm('Are you sure you want to delete this product?');">
+                                            @Html.Hidden("productId", product.Id)
+                                            <button type="submit" class="btn btn-cancel-order text-danger rounded-pill px-3" style="transition: all 0.3s ease; border: 1px solid #FFB524; white-space: nowrap; transition: all 0.3s ease; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this product?');">
                                                 Delete
                                             </button>
                                         }
@@ -111,74 +74,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .product-description {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: normal;
-        height: 3em;
-        line-height: 1.5em;
-        white-space: normal;
-        word-wrap: break-word;
-    }
-
-    .product-name {
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        height: 1.5em;
-        line-height: 1.5em;
-        word-wrap: break-word;
-    }
-
-    .btn-cancel-order {
-        border: 1px solid #FFB524;
-        transition: all 0.3s ease;
-    }
-
-        .btn-cancel-order:hover {
-            background-color: #FFB524;
-            color: #fff;
-            background-image: none;
-        }
-
-    .card-body {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
-    }
-
-        .card-body .product-description {
-            flex-grow: 1;
-        }
-
-        .card-body .btn {
-            margin-top: 10px;
-        }
-
-        .card-body p.text-dark {
-            margin-bottom: 10px;
-        }
-</style>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const buttons = document.querySelectorAll(".pulse-js");
-
-        buttons.forEach(button => {
-            setInterval(() => {
-                button.style.transform = "scale(1.05)";
-                setTimeout(() => {
-                    button.style.transform = "scale(1)";
-                }, 300);
-            }, 1000);
-        });
-    });
-</script>

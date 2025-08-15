@@ -34,7 +34,6 @@
                         </ul>
                     </div>
                 }
-
                 @if (TempData["SuccessMessage"] != null)
                 {
                     <div class="text-success no-bullets" style="text-align: center;">
@@ -42,17 +41,16 @@
                             <li>@TempData["SuccessMessage"]</li>
                         </ul>
                     </div>
-
                     <script>
-                        setTimeout(function () {
-                            window.location.href = '@Url.Action("Login", "Login")';
-                        }, 3500);
+                        setTimeout(function () { window.location.href = '@Url.Action("Login", "Login")'; }, 3500);
                     </script>
                 }
             </div>
             <div class="btn">
                 <div class="inner"></div>
-                <button type="submit" style="padding-top: 6px;">Register</button>
+                <button type="submit" style="padding-top: 6px;">
+                    Register
+                </button>
             </div>
             <div class="signup-link">
                 Already a member? <a href="@Url.Action("Login", "Login")">Log in here</a>
@@ -60,11 +58,3 @@
         }
     </div>
 </div>
-
-<style>
-    .no-bullets ul {
-        list-style: none;
-        padding-left: 0;
-        margin: 0;
-    }
-</style>

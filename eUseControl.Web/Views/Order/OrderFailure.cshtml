@@ -13,9 +13,9 @@
     </p>
     <p class="sub-msg">A problem occurred, and we could not complete your order.</p>
     <div class="order-details">
-        <p><strong>Order number:</strong> #@Model.Id</p>
-        <p><strong>Date:</strong> @Model.OrderDate</p>
-        <p><strong>Total:</strong> $@Model.TotalPrice</p>
+        <p><strong>Order number:</strong> #@Html.DisplayFor(model => Model.Id)</p>
+        <p><strong>Date:</strong> @Html.Raw(Model.OrderDate.ToString("dd MMM yyyy, HH:mm", System.Globalization.CultureInfo.InvariantCulture))</p>
+        <p><strong>Total:</strong> $@Html.DisplayFor(model => Model.TotalPrice)</p>
     </div>
     <a href="@Url.Action("Index", "Main")" class="btn-home-2" style="margin-top: 31px; color: white !important;">
         Back to home page
