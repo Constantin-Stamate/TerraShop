@@ -24,9 +24,14 @@ namespace eUseControl.Helpers
         private static string EncryptStringAes(string plainText, string sharedSecret)
         {
             if (string.IsNullOrEmpty(plainText))
+            {
                 throw new ArgumentNullException(nameof(plainText));
+            }
+
             if (string.IsNullOrEmpty(sharedSecret))
+            {
                 throw new ArgumentNullException(nameof(sharedSecret));
+            }
 
             string outStr;
             RijndaelManaged aesAlg = null;
@@ -44,6 +49,7 @@ namespace eUseControl.Helpers
                 {
                     msEncrypt.Write(BitConverter.GetBytes(aesAlg.IV.Length), 0, sizeof(int));
                     msEncrypt.Write(aesAlg.IV, 0, aesAlg.IV.Length);
+
                     using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
                     {
                         using (var swEncrypt = new StreamWriter(csEncrypt))
@@ -51,6 +57,7 @@ namespace eUseControl.Helpers
                             swEncrypt.Write(plainText);
                         }
                     }
+
                     outStr = Convert.ToBase64String(msEncrypt.ToArray());
                 }
             }
@@ -65,9 +72,14 @@ namespace eUseControl.Helpers
         private static string DecryptStringAes(string cipherText, string sharedSecret)
         {
             if (string.IsNullOrEmpty(cipherText))
+            {
                 throw new ArgumentNullException(nameof(cipherText));
+            }
+
             if (string.IsNullOrEmpty(sharedSecret))
+            {
                 throw new ArgumentNullException(nameof(sharedSecret));
+            }
 
             string plainText;
             RijndaelManaged aesAlg = null;
@@ -75,8 +87,8 @@ namespace eUseControl.Helpers
             try
             {
                 var key = new Rfc2898DeriveBytes(sharedSecret, Salt);
-
                 var bytes = Convert.FromBase64String(cipherText);
+
                 using (var msDecrypt = new MemoryStream(bytes))
                 {
                     aesAlg = new RijndaelManaged();
@@ -95,7 +107,9 @@ namespace eUseControl.Helpers
             finally
             {
                 if (aesAlg != null)
+                {
                     aesAlg.Clear();
+                }
             }
 
             return plainText;
@@ -105,11 +119,15 @@ namespace eUseControl.Helpers
         {
             var rawLength = new byte[sizeof(int)];
             if (s.Read(rawLength, 0, rawLength.Length) != rawLength.Length)
+            {
                 throw new SystemException("Stream did not contain properly formatted byte array");
+            }
 
             var buffer = new byte[BitConverter.ToInt32(rawLength, 0)];
             if (s.Read(buffer, 0, buffer.Length) != buffer.Length)
+            {
                 throw new SystemException("Did not read byte array properly");
+            }
 
             return buffer;
         }
