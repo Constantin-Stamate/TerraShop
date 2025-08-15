@@ -59,5 +59,10 @@ namespace eUseControl.BusinessLogic
         {
             return new ChatBL();
         }
+
+        public ISubscription GetSubscriptionBL()
+        {
+            return new SubscriptionBL();
+        }
     }
 }
