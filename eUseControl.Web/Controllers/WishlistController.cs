@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
-using eUseControl.Domain.Entities.Product;
 using eUseControl.Web.Models.Product;
 
 namespace eUseControl.Web.Controllers
@@ -12,16 +12,18 @@ namespace eUseControl.Web.Controllers
     {
         private readonly IWishlist _wishlist;
         private readonly ISession _session;
+        private readonly IMapper _mapper;
 
-        public WishlistController()
+        public WishlistController(IMapper mapper)
         {
             var bl = new BusinessLogicManager();
             _session = bl.GetSessionBL();
             _wishlist = bl.GetWishlistBL();
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult Wishlist()
+        public async Task<ActionResult> Wishlist()
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -35,22 +37,16 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            var products = _wishlist.GetAllWishlistProducts(user.Id);
+            var products = await _wishlist.GetAllWishlistProducts(user.Id);
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ProductLite, ProductInfo >();
-            });
-
-            var mapper = config.CreateMapper();
-            var productsList = mapper.Map<List<ProductInfo>>(products);
+            var productsList = _mapper.Map<List<ProductInfo>>(products);
 
             return View(productsList);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddProductToWishlist(int productId)
+        public async Task<ActionResult> AddProductToWishlist(int productId)
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -64,21 +60,21 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            var result = _wishlist.AddProductToWishlist(user.Id, productId);
+            var result = await _wishlist.AddProductToWishlist(user.Id, productId);
 
             if (result.Status)
             {
-                return RedirectToAction("Shop", "Shop", new { success = true });
+                return RedirectToAction("Wishlist", "Wishlist", new { success = true });
             }
             else
             {
-                return RedirectToAction("Shop", "Shop", new { error = true });
+                return RedirectToAction("Wishlist", "Wishlist", new { error = true });
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RemoveProductFromWishlist(int productId)
+        public async Task<ActionResult> RemoveProductFromWishlist(int productId)
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -92,15 +88,15 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            var result = _wishlist.RemoveProductFromWishlist(productId, user.Id);
+            var result = await _wishlist.RemoveProductFromWishlist(productId, user.Id);
 
             if (result.Status)
             {
-                return RedirectToAction("Shop", "Shop", new { success = true });
+                return RedirectToAction("Wishlist", "Wishlist", new { success = true });
             }
             else
             {
-                return RedirectToAction("Shop", "Shop", new { error = true });
+                return RedirectToAction("Wishlist", "Wishlist", new { error = true });
             }
         }
     }

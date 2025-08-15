@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using AutoMapper;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
@@ -11,12 +12,14 @@ namespace eUseControl.Web.Controllers
     {
         private readonly IContact _contact;
         private readonly ISession _session;
+        private readonly IMapper _mapper;
 
-        public ContactController()
+        public ContactController(IMapper mapper)
         {
             var bl = new BusinessLogicManager();
             _contact = bl.GetContactBL();
             _session = bl.GetSessionBL();
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -27,7 +30,7 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SubmitContactRequest(ContactCompact contactCompact)
+        public async Task<ActionResult> SubmitContactRequest(ContactCompact contactCompact)
         {
             if (ModelState.IsValid)
             {
@@ -43,15 +46,9 @@ namespace eUseControl.Web.Controllers
                     return RedirectToAction("Login", "Login", new { error = true });
                 }
 
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<ContactCompact, ContactData>();
-                });
+                var contactData = _mapper.Map<ContactData>(contactCompact);
 
-                var mapper = config.CreateMapper();
-                var contactData = mapper.Map<ContactData>(contactCompact);
-
-                var result = _contact.SubmitContactRequest(contactData, user.Id);
+                var result = await _contact.SubmitContactRequest(contactData, user.Id);
 
                 if (result.Status)
                 {

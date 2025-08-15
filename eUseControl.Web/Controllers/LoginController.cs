@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
@@ -12,11 +13,13 @@ namespace eUseControl.Web.Controllers
     public class LoginController : Controller
     {
         private readonly ISession _session;
+        private readonly IMapper _mapper;
 
-        public LoginController()
+        public LoginController(IMapper mapper)
         {
             var bl = new BusinessLogicManager();
             _session = bl.GetSessionBL();
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -27,38 +30,30 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(UserLogin login)
+        public async Task<ActionResult> Login(UserLogin login)
         {
             if (ModelState.IsValid)
             {
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<UserLogin, ULoginData>();
-                });
-
-                var mapper = config.CreateMapper();
-                var data = mapper.Map<ULoginData>(login);
+                var data = _mapper.Map<ULoginData>(login);
 
                 data.LastIp = Request.UserHostAddress;
                 data.LastLogin = DateTime.Now;
 
-                var userLogin = _session.UserLogin(data);
+                var userLogin = await _session.UserLogin(data);
 
                 if (userLogin.Status)
                 {
                     Session["UserId"] = userLogin.UserMinimal.Id;
                     Session["User"] = userLogin.UserMinimal;
 
-                    HttpCookie cookie = _session.GenCookie(login.Username);
+                    HttpCookie cookie = await _session.GenCookie(login.Username);
                     ControllerContext.HttpContext.Response.Cookies.Add(cookie);
 
                     return RedirectToAction("Index", "Main", new { success = true });
                 }
                 else
                 {
-                    ModelState.AddModelError("", userLogin.StatusMsg);
                     TempData["ErrorMessage"] = userLogin.StatusMsg;
-
                     return RedirectToAction("Login", "Login", new { error = true });
                 }
             }

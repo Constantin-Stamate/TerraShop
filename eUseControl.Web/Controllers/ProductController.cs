@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
-using eUseControl.Domain.Entities;
 using eUseControl.Domain.Entities.Product;
-using eUseControl.Domain.Entities.Profile;
-using eUseControl.Domain.Entities.Review;
 using eUseControl.Web.Models.Product;
-using eUseControl.Web.Models.User;
 using eUseControl.Web.Models.Profile;
 using eUseControl.Web.Models.Review;
-using eUseControl.Domain.Entities.User;
+using eUseControl.Web.Models.User;
 
 namespace eUseControl.Web.Controllers
 {
@@ -26,8 +23,9 @@ namespace eUseControl.Web.Controllers
         private readonly IReview _review;
         private readonly IProfile _profile;
         private readonly IWishlist _wishlist;
+        private readonly IMapper _mapper;
 
-        public ProductController()
+        public ProductController(IMapper mapper)
         {
             var bl = new BusinessLogicManager();
             _product = bl.GetProductBL();
@@ -35,17 +33,26 @@ namespace eUseControl.Web.Controllers
             _review = bl.GetReviewBL();
             _profile = bl.GetProfileBL();
             _wishlist = bl.GetWishlistBL();
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult AddProduct()
+        public async Task<ActionResult> AddProduct()
         {
-            return View();
+            var categories = await _product.ExtractCategories();
+
+            var model = new AddProductViewModel
+            {
+                Categories = categories,
+                Product = new Product()
+            };
+
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddProduct(Product product, HttpPostedFileBase productImageUrl)
+        public async Task<ActionResult> AddProduct(AddProductViewModel model, HttpPostedFileBase productImageUrl)
         {
             if (ModelState.IsValid)
             {
@@ -74,7 +81,10 @@ namespace eUseControl.Web.Controllers
                     {
                         try
                         {
-                            productImageUrl.SaveAs(filePath);
+                            using (var fileStream = System.IO.File.Create(filePath))
+                            {
+                                await productImageUrl.InputStream.CopyToAsync(fileStream);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -83,21 +93,13 @@ namespace eUseControl.Web.Controllers
                         }
                     }
 
-                    product.ProductImageUrl = "~/Uploads/products/" + fileName;
+                    model.Product.ProductImageUrl = "~/Uploads/products/" + fileName;
                 }
                 else
                 {
                     TempData["ErrorMessage"] = "Product image is required!";
                     return RedirectToAction("AddProduct", "Product", new { error = true });
                 }
-
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Product, ProductData>();
-                });
-
-                var mapper = config.CreateMapper();
-                var productData = mapper.Map<ProductData>(product);
 
                 var cookie = Request.Cookies["X-KEY"]?.Value;
                 if (string.IsNullOrEmpty(cookie))
@@ -111,7 +113,9 @@ namespace eUseControl.Web.Controllers
                     return RedirectToAction("Login", "Login", new { error = true });
                 }
 
-                var result = _product.CreateProduct(productData, user.Id);
+                var productData = _mapper.Map<ProductData>(model.Product);
+
+                var result = await _product.CreateProduct(productData, user.Id);
 
                 if (result.Status)
                 {
@@ -120,9 +124,7 @@ namespace eUseControl.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", result.StatusMsg);
                     TempData["ErrorMessage"] = result.StatusMsg;
-
                     return RedirectToAction("AddProduct", "Product", new { error = true });
                 }
             }
@@ -134,40 +136,26 @@ namespace eUseControl.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult UpdateProduct(int Id)
+        public async Task<ActionResult> UpdateProduct(int Id)
         {
-            var cookie = Request.Cookies["X-KEY"]?.Value;
-            if (string.IsNullOrEmpty(cookie))
+            var productData = await _product.GetProductById(Id);
+
+            var product = _mapper.Map<Product>(productData);
+
+            var categories = await _product.ExtractCategories();
+
+            var model = new AddProductViewModel
             {
-                return RedirectToAction("Login", "Login", new { error = true });
-            }
+                Categories = categories,
+                Product = product
+            };
 
-            var user = _session.GetUserByCookie(cookie);
-            if (user == null)
-            {
-                return RedirectToAction("Login", "Login", new { error = true });
-            }
-
-            var productData = _product.GetProductById(Id);
-            if (productData == null)
-            {
-                return RedirectToAction("ArticlesProfile", "Profile", new { error = true });
-            }
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ProductData, Product>();
-            });
-
-            var mapper = config.CreateMapper();
-            var product = mapper.Map<Product>(productData);
-
-            return View(product);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateProduct(Product product, HttpPostedFileBase productImageUrl)
+        public async Task<ActionResult> UpdateProduct(AddProductViewModel model, HttpPostedFileBase productImageUrl)
         {
             if (ModelState.IsValid)
             {
@@ -196,7 +184,10 @@ namespace eUseControl.Web.Controllers
                     {
                         try
                         {
-                            productImageUrl.SaveAs(filePath);
+                            using (var fileStream = System.IO.File.Create(filePath))
+                            {
+                                await productImageUrl.InputStream.CopyToAsync(fileStream);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -205,30 +196,12 @@ namespace eUseControl.Web.Controllers
                         }
                     }
 
-                    product.ProductImageUrl = "~/Uploads/products/" + fileName;
+                    model.Product.ProductImageUrl = "~/Uploads/products/" + fileName;
                 }
 
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Product, ProductData>();
-                });
+                var productData = _mapper.Map<ProductData>(model.Product);
 
-                var mapper = config.CreateMapper();
-                var productData = mapper.Map<ProductData>(product);
-
-                var cookie = Request.Cookies["X-KEY"]?.Value;
-                if (string.IsNullOrEmpty(cookie))
-                {
-                    return RedirectToAction("Login", "Login", new { error = true });
-                }
-
-                var user = _session.GetUserByCookie(cookie);
-                if (user == null)
-                {
-                    return RedirectToAction("Login", "Login", new { error = true });
-                }
-
-                var result = _product.UpdateProduct(productData);
+                var result = await _product.UpdateProduct(productData);
 
                 if (result.Status)
                 {
@@ -237,9 +210,7 @@ namespace eUseControl.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", result.StatusMsg);
                     TempData["ErrorMessage"] = result.StatusMsg;
-
                     return RedirectToAction("UpdateProduct", "Product", new { error = true });
                 }
             }
@@ -251,7 +222,7 @@ namespace eUseControl.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult ProductDetails(int productId, int? reviewId)
+        public async Task<ActionResult> ProductDetails(int productId, int? reviewId)
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -265,58 +236,50 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            var productData = _product.GetProductById(productId);
+            var activeUser = _mapper.Map<UserCompact>(userMinimal);
+
+            var productData = await _product.GetProductById(productId);
             if (productData == null)
             {
                 return RedirectToAction("Shop", "Shop", new { error = true });
             }
 
-            var userData = _session.GetUserById(productData.UserId);
+            var product = _mapper.Map<Product>(productData);
+
+            var userData = await _session.GetUserById(productData.UserId);
             if (userData == null)
             {
                 return RedirectToAction("Shop", "Shop", new { error = true });
             }
 
-            var allReviews = _review.GetReviewsByProductId(productId);
+            var user = _mapper.Map<UserCompact>(userData);
 
-            var allRecommendedProducts = _product.GetRecommendedProducts();
+            var allRecommendedProducts = await _product.GetRecommendedProducts();
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ReviewData, ReviewCompact>();
-                cfg.CreateMap<ProfileData, ProfileMini>();
-                cfg.CreateMap<ProductData, Product>();
-                cfg.CreateMap<UserSummary, UserCompact>();
-                cfg.CreateMap<UserMinimal, UserCompact>();
-                cfg.CreateMap<ProductSummary, ProductMini>();
-            });
+            var recommendedProducts = _mapper.Map<List<ProductMini>>(allRecommendedProducts);
 
-            var mapper = config.CreateMapper();
-
-            var recommendedProducts = mapper.Map<List<ProductMini>>(allRecommendedProducts);
+            var allReviews = await _review.GetReviewsByProductId(productId);
 
             var reviewProfileDict = new Dictionary<ReviewCompact, ProfileMini>();
 
             foreach (var reviewData in allReviews)
             {
-                var review = mapper.Map<ReviewCompact>(reviewData);
-                var profileData = _profile.GetProfileByUserId(reviewData.UserId);
+                var review = _mapper.Map<ReviewCompact>(reviewData);
+
+                var profileData = await _profile.GetProfileByUserId(reviewData.UserId);
                 if (profileData != null)
                 {
-                    var profile = mapper.Map<ProfileMini>(profileData);
+                    var profile = _mapper.Map<ProfileMini>(profileData);
                     reviewProfileDict.Add(review, profile);
                 }
             }
 
-            var product = mapper.Map<Product>(productData);
-            var user = mapper.Map<UserCompact>(userData);
-            var activeUser = mapper.Map<UserCompact>(userMinimal);
-
             ReviewCompact reviewToEdit;
+
             if (reviewId.HasValue && reviewId != 0)
             {
-                var reviewData = _review.GetReviewById(reviewId);
-                reviewToEdit = mapper.Map<ReviewCompact>(reviewData);
+                var reviewData = await _review.GetReviewById(reviewId);
+                reviewToEdit = _mapper.Map<ReviewCompact>(reviewData);
             }
             else
             {
@@ -328,7 +291,7 @@ namespace eUseControl.Web.Controllers
                 };
             }
 
-            var productIds = _wishlist.GetWishlistProductIds(user.Id);
+            var productIds = await _wishlist.GetWishlistProductIds(user.Id);
 
             var model = new ProductDetailsViewModel
             {
@@ -346,15 +309,9 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ChangeProductStatus(int productId)
+        public async Task<ActionResult> ChangeProductStatus(int productId)
         {
-            var cookie = Request.Cookies["X-KEY"]?.Value;
-            if (string.IsNullOrEmpty(cookie))
-            {
-                return RedirectToAction("Login", "Login", new { error = true });
-            }
-
-            var result = _product.UpdateProductStatus(productId);
+            var result = await _product.UpdateProductStatus(productId);
 
             if (result.Status)
             {
@@ -368,21 +325,9 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteProduct(int productId)
+        public async Task<ActionResult> DeleteProduct(int productId)
         {
-            var cookie = Request.Cookies["X-KEY"]?.Value;
-            if (string.IsNullOrEmpty(cookie))
-            {
-                return RedirectToAction("Login", "Login", new { error = true });
-            }
-
-            var userMinimal = _session.GetUserByCookie(cookie);
-            if (userMinimal == null)
-            {
-                return RedirectToAction("Login", "Login", new { error = true });
-            }
-
-            var result = _product.RemoveProduct(productId);
+            var result = await _product.RemoveProduct(productId);
 
             if (result.Status)
             {

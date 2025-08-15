@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
-using eUseControl.Domain.Entities.Product;
 using eUseControl.Web.Models.Product;
 
 namespace eUseControl.Web.Controllers
@@ -15,17 +15,19 @@ namespace eUseControl.Web.Controllers
         private readonly IProduct _product;
         private readonly IWishlist _wishlist;
         private readonly ISession _session;
+        private readonly IMapper _mapper;
 
-        public ShopController()
+        public ShopController(IMapper mapper)
         {
             var bl = new BusinessLogicManager();
             _product = bl.GetProductBL();
             _wishlist = bl.GetWishlistBL();
             _session = bl.GetSessionBL();
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult Shop(string country, string searchQuery, string maxPrice, string sortOption, int? categoryId, int page = 1)
+        public async Task<ActionResult> Shop(string country, string searchQuery, string maxPrice, string sortOption, int? categoryId, int page = 1)
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -39,66 +41,43 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            List<ProductSummary> productsList;
-            int value = 0;
+            int.TryParse(maxPrice, out var value);
 
-            if (!string.IsNullOrEmpty(maxPrice) && maxPrice != "0")
+            var productsList = (categoryId == 0 || !categoryId.HasValue) ? await _product.GetAvailableProducts() : await _product.GetAvailableProductsByCategoryId(categoryId);
+
+            if (value > 0)
             {
-                value = int.Parse(maxPrice);
+                productsList = await _product.GetProductsByMaxPrice(value, productsList);
             }
 
-            if (categoryId == 0 || !categoryId.HasValue)
+            if (!string.IsNullOrWhiteSpace(searchQuery))
             {
-                productsList = _product.GetAvailableProducts();
-            }
-            else
-            {
-                productsList = _product.GetAvailableProductsByCategoryId(categoryId);
+                productsList = await _product.GetProductsBySearchQuery(searchQuery, productsList);
             }
 
-            if (value != 0)
+            if (!string.IsNullOrWhiteSpace(country))
             {
-                productsList = _product.GetProductsByMaxPrice(value, productsList);
+                productsList = await _product.GetProductsByCountry(country, productsList);
             }
 
-            if (!string.IsNullOrEmpty(searchQuery))
-            {
-                productsList = _product.GetProductsBySearchQuery(searchQuery, productsList);
-            }
-
-            if (!string.IsNullOrEmpty(country))
-            {
-                productsList = _product.GetProductsByCountry(country, productsList);
-            }
-
-            productsList = _product.SortProducts(sortOption, productsList);
+            productsList = await _product.SortProducts(sortOption, productsList);
 
             var categoryProductCounts = _product.GetCategoryProductCounts();
 
-            var allRecommendedProducts = _product.GetRecommendedProducts();
+            var allRecommendedProducts = await _product.GetRecommendedProducts();
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ProductSummary, ProductMini>();
-                cfg.CreateMap<CategoryDbTable, ProductCategory>();
-            });
+            var products = _mapper.Map<List<ProductMini>>(productsList);
+            var productCountsByCategory = _mapper.Map<Dictionary<ProductCategory, int>>(categoryProductCounts);
+            var recommendedProducts = _mapper.Map<List<ProductMini>>(allRecommendedProducts);
 
-            var mapper = config.CreateMapper();
-
-            var products = mapper.Map<List<ProductMini>>(productsList);
-            var productCountsByCategory = mapper.Map<Dictionary<ProductCategory, int>>(categoryProductCounts);
-            var recommendedProducts = mapper.Map<List<ProductMini>>(allRecommendedProducts);
-
-            int pageSize = 12;
-            var totalProducts = productsList.Count();
-            int totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
-
+            const int pageSize = 12;
+            var totalPages = (int)Math.Ceiling(productsList.Count / (double)pageSize);
             var productsForCurrentPage = products
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
 
-            var productIds = _wishlist.GetWishlistProductIds(user.Id);
+            var productIds = await _wishlist.GetWishlistProductIds(user.Id);
 
             var model = new ProductCatalogViewModel
             {

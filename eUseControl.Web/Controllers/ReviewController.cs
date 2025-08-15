@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
+using AutoMapper;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities.Review;
@@ -11,18 +13,20 @@ namespace eUseControl.Web.Controllers
         private readonly IReview _review;
         private readonly ISession _session;
         private readonly IProduct _product;
+        private readonly IMapper _mapper;
 
-        public ReviewController()
+        public ReviewController(IMapper mapper)
         {
             var bl = new BusinessLogicManager();
             _review = bl.GetReviewBL();
-            _session = bl.GetSessionBL();  
+            _session = bl.GetSessionBL();
             _product = bl.GetProductBL();
+            _mapper = mapper;
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostReview(ProductDetailsViewModel model)
+        public async Task<ActionResult> PostReview(ProductDetailsViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -38,26 +42,11 @@ namespace eUseControl.Web.Controllers
                     return RedirectToAction("Login", "Login", new { error = true });
                 }
 
-                var reviewData = new ReviewData
-                {
-                    Id = model.ReviewCompact.Id,
-                    ProductId = model.ReviewCompact.ProductId,
-                    Review = model.ReviewCompact.Review,
-                    Rating = model.ReviewCompact.Rating
-                };
+                var reviewData = _mapper.Map<ReviewData>(model.ReviewCompact);
 
-                ReviewResp result;
+                var result = reviewData.Id > 0 ? await _review.UpdateReview(reviewData) : await _review.CreateReview(reviewData, user.Id);
 
-                if (reviewData.Id > 0)
-                {
-                    result = _review.UpdateReview(reviewData);
-                    var status = _product.UpdateProductRating(model.ReviewCompact.ProductId);
-                }
-                else
-                {
-                    result = _review.CreateReview(reviewData, user.Id);
-                    var status = _product.UpdateProductRating(model.ReviewCompact.ProductId);
-                }
+                var status = await _product.UpdateProductRating(model.ReviewCompact.ProductId);
 
                 if (result.Status)
                 {
@@ -66,7 +55,6 @@ namespace eUseControl.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", result.StatusMsg);
                     TempData["ErrorMessage"] = result.StatusMsg;
                     return RedirectToAction("ProductDetails", "Product", new { productId = reviewData.ProductId, error = true });
                 }
@@ -80,22 +68,11 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteReview(int reviewId, int productId)
+        public async Task<ActionResult> DeleteReview(int reviewId, int productId)
         {
-            var cookie = Request.Cookies["X-KEY"]?.Value;
-            if (string.IsNullOrEmpty(cookie))
-            {
-                return RedirectToAction("Login", "Login", new { error = true });
-            }
+            var result = await _review.DeleteReview(reviewId);
 
-            var user = _session.GetUserByCookie(cookie);
-            if (user == null)
-            {
-                return RedirectToAction("Login", "Login", new { error = true });
-            }
-
-            var result = _review.DeleteReview(reviewId);
-            var status = _product.UpdateProductRating(productId);
+            var status = await _product.UpdateProductRating(productId);
 
             if (result.Status)
             {

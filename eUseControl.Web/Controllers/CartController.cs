@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
-using eUseControl.Domain.Entities.Cart;
 using eUseControl.Web.Models.Cart;
 
 namespace eUseControl.Web.Controllers
@@ -12,16 +12,18 @@ namespace eUseControl.Web.Controllers
     {
         private readonly ISession _session;
         private readonly ICart _cart;
+        private readonly IMapper _mapper;
 
-        public CartController()
+        public CartController(IMapper mapper)
         {
             var bl = new BusinessLogicManager();
             _session = bl.GetSessionBL();
             _cart = bl.GetCartBL();
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult Cart()
+        public async Task<ActionResult> Cart()
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -35,22 +37,16 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            var allCartItems = _cart.GetCartItemsByUserId(user.Id);
+            var allCartItems = await _cart.GetCartItemsByUserId(user.Id);
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<CartData, CartCompact>();
-            });
-
-            var mapper = config.CreateMapper();
-            var cartItems = mapper.Map<List<CartCompact>>(allCartItems);
+            var cartItems = _mapper.Map<List<CartCompact>>(allCartItems);
 
             return View(cartItems);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddProductToCart(int productId)
+        public async Task<ActionResult> AddProductToCart(int productId)
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -64,7 +60,7 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            var result = _cart.AddItemToCart(productId, user.Id);
+            var result = await _cart.AddItemToCart(productId, user.Id);
 
             if (result.Status)
             {
@@ -78,7 +74,7 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RemoveProductFromCart(int productId)
+        public async Task<ActionResult> RemoveProductFromCart(int productId)
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -92,7 +88,7 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            var result = _cart.RemoveItemFromCart(productId, user.Id);
+            var result = await _cart.RemoveItemFromCart(productId, user.Id);
 
             if (result.Status)
             {
@@ -106,7 +102,7 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateProductQuantity(int productId, int newQuantity)
+        public async Task<ActionResult> UpdateProductQuantity(int productId, int newQuantity)
         {
             var cookie = Request.Cookies["X-KEY"]?.Value;
             if (string.IsNullOrEmpty(cookie))
@@ -120,7 +116,7 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Login", "Login", new { error = true });
             }
 
-            var result = _cart.ChangeProductQuantity(productId, user.Id, newQuantity);
+            var result = await _cart.ChangeProductQuantity(productId, user.Id, newQuantity);
 
             if (result.Status)
             {
