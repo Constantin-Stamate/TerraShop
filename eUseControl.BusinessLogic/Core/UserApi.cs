@@ -18,6 +18,7 @@ using eUseControl.Domain.Entities.Payment;
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Profile;
 using eUseControl.Domain.Entities.Review;
+using eUseControl.Domain.Entities.Subscription;
 using eUseControl.Domain.Entities.User;
 using eUseControl.Domain.Entities.Wishlist;
 using eUseControl.Domain.Enums;
@@ -2777,6 +2778,60 @@ namespace eUseControl.BusinessLogic.Core
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return new List<string>();
+            }
+        }
+
+        internal async Task<SubscriptionResp> CreateSubscriptionAction(string email)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(email))
+                {
+                    return new SubscriptionResp
+                    {
+                        Status = false,
+                        StatusMsg = "Email cannot be empty!"
+                    };
+                }
+
+                using (var db = new SubscriptionContext())
+                {
+                    var existingSubscriber = await db.Subscribers
+                        .FirstOrDefaultAsync(s => s.Email == email);
+
+                    if (existingSubscriber != null)
+                    {
+                        return new SubscriptionResp
+                        {
+                            Status = false,
+                            StatusMsg = "Email is already subscribed!"
+                        };
+                    }
+
+                    var subscription = new SubscriptionDbTable
+                    {
+                        Email = email,
+                        SubscriptionDate = DateTime.Now
+                    };
+
+                    db.Subscribers.Add(subscription);
+                    await db.SaveChangesAsync();
+
+                    return new SubscriptionResp
+                    {
+                        Status = true,
+                        StatusMsg = "Subscription created successfully!"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new SubscriptionResp
+                {
+                    Status = false,
+                    StatusMsg = "An error occurred while creating subscription!"
+                };
             }
         }
     }

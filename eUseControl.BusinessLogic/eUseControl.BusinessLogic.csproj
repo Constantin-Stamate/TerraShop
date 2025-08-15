@@ -64,6 +64,7 @@
     <Compile Include="BusinessLayer\ManagementBL.cs" />
     <Compile Include="BusinessLayer\OrderBL.cs" />
     <Compile Include="BusinessLayer\ReviewBL.cs" />
+    <Compile Include="BusinessLayer\SubscriptionBL.cs" />
     <Compile Include="BusinessLayer\TransactionBL.cs" />
     <Compile Include="BusinessLayer\WishlistBL.cs" />
     <Compile Include="BusinessLogicManager.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="DBModel\ProfileContext.cs" />
     <Compile Include="DBModel\ReviewContext.cs" />
     <Compile Include="DBModel\SessionContext.cs" />
+    <Compile Include="DBModel\SubscriptionContext.cs" />
     <Compile Include="DBModel\TransactionContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="DBModel\WishlistContext.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="Interfaces\IProfile.cs" />
     <Compile Include="Interfaces\IReview.cs" />
     <Compile Include="Interfaces\ISession.cs" />
+    <Compile Include="Interfaces\ISubscription.cs" />
     <Compile Include="Interfaces\ITransaction.cs" />
     <Compile Include="Interfaces\IWishlist.cs" />
     <Compile Include="BusinessLayer\ProductBL.cs" />
@@ -145,6 +148,11 @@
       <DependentUpon>202506051615493_CreateUserSessionsTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Session\Configuration.cs" />
+    <Compile Include="Migrations\Subscription\202508151630054_CreateSubscribersTable.cs" />
+    <Compile Include="Migrations\Subscription\202508151630054_CreateSubscribersTable.Designer.cs">
+      <DependentUpon>202508151630054_CreateSubscribersTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Subscription\Configuration.cs" />
     <Compile Include="Migrations\Transaction\202506051753228_CreateUserTransactionsTable.cs" />
     <Compile Include="Migrations\Transaction\202506051753228_CreateUserTransactionsTable.Designer.cs">
       <DependentUpon>202506051753228_CreateUserTransactionsTable.cs</DependentUpon>
@@ -207,6 +215,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Session\202506051615493_CreateUserSessionsTable.resx">
       <DependentUpon>202506051615493_CreateUserSessionsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Subscription\202508151630054_CreateSubscribersTable.resx">
+      <DependentUpon>202508151630054_CreateSubscribersTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Transaction\202506051753228_CreateUserTransactionsTable.resx">
       <DependentUpon>202506051753228_CreateUserTransactionsTable.cs</DependentUpon>

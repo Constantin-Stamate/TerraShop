@@ -202,6 +202,8 @@
     <Compile Include="Entities\Review\ReviewDbTable.cs" />
     <Compile Include="Entities\Review\ReviewResp.cs" />
     <Compile Include="Entities\Review\ReviewSummary.cs" />
+    <Compile Include="Entities\Subscription\SubscriptionDbTable.cs" />
+    <Compile Include="Entities\Subscription\SubscriptionResp.cs" />
     <Compile Include="Entities\User\SessionDbTable.cs" />
     <Compile Include="Entities\User\UDbTable.cs" />
     <Compile Include="Entities\User\ULoginData.cs" />
