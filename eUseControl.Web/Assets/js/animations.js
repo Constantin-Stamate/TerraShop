@@ -14,7 +14,7 @@
     const buttons = document.querySelectorAll(".pulse-js");
     buttons.forEach(button => {
         setInterval(() => {
-            button.style.transform = "scale(1.05)";
+            button.style.transform = "scale(1.01)";
             setTimeout(() => {
                 button.style.transform = "scale(1)";
             }, 300);
