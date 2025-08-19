@@ -170,6 +170,7 @@
     <Content Include="Assets\img\chat-icons\terra.svg" />
     <Content Include="Assets\img\chat-icons\user.png" />
     <Content Include="Assets\img\favicon.ico" />
+    <Content Include="Assets\img\demo.png" />
     <Content Include="Assets\img\order\order-icon-1.jpg" />
     <Content Include="Assets\img\order\order-icon-2.jpg" />
     <Content Include="Assets\img\popular-products\popular-product-1.jpg" />
