@@ -71,7 +71,7 @@
                     {
                         <div class="position-relative mx-auto">
                             @Html.TextBox("searchQuery", null, new { @class = "form-control border-2 border-secondary w-75 py-3 px-4 rounded-pill", type = "search", placeholder = "Search" })
-                            <button type="submit" class="btn btn-primary border-2 border-secondary py-3 px-4 position-absolute rounded-pill text-white h-100" style="top: 0; right: 25%;">
+                            <button type="submit" class="btn btn-primary border-2 border-secondary py-3 px-4 position-absolute rounded-pill text-white h-100 pulse-js" style="top: 0; right: 25%;">
                                 Submit Now
                             </button>
                         </div>
@@ -180,7 +180,7 @@
                         <h1 class="display-3 text-white">Shop with Purpose</h1>
                         <p class="fw-normal display-3 text-dark mb-4">NGO & Eco Support</p>
                         <p class="mb-4 text-dark">Every purchase you make at TerraShop helps NGOs and artisans create a better future. Discover handcrafted, recycled, and eco-friendly products that give back to the community while protecting the planet.</p>
-                        <a href="@Url.Action("Index", "Main")" class="banner-btn btn border-2 border-white rounded-pill text-dark py-3 px-5" style="transition: background-color 0.3s ease, color 0.3s ease;" onmouseover="this.style.backgroundColor='#FFB524'; this.style.borderColor='#FFB524'; this.style.color='white';" onmouseout="this.style.backgroundColor='transparent'; this.style.borderColor='white'; this.style.color='black';">
+                        <a href="@Url.Action("Index", "Main")" class="banner-btn btn border-2 border-white rounded-pill text-dark py-3 px-5 pulse-js" style="transition: background-color 0.3s ease, color 0.3s ease;" onmouseover="this.style.backgroundColor='#FFB524'; this.style.borderColor='#FFB524'; this.style.color='white';" onmouseout="this.style.backgroundColor='transparent'; this.style.borderColor='white'; this.style.color='black';">
                             DISCOVER MORE
                         </a>
                     </div>
@@ -296,7 +296,7 @@
                         <h1 class="display-3 text-white">Sustainable Picks</h1>
                         <p class="fw-normal display-3 text-dark mb-4">Shop at TerraShop</p>
                         <p class="mb-4 text-dark">Explore a diverse range of eco-friendly products, crafted with sustainability in mind, to support a greener and healthier future. Our products are designed to reduce environmental impact while offering you high-quality, sustainable alternatives for everyday use.</p>
-                        <a href="@Url.Action("Shop", "Shop")" class="banner-btn btn border-2 border-white rounded-pill text-dark py-3 px-5">
+                        <a href="@Url.Action("Shop", "Shop")" class="banner-btn btn border-2 border-white rounded-pill text-dark py-3 px-5 pulse-js">
                             BUY NOW
                         </a>
                     </div>
