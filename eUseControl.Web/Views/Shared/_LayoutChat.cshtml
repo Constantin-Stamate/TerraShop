@@ -51,12 +51,8 @@
 
     @RenderBody()
 
-    <!-- Back to Top -->
-    <a href="@Url.Action("Chat", "Chat")" class="btn btn-primary border-3 border-primary rounded-circle back-to-top">
-        <i class="fa fa-arrow-up"></i>
-    </a>
-
     <!-- JavaScript Libraries -->
+    @Scripts.Render("~/bundles/animations/js")
     <script src="/Assets/js/chat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>

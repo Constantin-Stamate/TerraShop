@@ -80,6 +80,7 @@
     <Compile Include="ServicesTests\ProfileTests.cs" />
     <Compile Include="ServicesTests\ReviewTests.cs" />
     <Compile Include="ServicesTests\SessionTests.cs" />
+    <Compile Include="ServicesTests\SubscriptionTests.cs" />
     <Compile Include="ServicesTests\TransactionTests.cs" />
     <Compile Include="ServicesTests\WishlistTests.cs" />
   </ItemGroup>

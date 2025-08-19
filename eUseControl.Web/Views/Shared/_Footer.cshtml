@@ -17,7 +17,7 @@
                     @Html.AntiForgeryToken()
                     <div class="position-relative mx-auto">
                         @Html.TextBox("email", null, new { @class = "form-control border-0 w-100 py-3 px-4 rounded-pill", placeholder = "Your Email", type = "text", required = "required" })
-                        <button type="submit" class="btn btn-primary border-0 border-secondary py-3 px-4 position-absolute rounded-pill text-white" style="top: 0; right: 0;">
+                        <button type="submit" class="btn btn-primary border-0 border-secondary py-3 px-4 position-absolute rounded-pill text-white pulse-js" style="top: 0; right: 0;">
                             Subscribe Now
                         </button>
                     </div>
@@ -46,7 +46,7 @@
             <div class="footer-item">
                 <h4 class="text-light mb-3">Why People Like us!</h4>
                 <p class="mb-4">Connecting customers with unique, eco-friendly products, promoting sustainability and supporting small businesses worldwide</p>
-                <a href="@Url.Action("Index", "Main")" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Read More</a>
+                <a href="@Url.Action("Index", "Main")" class="btn border-secondary py-2 px-4 rounded-pill text-primary pulse-js">Read More</a>
             </div>
         </div>
         <div class="col-lg-3 col-md-6">

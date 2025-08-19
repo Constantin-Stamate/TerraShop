@@ -86,11 +86,11 @@
             @Html.Label("securitycode", "Security code")
             @Html.TextBoxFor(m => m.Cvv, new { @class = "form-control", @id = "securitycode", @name = "securityCode", @type = "text", @maxlength = "3", @inputmode = "numeric", @style = "height: 40px", required = "required" })
         </div>
-        <a href="@Url.Action("Index", "Main")" class="animated-button-2" style="display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; background-color: #B22222; color: #fff; border: 2px; border-radius: 5px; font-size: 15px; cursor: pointer; transition: background-color 0.3s ease; margin-left: 30px;">
-            Cancel
-        </a>
-        <button type="submit" class="animated-button" style="padding: 8px 16px; background-color: #81c408; color: #fff; border: 2px; border-radius: 5px; font-size: 15px; cursor: pointer; transition: background-color 0.3s ease; margin-right: 30px;">
-            <span class="text" style="color: white !important; visibility: visible !important;">Confirm</span>
+        <button type="button" onclick="window.location='@Url.Action("Index","Main")'" class="btn-recycle btn border border-secondary pulse-js" style="padding: 8px 16px; border: 2px; font-size: 15px; cursor: pointer; color: #B22222; margin-top: 7px; margin-right: 15px;">
+            <i class="fas fa-times" style="margin-right: 6px; color: #B22222;"></i>Cancel
+        </button>
+        <button type="submit" class="btn-recycle btn border border-secondary pulse-js" style="padding: 8px 16px; border: 2px; font-size: 15px; cursor: pointer; margin-top: 7px; margin-left: 15px;">
+            <i class="fas fa-check" style="margin-right: 6px;"></i>Confirm
         </button>
     </div>
 }

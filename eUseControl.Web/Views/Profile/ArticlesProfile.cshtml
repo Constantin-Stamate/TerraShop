@@ -53,14 +53,14 @@
                                         <span>$@Html.DisplayFor(m => product.ProductPrice)</span>
                                     </p>
                                     <div class="d-flex justify-content-between flex-lg-wrap mt-3">
-                                        <a href="@Url.Action("UpdateProduct", "Product", new { Id = product.Id })" class="btn rounded-pill px-3 text-primary" style="transition: all 0.3s ease; border: 1px solid #FFB524; text-decoration: none;">
+                                        <a href="@Url.Action("UpdateProduct", "Product", new { Id = product.Id })" class="btn rounded-pill px-3 pulse-js" style="transition: all 0.3s ease; border: 1px solid #FFB524; text-decoration: none; color: #81C408;" onmouseover="this.style.color='white'" onmouseout="this.style.color='#81C408'">
                                             Change
                                         </a>
                                         @using (Html.BeginForm("DeleteProduct", "Product", FormMethod.Post, new { @class = "d-inline" }))
                                         {
                                             @Html.AntiForgeryToken()
                                             @Html.Hidden("productId", product.Id)
-                                            <button type="submit" class="btn btn-cancel-order text-danger rounded-pill px-3" style="transition: all 0.3s ease; border: 1px solid #FFB524; white-space: nowrap; transition: all 0.3s ease; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this product?');">
+                                            <button type="submit" class="btn rounded-pill px-3 pulse-js" style="color: #B22222; transition: all 0.3s ease; border: 1px solid #FFB524; white-space: nowrap; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this product?');" onmouseover="this.style.backgroundColor='#FFB524'; this.style.color='#fff';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#dc3545';">
                                                 Delete
                                             </button>
                                         }
