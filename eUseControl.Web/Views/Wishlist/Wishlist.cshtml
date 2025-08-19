@@ -64,8 +64,8 @@
                                 {
                                     @Html.AntiForgeryToken()
                                     @Html.Hidden("productId", product.Id)
-                                    <button type="submit" class="btn mt-4 px-4 py-2 pulse-js" style="background-color: @(product.ProductQuantity > 0 ? "#FFB524" : "#ccc"); border: none; color: @(product.ProductQuantity > 0 ? "#fff" : "#666"); border-radius: 30px; font-weight: 600; cursor: @(product.ProductQuantity > 0 ? "pointer" : "not-allowed");" @(product.ProductQuantity == 0 ? "disabled" : "")>
-                                        <i class="fa fa-shopping-bag me-2"></i> Add to Cart
+                                    <button type="submit" class="btn-recycle btn border border-secondary mt-4 px-4 py-2 pulse-js" style="background-color: @(product.ProductQuantity > 0 ? "white" : "#DCDCDC"); color: @(product.ProductQuantity > 0 ? "#81C408" : "#666"); cursor: @(product.ProductQuantity > 0 ? "pointer" : "not-allowed");" @(product.ProductQuantity == 0 ? "disabled" : "")>
+                                        <i class="fa fa-shopping-bag me-2" style="margin-right:6px;"></i>Add to Cart
                                     </button>
                                 }
                             </td>
@@ -74,7 +74,7 @@
                                 {
                                     @Html.AntiForgeryToken()
                                     @Html.Hidden("productId", product.Id)
-                                    <button type="submit" class="btn btn-md rounded-circle bg-light border mt-4" onclick="return confirm('Are you sure you want to remove this product from your wishlist?');">
+                                    <button type="submit" class="btn btn-md rounded-circle bg-light border mt-4 pulse-js" onclick="return confirm('Are you sure you want to remove this product from your wishlist?');">
                                         <i class="fa fa-times text-danger"></i>
                                     </button>
                                 }

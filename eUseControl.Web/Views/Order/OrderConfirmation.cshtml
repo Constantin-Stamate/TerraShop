@@ -17,7 +17,8 @@
         <p><strong>Date:</strong> @Html.Raw(Model.OrderDate.ToString("dd MMM yyyy, HH:mm", System.Globalization.CultureInfo.InvariantCulture))</p>
         <p><strong>Total:</strong> $@Html.DisplayFor(model => Model.TotalPrice)</p>
     </div>
-    <a href="@Url.Action("Index", "Main")" class="btn-home" style="margin-top: 31px; color: white !important;">
-        Back to home page
+    <a href="@Url.Action("Index", "Main")" class="btn-recycle btn border border-secondary pulse-js" style="padding:10px 16px; width:auto; margin-top:20px; display:inline-flex; align-items:center; text-decoration:none;" onmouseover="this.querySelector('span').style.color='white'; this.querySelector('i').style.color='#81C408';" onmouseout="this.querySelector('span').style.color='#81C408'; this.querySelector('i').style.color='#81C408';">
+        <i class="fas fa-home" style="margin-right:6px; font-size:16px; color:#81C408; position:relative; top:-1px;"></i>
+        <span style="font-size:16px; color:#81C408;">Return home</span>
     </a>
 </div>

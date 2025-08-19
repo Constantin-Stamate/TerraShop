@@ -73,7 +73,7 @@
         <div class="prompt__input-wrapper">
             @Html.TextBox("message", null, new { placeholder = "Enter a prompt here", @class = "prompt__form-input", required = "required" })
             <button class="prompt__form-button" id="sendButton" type="submit">
-                <i class='bx bx-send'></i>
+                <i class='bx bx-send pulse-js'></i>
             </button>
         </div>
     }
@@ -81,7 +81,7 @@
     {
         @Html.AntiForgeryToken()
         <button type="submit" class="prompt__form-button" id="deleteButton" style="margin-right: 390px; margin-top: -23px;">
-            <i class='bx bx-trash'></i>
+            <i class='bx bx-trash pulse-js'></i>
         </button>
     }
     <p class="prompt__disclaim">TerraAI’s answers may not always be fully accurate or up to date — please double-check important info.</p>
